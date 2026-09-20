@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kvíz z češtiny – pravopisné chytáky</title>
+<style>
+:root {
+  --bg:#f4f4f4; --card:#fff; --text:#202124; --muted:#666; --line:#d8d8d8;
+  --accent:#2f6fed; --choice:#e8edff; --choice-border:#c8d3ff;
+  --ok:#e9f7ee; --ok-border:#69a77a; --bad:#fdecec; --bad-border:#cf7777;
+}
+* { box-sizing:border-box; }
+html,body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family:Arial,Helvetica,sans-serif; }
+.app { width:100%; max-width:700px; margin:0 auto; padding:24px 10px 18px; }
+.head { text-align:center; padding:0 10px 14px; }
+h1 { margin:0 0 10px; font-size:30px; line-height:1.15; }
+.sub { margin:0 auto 8px; max-width:620px; font-size:16px; line-height:1.45; color:#444; }
+.note { margin:0; font-size:13px; color:var(--muted); }
+.quizbox {
+  background:var(--card); border:1px solid var(--line); border-radius:6px;
+  padding:12px 20px 22px; min-height:430px;
+}
+.progress { text-align:center; color:var(--muted); font-size:14px; margin:0 0 12px; }
+.q { text-align:center; font-size:24px; line-height:1.25; color:var(--accent); margin:12px 0 22px; }
+.answers { max-width:520px; margin:0 auto; }
+.answer {
+  display:block; width:100%; border:1px solid var(--choice-border); background:var(--choice);
+  color:var(--text); padding:17px 14px; margin:10px 0; font-size:18px; cursor:pointer;
+}
+.answer:hover { filter:brightness(.98); }
+.answer.correct { background:var(--ok); border-color:var(--ok-border); }
+.answer.wrong { background:var(--bad); border-color:var(--bad-border); }
+.answer:disabled { cursor:default; filter:none; }
+.feedback {
+  display:none; max-width:540px; margin:18px auto 0; padding:12px 14px;
+  border-top:1px solid var(--line); font-size:15px; line-height:1.45; color:#444;
+}
+.feedback.show { display:block; }
+.next {
+  display:none; margin:16px auto 0; border:0; border-radius:6px; padding:12px 22px;
+  background:#222; color:white; font-size:16px; cursor:pointer;
+}
+.next.show { display:block; }
+.result { display:none; text-align:center; padding:34px 20px; }
+.result.show { display:block; }
+.score { font-size:48px; font-weight:800; margin:8px 0 12px; }
+.retry { border:0; border-radius:6px; padding:12px 22px; background:#222; color:#fff; font-size:16px; cursor:pointer; }
+@media (max-width:560px) {
+  .app { padding-top:16px; }
+  h1 { font-size:24px; }
+  .sub { font-size:15px; }
+  .quizbox { padding:10px 12px 18px; min-height:410px; }
+  .q { font-size:21px; margin-bottom:18px; }
+  .answer { font-size:16px; padding:15px 12px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="head">
+    <h1>Čeština: pravopisné chytáky</h1>
+    <p class="sub">Mě, nebo mně? Byste, nebo by jste? Patnáct krátkých otázek prověří, jak jste na tom s češtinou.</p>
+    <p class="note">Jen pro zábavu – jde o vědomostní kvíz, ne o test inteligence.</p>
+  </div>
+
+  <div class="quizbox">
+    <div id="play">
+      <div id="progress" class="progress"></div>
+      <div id="question" class="q"></div>
+      <div id="answers" class="answers"></div>
+      <div id="feedback" class="feedback"></div>
+      <button id="next" class="next">Další otázka</button>
+    </div>
+
+    <div id="result" class="result">
+      <div>Váš výsledek</div>
+      <div id="score" class="score"></div>
+      <p id="verdict"></p>
+      <button id="retry" class="retry">Zkusit znovu</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const questions = [{"q": "Který tvar je správný?", "opts": ["raní čaj", "ranní čaj", "ranný čaj", "raný čaj"], "correct": 1, "explain": "Přídavné jméno od slova ráno má ve spojení s čajem podobu „ranní“ se dvěma n."}, {"q": "Které slovo je napsané správně?", "opts": ["vyjímka", "výjímka", "výjimka", "vyjimka"], "correct": 2, "explain": "Správná podoba je „výjimka“."}, {"q": "Která podoba je spisovná?", "opts": ["standartní", "standardní", "standartný", "standarní"], "correct": 1, "explain": "Správně se píše „standardní“, stejně jako „standard“."}, {"q": "Která věta je napsaná správně?", "opts": ["Mohl by jsi přijít zítra?", "Mohl bys přijít zítra?", "Mohl by si přijít zítra?", "Mohl bis přijít zítra?"], "correct": 1, "explain": "Ve 2. osobě jednotného čísla je spisovný tvar podmiňovacího způsobu „bys“."}, {"q": "Která podoba je správná?", "opts": ["kdyby jsme přišli", "kdybychom přišli", "kdyby sme přišli", "kdy bychom přišli"], "correct": 1, "explain": "Spisovná podoba podmiňovacího způsobu v 1. osobě množného čísla je „kdybychom“."}, {"q": "Doplňte správně: Včera jsem ___ viděl před domem.", "opts": ["mně", "mě", "mi", "mneho"], "correct": 1, "explain": "Po slovese „vidět“ je zde 4. pád zájmena já, tedy „mě“."}, {"q": "Doplňte správně: Mluvili jsme o ___ celé odpoledne.", "opts": ["mě", "mně", "mi", "mneho"], "correct": 1, "explain": "Po předložce „o“ je zde 6. pád zájmena já, proto „o mně“."}, {"q": "Která věta je správná?", "opts": ["Vezmi si deštník sebou.", "Vezmi si deštník s sebou.", "Vezmi si deštník z sebou.", "Vezmi si deštník se bou."], "correct": 1, "explain": "Ve významu „vzít něco spolu se sebou“ se píše předložkové spojení „s sebou“."}, {"q": "Jak se správně píše rozloučení?", "opts": ["nashledanou", "na shledanou", "na schledanou", "nashledanou"], "correct": 1, "explain": "Správně se píše zvlášť: „na shledanou“."}, {"q": "Která věta je správná, pokud myslíme sledování filmu?", "opts": ["Včera jsme shlédli nový film.", "Včera jsme zhlédli nový film.", "Včera jsme zhledli nový film.", "Včera jsme schlédli nový film."], "correct": 1, "explain": "Ve významu „spatřit, podívat se na film či představení“ se píše „zhlédnout“."}, {"q": "Která věta je správná?", "opts": ["Za rok nabyl mnoho zkušeností.", "Za rok nabil mnoho zkušeností.", "Za rok nabíl mnoho zkušeností.", "Za rok nabyjl mnoho zkušeností."], "correct": 0, "explain": "Ve významu „získat“ se píše „nabýt“, tedy „nabyl mnoho zkušeností“."}, {"q": "Která věta používá správné slovo?", "opts": ["Můj typ na vítěze je Sparta.", "Můj tip na vítěze je Sparta.", "Můj typ na vítěze je tip.", "Můj tip na vítěze je typ."], "correct": 1, "explain": "„Tip“ je odhad nebo doporučení. „Typ“ označuje druh, vzor nebo charakteristický druh osoby či věci."}, {"q": "Který infinitiv je napsaný správně?", "opts": ["příjít", "přijít", "přijýt", "příjýt"], "correct": 1, "explain": "Správná podoba infinitivu je „přijít“."}, {"q": "Která věta je spisovná?", "opts": ["Mohli by jste počkat?", "Mohli byste počkat?", "Mohli by ste počkat?", "Mohly by jste počkat?"], "correct": 1, "explain": "Ve 2. osobě množného čísla je spisovný tvar podmiňovacího způsobu „byste“."}, {"q": "Která věta je napsaná správně?", "opts": ["Zítra si to vezmu s sebou.", "Zítra si to vezmu sebou.", "Zítra si to vezmu z sebou.", "Zítra si to vezmu seboů."], "correct": 0, "explain": "Při významu „vzít něco spolu se sebou“ píšeme „s sebou“. Samotné „sebou“ se používá v jiných vazbách, například „trhl sebou“."}];
+let index = 0;
+let score = 0;
+let locked = false;
+const progress = document.getElementById('progress');
+const question = document.getElementById('question');
+const answers = document.getElementById('answers');
+const feedback = document.getElementById('feedback');
+const next = document.getElementById('next');
+const play = document.getElementById('play');
+const result = document.getElementById('result');
+
+function renderQuestion() {
+  locked = false;
+  feedback.className = 'feedback';
+  next.className = 'next';
+  const item = questions[index];
+  progress.textContent = `Otázka ${index+1} / ${questions.length}`;
+  question.textContent = item.q;
+  answers.innerHTML = '';
+  item.opts.forEach((opt, oi) => {
+    const btn = document.createElement('button');
+    btn.className = 'answer';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => choose(oi, btn));
+    answers.appendChild(btn);
+  });
+}
+
+function choose(oi, clicked) {
+  if (locked) return;
+  locked = true;
+  const item = questions[index];
+  const buttons = [...answers.querySelectorAll('.answer')];
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === item.correct) btn.classList.add('correct');
+  });
+  if (oi === item.correct) score++;
+  else clicked.classList.add('wrong');
+
+  feedback.textContent = item.explain;
+  feedback.classList.add('show');
+  next.textContent = index === questions.length - 1 ? 'Zobrazit výsledek' : 'Další otázka';
+  next.classList.add('show');
+}
+
+next.addEventListener('click', () => {
+  index++;
+  if (index >= questions.length) showResult();
+  else renderQuestion();
+});
+
+function showResult() {
+  play.style.display = 'none';
+  result.classList.add('show');
+  document.getElementById('score').textContent = `${score}/15`;
+  let verdict = '';
+  if (score <= 5) verdict = 'Čeština umí být zákeřná. Tady se ještě pár chytáků schovalo.';
+  else if (score <= 9) verdict = 'Slušný výsledek. Většinu běžných pastí jste zvládli.';
+  else if (score <= 13) verdict = 'Výborný výsledek. Pravopisné chytáky vás většinou nerozhodí.';
+  else if (score === 14) verdict = 'Těsně pod plným počtem. Jeden jediný chyták vás zastavil.';
+  else verdict = '15/15. Plný zásah – pravopisné chytáky vás nepřekvapily.';
+  document.getElementById('verdict').textContent = verdict;
+}
+
+document.getElementById('retry').addEventListener('click', () => {
+  index = 0; score = 0;
+  result.className = 'result';
+  play.style.display = 'block';
+  renderQuestion();
+});
+
+renderQuestion();
+</script>
+</body>
+</html>
