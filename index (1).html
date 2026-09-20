@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kvíz českých devadesátek</title>
+<style>
+:root {
+  --bg:#f4f4f4;
+  --card:#fff;
+  --text:#202124;
+  --muted:#666;
+  --line:#d8d8d8;
+  --accent:#2f6fed;
+  --choice:#e8edff;
+  --choice-border:#c8d3ff;
+  --ok:#e9f7ee;
+  --ok-border:#69a77a;
+  --bad:#fdecec;
+  --bad-border:#cf7777;
+}
+* { box-sizing:border-box; }
+html,body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family:Arial,Helvetica,sans-serif; }
+.app { width:100%; max-width:700px; margin:0 auto; padding:24px 10px 18px; }
+.head { text-align:center; padding:0 10px 14px; }
+h1 { margin:0 0 10px; font-size:30px; line-height:1.15; }
+.sub { margin:0 auto 8px; max-width:620px; font-size:16px; line-height:1.45; color:#444; }
+.note { margin:0; font-size:13px; color:var(--muted); }
+.quizbox {
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:12px 20px 22px;
+  min-height:430px;
+}
+.progress { text-align:center; color:var(--muted); font-size:14px; margin:0 0 12px; }
+.q { text-align:center; font-size:24px; line-height:1.25; color:var(--accent); margin:12px 0 22px; }
+.answers { max-width:500px; margin:0 auto; }
+.answer {
+  display:block; width:100%; border:1px solid var(--choice-border); background:var(--choice);
+  color:var(--text); padding:17px 14px; margin:10px 0; font-size:18px; cursor:pointer;
+}
+.answer:hover { filter:brightness(.98); }
+.answer.correct { background:var(--ok); border-color:var(--ok-border); }
+.answer.wrong { background:var(--bad); border-color:var(--bad-border); }
+.answer:disabled { cursor:default; filter:none; }
+.feedback {
+  display:none; max-width:540px; margin:18px auto 0; padding:12px 14px;
+  border-top:1px solid var(--line); font-size:15px; line-height:1.45; color:#444;
+}
+.feedback.show { display:block; }
+.next {
+  display:none; margin:16px auto 0; border:0; border-radius:6px; padding:12px 22px;
+  background:#222; color:white; font-size:16px; cursor:pointer;
+}
+.next.show { display:block; }
+.result { display:none; text-align:center; padding:34px 20px; }
+.result.show { display:block; }
+.score { font-size:48px; font-weight:800; margin:8px 0 12px; }
+.retry { border:0; border-radius:6px; padding:12px 22px; background:#222; color:#fff; font-size:16px; cursor:pointer; }
+@media (max-width:560px) {
+  .app { padding-top:16px; }
+  h1 { font-size:24px; }
+  .sub { font-size:15px; }
+  .quizbox { padding:10px 12px 18px; min-height:410px; }
+  .q { font-size:21px; margin-bottom:18px; }
+  .answer { font-size:16px; padding:15px 12px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="head">
+    <h1>Kvíz českých devadesátek</h1>
+    <p class="sub">Pamatujete VHS, dial-up, telefonní karty, první PlayStation nebo začátky Seznamu? Čeká vás 15 otázek.</p>
+    <p class="note">Jen pro zábavu – nejde o test inteligence, paměti ani zdravotního stavu.</p>
+  </div>
+
+  <div class="quizbox">
+    <div id="play">
+      <div id="progress" class="progress"></div>
+      <div id="question" class="q"></div>
+      <div id="answers" class="answers"></div>
+      <div id="feedback" class="feedback"></div>
+      <button id="next" class="next">Další otázka</button>
+    </div>
+
+    <div id="result" class="result">
+      <div>Váš výsledek</div>
+      <div id="score" class="score"></div>
+      <p id="verdict"></p>
+      <button id="retry" class="retry">Zkusit znovu</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const questions = [{"q": "Ve kterém roce vznikla samostatná Česká republika?", "opts": ["1991", "1992", "1993", "1994"], "correct": 2, "explain": "Samostatná Česká republika vznikla 1. ledna 1993 po zániku Československa."}, {"q": "Která soukromá televize začala v Česku vysílat v roce 1994?", "opts": ["Prima", "Nova", "Óčko", "Barrandov"], "correct": 1, "explain": "TV Nova zahájila vysílání 4. února 1994 a rychle se stala výraznou součástí české televizní scény."}, {"q": "Co byla disketa 3,5 palce?", "opts": ["Přenosné datové médium", "Typ videokazety", "Telefonní karta", "Hudební nosič pro walkman"], "correct": 0, "explain": "Disketa 3,5 palce byla malé přenosné magnetické datové médium používané hlavně u počítačů."}, {"q": "K čemu sloužil vytáčený dial-up internet?", "opts": ["K připojení k internetu přes telefonní linku", "K bezdrátovému přenosu mezi mobily", "K naladění satelitní televize", "K přehrávání CD-ROM"], "correct": 0, "explain": "Dial-up vytáčel spojení přes klasickou telefonní linku pomocí modemu a při připojování typicky vydával charakteristické zvuky."}, {"q": "Ve kterém roce byly vydány Windows 95?", "opts": ["1993", "1994", "1995", "1997"], "correct": 2, "explain": "Microsoft uvedl Windows 95 v srpnu 1995."}, {"q": "Co bylo ICQ?", "opts": ["Program pro instantní zprávy", "Česká hudební stanice", "Herní konzole", "Typ počítačové diskety"], "correct": 0, "explain": "ICQ byl jeden z prvních masově používaných programů pro online chat a instantní zprávy."}, {"q": "Který český internetový portál vznikl v roce 1996?", "opts": ["Seznam.cz", "iDNES.cz", "Stream.cz", "Mapy.cz"], "correct": 0, "explain": "Seznam.cz vznikl v roce 1996 původně jako katalog českých internetových stránek."}, {"q": "Co bylo Tamagotchi?", "opts": ["Kapesní digitální zvířátko", "Přenosný CD přehrávač", "Telefonní karta", "Hračka na VHS"], "correct": 0, "explain": "Tamagotchi bylo malé elektronické zařízení, ve kterém se hráč staral o virtuální zvířátko."}, {"q": "K čemu se nejčastěji používala VHS kazeta?", "opts": ["K ukládání videa", "K ukládání počítačových souborů", "K placení v telefonní budce", "K fotografování"], "correct": 0, "explain": "VHS byla rozšířený formát videokazet pro domácí nahrávání a přehrávání filmů a televizních pořadů."}, {"q": "Co znamenal pojem „walkman“ v běžné řeči 90. let?", "opts": ["Přenosný kazetový přehrávač", "Stolní počítač", "Videorekordér", "Bezdrátový telefon"], "correct": 0, "explain": "Walkman se stal obecným symbolem přenosného poslechu hudby z audiokazet do sluchátek."}, {"q": "Která herní konzole od Sony se v Evropě začala prodávat v roce 1995?", "opts": ["PlayStation", "Dreamcast", "Xbox", "GameCube"], "correct": 0, "explain": "První PlayStation se v Evropě začal prodávat v září 1995."}, {"q": "Co člověk obvykle slyšel při připojování k internetu přes modem?", "opts": ["Sérii pískání a šumů", "Zvonění jako u budíku", "Hudební znělku Windows", "Zvuk přetáčení kazety"], "correct": 0, "explain": "Dial-up modem při navazování spojení převáděl data do zvukových tónů, takže připojení doprovázelo typické pískání a šum."}, {"q": "K čemu sloužil videorekordér?", "opts": ["K přehrávání a nahrávání videokazet", "K přehrávání disket", "K volání z pevné linky", "K tisku fotografií"], "correct": 0, "explain": "Videorekordér umožňoval přehrávat VHS kazety a také nahrávat televizní vysílání."}, {"q": "Co byla telefonní karta?", "opts": ["Karta pro placení hovoru ve veřejném telefonu", "SIM karta do prvních mobilů", "Karta pro vstup do videopůjčovny", "Předplacená karta na internet"], "correct": 0, "explain": "Telefonní karty se používaly ve veřejných telefonních automatech místo mincí."}, {"q": "Jaký nosič se v 90. letech masově prosadil vedle audiokazet pro hudbu?", "opts": ["CD", "Blu-ray", "MiniDisc Video", "USB flash disk"], "correct": 0, "explain": "Kompaktní disk neboli CD se v 90. letech masově rozšířil jako digitální hudební nosič."}];
+let index = 0;
+let score = 0;
+let locked = false;
+
+const progress = document.getElementById('progress');
+const question = document.getElementById('question');
+const answers = document.getElementById('answers');
+const feedback = document.getElementById('feedback');
+const next = document.getElementById('next');
+const play = document.getElementById('play');
+const result = document.getElementById('result');
+
+function renderQuestion() {
+  locked = false;
+  feedback.className = 'feedback';
+  next.className = 'next';
+  const item = questions[index];
+  progress.textContent = `Otázka ${index+1} / ${questions.length}`;
+  question.textContent = item.q;
+  answers.innerHTML = '';
+  item.opts.forEach((opt, oi) => {
+    const btn = document.createElement('button');
+    btn.className = 'answer';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => choose(oi, btn));
+    answers.appendChild(btn);
+  });
+}
+
+function choose(oi, clicked) {
+  if (locked) return;
+  locked = true;
+  const item = questions[index];
+  const buttons = [...answers.querySelectorAll('.answer')];
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === item.correct) btn.classList.add('correct');
+  });
+  if (oi === item.correct) score++;
+  else clicked.classList.add('wrong');
+
+  feedback.textContent = item.explain;
+  feedback.classList.add('show');
+  next.textContent = index === questions.length - 1 ? 'Zobrazit výsledek' : 'Další otázka';
+  next.classList.add('show');
+}
+
+next.addEventListener('click', () => {
+  index++;
+  if (index >= questions.length) showResult();
+  else renderQuestion();
+});
+
+function showResult() {
+  play.style.display = 'none';
+  result.classList.add('show');
+  document.getElementById('score').textContent = `${score}/15`;
+  let verdict = '';
+  if (score <= 5) verdict = 'Devadesátky vám možná trochu utekly. Pár věcí už dnes působí jako jiný svět.';
+  else if (score <= 9) verdict = 'Slušný přehled. VHS, modem ani telefonní karta vás úplně nezaskočily.';
+  else if (score <= 13) verdict = 'Výborný výsledek. Devadesátky máte očividně pořád dobře v hlavě.';
+  else if (score === 14) verdict = 'Těsně pod plným počtem. Na devadesátky jste skoro expert.';
+  else verdict = '15/15. Plný zásah – devadesátky vás ničím nepřekvapily.';
+  document.getElementById('verdict').textContent = verdict;
+}
+
+document.getElementById('retry').addEventListener('click', () => {
+  index = 0; score = 0;
+  result.className = 'result';
+  play.style.display = 'block';
+  renderQuestion();
+});
+
+renderQuestion();
+</script>
+</body>
+</html>
