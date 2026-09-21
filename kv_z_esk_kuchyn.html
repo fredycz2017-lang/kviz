@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kvíz: Česká kuchyně</title>
+    <style>
+        :root {
+            --primary-blue: #1e40af;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --btn-bg: #f9fafb;
+            --btn-border: #e5e7eb;
+            --btn-hover: #f3f4f6;
+            --correct-bg: #dcfce7;
+            --correct-border: #22c55e;
+            --incorrect-bg: #fee2e2;
+            --incorrect-border: #ef4444;
+            --next-btn-bg: #2563eb;
+            --next-btn-hover: #1d4ed8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 15px;
+            line-height: 1.5;
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 700px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 24px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--btn-border);
+        }
+
+        .header h1 {
+            font-size: 1.25rem;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+
+        .header p {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .progress {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .question {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 24px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: var(--btn-bg);
+            border: 2px solid var(--btn-border);
+            color: var(--text-color);
+            padding: 14px 16px;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: var(--btn-hover);
+            border-color: #d1d5db;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .option-btn.correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+        }
+
+        .option-btn.incorrect {
+            background-color: var(--incorrect-bg);
+            border-color: var(--incorrect-border);
+        }
+
+        .explanation {
+            margin-top: 20px;
+            padding: 16px;
+            background-color: #f8fafc;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 4px;
+            display: none;
+        }
+
+        .explanation p {
+            font-size: 0.95rem;
+            color: #334155;
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            background-color: var(--next-btn-bg);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            display: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .next-btn:hover {
+            background-color: var(--next-btn-hover);
+        }
+
+        .result-container {
+            text-align: center;
+            display: none;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: var(--primary-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto 24px auto;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 12px;
+        }
+
+        .result-text {
+            font-size: 1.1rem;
+            margin-bottom: 32px;
+            color: #4b5563;
+        }
+
+        @media (max-width: 560px) {
+            .quiz-container {
+                padding: 16px;
+            }
+            .question {
+                font-size: 1.1rem;
+            }
+            .option-btn {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+            .score-circle {
+                width: 100px;
+                height: 100px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="header" id="quiz-header">
+            <h1>Kvíz z české kuchyně</h1>
+            <p>Jen pro zábavu. Sbíhají se vám už sliny?</p>
+        </div>
+
+        <div id="question-container">
+            <div class="progress" id="progress">Otázka 1 / 15</div>
+            <div class="question" id="question">Načítání otázky...</div>
+            <div class="options" id="options"></div>
+            
+            <div class="explanation" id="explanation">
+                <p id="explanation-text"></p>
+            </div>
+            
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()">Další otázka</button>
+        </div>
+
+        <div class="result-container" id="result-container">
+            <div class="score-circle" id="final-score">0/15</div>
+            <h2 class="result-title" id="result-title">Hodnocení</h2>
+            <p class="result-text" id="result-text">Vyhodnocení</p>
+            <button class="next-btn" style="display: block;" onclick="restartQuiz()">Zkusit znovu</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Co je absolutním základem pro pravý buřtguláš?",
+                options: ["Špekáčky, brambory a paprika", "Hovězí maso a kmín", "Kuřecí vývar a smetana", "Fazole a mrkev"],
+                correct: 0,
+                explanation: "Bez pořádných špekáčků to prostě není ono!"
+            },
+            {
+                question: "Jaké koření dodává bramborákům jejich typickou vůni a chuť?",
+                options: ["Česnek a majoránka", "Skořice a hřebíček", "Kari a kurkuma", "Bazalka a oregano"],
+                correct: 0,
+                explanation: "Klasický cmunda neboli bramborák stojí a padá na majoránce s česnekem."
+            },
+            {
+                question: "Co se skrývá pod názvem \"Španělský ptáček\"?",
+                options: ["Závitek z hovězího masa s vejcem a uzeninou", "Pečené kuře na paprice", "Smažené kousky vepřového", "Druh sladkého pečiva"],
+                correct: 0,
+                explanation: "Je to hovězí plátek potřený hořčicí, plněný vajíčkem, okurkou a uzeninou."
+            },
+            {
+                question: "Která surovina nesmí chybět v tradiční krkonošské polévce zvané kyselo?",
+                options: ["Chlebový kvásek", "Rajčatový protlak", "Sladká smetana", "Kysané zelí"],
+                correct: 0,
+                explanation: "Pravé kyselo se dělá z chlebového kvásku, hub a vajec."
+            },
+            {
+                question: "Z čeho se tradičně připravují škubánky?",
+                options: ["Z vařených brambor a hrubé mouky", "Z kynutého těsta", "Z tvarohu a krupice", "Z rýže a mléka"],
+                correct: 0,
+                explanation: "Brambory se rozšťouchají s moukou a podávají nasladko s mákem nebo naslano."
+            },
+            {
+                question: "Jaká zelenina tvoří základ omáčky u klasické svíčkové?",
+                options: ["Celer, mrkev, petržel", "Rajčata a papriky", "Cibule a česnek", "Brokolice a květák"],
+                correct: 0,
+                explanation: "Základem je poctivá kořenová zelenina."
+            },
+            {
+                question: "Co je hlavní ingrediencí staročeského jídla Kuba, které se jí o Vánocích?",
+                options: ["Kroupy a houby", "Čočka a párek", "Kapr a bramborový salát", "Hrachová kaše"],
+                correct: 0,
+                explanation: "Houbový kuba je tradiční bezmasý pokrm z krup a sušených hub."
+            },
+            {
+                question: "Moravský vrabec je oblíbené jídlo. Z jakého masa se připravuje?",
+                options: ["Z vepřového masa", "Z drůbežího masa", "Z hovězího masa", "Z jehněčího masa"],
+                correct: 0,
+                explanation: "Ačkoliv má v názvu ptáka, jedná se o kousky pečeného vepřového."
+            },
+            {
+                question: "Jaké jídlo se skrývá pod hovorovým názvem \"smažák\"?",
+                options: ["Smažený sýr s tatarkou", "Smažený kapr", "Smažený vepřový řízek", "Smažený květák"],
+                correct: 0,
+                explanation: "Pro někoho lahůdka, pro jiného noční můra plná roztékající se hmoty."
+            },
+            {
+                question: "Co je to \"utopenec\"?",
+                options: ["Špekáček naložený v octovém nálevu s cibulí", "Ryba pečená v soli", "Druh alkoholického koktejlu", "Knedlík vařený ve vodě"],
+                correct: 0,
+                explanation: "Ideální chuťovka do šenku k pivu."
+            },
+            {
+                question: "Co nesmí chybět ve sladké žemlovce?",
+                options: ["Starší pečivo a jablka", "Ořechy a med", "Tvaroh a povidla", "Rýže a švestky"],
+                correct: 0,
+                explanation: "Základem jsou plátky rohlíků nebo veky, proložené jablky a skořicí."
+            },
+            {
+                question: "Která polévka je typická použitím čerstvého kopru, hub a zastřeného vejce?",
+                options: ["Kulajda", "Česnečka", "Bramboračka", "Zelňačka"],
+                correct: 0,
+                explanation: "Jemná, lehce nakyslá bílá polévka původem z jižních Čech."
+            },
+            {
+                question: "Z jakého masa se u nás dělá klasický tatarák?",
+                options: ["Ze syrového hovězího", "Z vařeného vepřového", "Z pečeného kuřecího", "Z uzené ryby"],
+                correct: 0,
+                explanation: "Syrové hovězí se žloutkem. Někdo to miluje, jiný by to do pusy nevzal."
+            },
+            {
+                question: "Jaké koření dává typickou barvu a chuť guláši?",
+                options: ["Mletá červená paprika", "Kari koření", "Pepř a sůl", "Kmín a koriandr"],
+                correct: 0,
+                explanation: "Bez mleté papriky by guláš nebyl gulášem."
+            },
+            {
+                question: "Je trdelník tradiční staročeské pečivo?",
+                options: ["Ne, u nás je to moderní turistický hit", "Ano, pekl se už na dvoře Karla IV.", "Ano, pochází z jižní Moravy", "Ano, vymyslela ho M. D. Rettigová"],
+                correct: 0,
+                explanation: "I přes velký hype jde o novodobou záležitost převzatou spíše z Balkánu/Maďarska."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        const questionEl = document.getElementById('question');
+        const optionsEl = document.getElementById('options');
+        const progressEl = document.getElementById('progress');
+        const explanationEl = document.getElementById('explanation');
+        const explanationTextEl = document.getElementById('explanation-text');
+        const nextBtn = document.getElementById('next-btn');
+        
+        const questionContainer = document.getElementById('question-container');
+        const resultContainer = document.getElementById('result-container');
+        const headerEl = document.getElementById('quiz-header');
+
+        function initQuiz() {
+            // Zamíchání možností (aby nebyla vždy správná první jako v zadání)
+            questions.forEach(q => {
+                const optionsWithIndex = q.options.map((opt, i) => ({ text: opt, isCorrect: i === q.correct }));
+                // Fischer-Yates shuffle
+                for (let i = optionsWithIndex.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
+                }
+                q.shuffledOptions = optionsWithIndex.map(opt => opt.text);
+                q.shuffledCorrectIndex = optionsWithIndex.findIndex(opt => opt.isCorrect);
+            });
+
+            currentQuestionIndex = 0;
+            score = 0;
+            questionContainer.style.display = 'block';
+            resultContainer.style.display = 'none';
+            headerEl.style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            const currentQ = questions[currentQuestionIndex];
+            
+            progressEl.textContent = `Otázka ${currentQuestionIndex + 1} / ${questions.length}`;
+            questionEl.textContent = currentQ.question;
+            
+            optionsEl.innerHTML = '';
+            explanationEl.style.display = 'none';
+            nextBtn.style.display = 'none';
+
+            currentQ.shuffledOptions.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => selectOption(index, btn);
+                optionsEl.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex, selectedBtn) {
+            if (answered) return;
+            answered = true;
+
+            const currentQ = questions[currentQuestionIndex];
+            const allBtns = optionsEl.getElementsByClassName('option-btn');
+
+            for (let i = 0; i < allBtns.length; i++) {
+                allBtns[i].disabled = true;
+                if (i === currentQ.shuffledCorrectIndex) {
+                    allBtns[i].classList.add('correct');
+                }
+            }
+
+            if (selectedIndex === currentQ.shuffledCorrectIndex) {
+                score++;
+            } else {
+                selectedBtn.classList.add('incorrect');
+            }
+
+            explanationTextEl.textContent = currentQ.explanation;
+            explanationEl.style.display = 'block';
+            
+            if (currentQuestionIndex < questions.length - 1) {
+                nextBtn.textContent = 'Další otázka';
+            } else {
+                nextBtn.textContent = 'Zobrazit výsledek';
+            }
+            nextBtn.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            questionContainer.style.display = 'none';
+            headerEl.style.display = 'none';
+            resultContainer.style.display = 'block';
+            
+            document.getElementById('final-score').textContent = `${score}/${questions.length}`;
+            
+            const titleEl = document.getElementById('result-title');
+            const textEl = document.getElementById('result-text');
+            
+            if (score === questions.length) {
+                titleEl.textContent = "Mistr šéfkuchař!";
+                textEl.textContent = "Vaše znalosti české kuchyně jsou bezchybné. Svíčkovou určitě vaříte poslepu!";
+            } else if (score >= 10) {
+                titleEl.textContent = "Gurmán a znalec";
+                textEl.textContent = "Skvělý výsledek! Občas vám možná uteče nějaký ten knedlík, ale v hospodě i v kuchyni se vyznáte.";
+            } else if (score >= 5) {
+                titleEl.textContent = "Slušný základ";
+                textEl.textContent = "Znáte klasiku, ale do tajů staročeských receptů jste ještě úplně nepronikli. Nevadí, trénink dělá mistra!";
+            } else {
+                titleEl.textContent = "Cizinec v české hospodě?";
+                textEl.textContent = "Tady je potřeba trochu doučování. Co takhle zajít o víkendu k babičce na nedělní oběd?";
+            }
+        }
+
+        function restartQuiz() {
+            initQuiz();
+        }
+
+        // Start kvízu
+        initQuiz();
+    </script>
+</body>
+</html>
