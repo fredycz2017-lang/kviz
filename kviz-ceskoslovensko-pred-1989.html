@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kvíz – Československo před rokem 1989</title>
+<style>
+:root{--bg:#f4f4f4;--card:#fff;--text:#202124;--muted:#666;--line:#d8d8d8;--accent:#2f6fed;--choice:#e8edff;--choice-border:#c8d3ff;--ok:#e9f7ee;--ok-border:#69a77a;--bad:#fdecec;--bad-border:#cf7777}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+.app{width:100%;max-width:700px;margin:0 auto;padding:22px 10px 18px}.head{text-align:center;padding:0 10px 14px}
+h1{margin:0 0 10px;font-size:29px;line-height:1.15}.sub{margin:0 auto 8px;max-width:620px;font-size:16px;line-height:1.45;color:#444}.note{margin:0;font-size:13px;color:var(--muted)}
+.quizbox{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px 20px 22px;min-height:430px}
+.progress{text-align:center;color:var(--muted);font-size:14px;margin:0 0 12px}.q{text-align:center;font-size:23px;line-height:1.28;color:var(--accent);margin:12px 0 22px}.answers{max-width:520px;margin:0 auto}
+.answer{display:block;width:100%;border:1px solid var(--choice-border);background:var(--choice);color:var(--text);padding:16px 14px;margin:10px 0;font-size:17px;cursor:pointer}
+.answer:hover{filter:brightness(.98)}.answer.correct{background:var(--ok);border-color:var(--ok-border)}.answer.wrong{background:var(--bad);border-color:var(--bad-border)}.answer:disabled{cursor:default;filter:none}
+.feedback{display:none;max-width:550px;margin:18px auto 0;padding:12px 14px;border-top:1px solid var(--line);font-size:15px;line-height:1.45;color:#444}.feedback.show{display:block}
+.next{display:none;margin:16px auto 0;border:0;border-radius:6px;padding:12px 22px;background:#222;color:white;font-size:16px;cursor:pointer}.next.show{display:block}
+.result{display:none;text-align:center;padding:34px 20px}.result.show{display:block}.score{font-size:48px;font-weight:800;margin:8px 0 12px}
+.retry{border:0;border-radius:6px;padding:12px 22px;background:#222;color:#fff;font-size:16px;cursor:pointer}
+@media(max-width:560px){.app{padding-top:14px}h1{font-size:24px}.sub{font-size:15px}.quizbox{padding:10px 12px 18px;min-height:410px}.q{font-size:20px;margin-bottom:18px}.answer{font-size:16px;padding:14px 12px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="head">
+    <h1>Pamatujete Československo před rokem 1989?</h1>
+    <p class="sub">Tuzex, bony, spartakiády, Prior i výjezdní doložka. Patnáct otázek z každodenního života a známých událostí před listopadem 1989.</p>
+    <p class="note">Historicko-nostalgický kvíz • 15 otázek • bez hodnocení politických postojů</p>
+  </div>
+  <div class="quizbox">
+    <div id="play">
+      <div id="progress" class="progress"></div>
+      <div id="question" class="q"></div>
+      <div id="answers" class="answers"></div>
+      <div id="feedback" class="feedback"></div>
+      <button id="next" class="next">Další otázka</button>
+    </div>
+    <div id="result" class="result">
+      <div>Váš výsledek</div>
+      <div id="score" class="score"></div>
+      <p id="verdict"></p>
+      <button id="retry" class="retry">Zkusit znovu</button>
+    </div>
+  </div>
+</div>
+<script>
+const questions = [{"q": "Čím se běžně platilo v prodejnách Tuzex?", "opts": ["Bony", "Stravenkami", "Kolky", "Poštovními známkami"], "correct": 0, "explain": "V Tuzexu se používaly tuzexové poukázky známé jako bony."}, {"q": "Kdo byl v běžné řeči „vekslák“?", "opts": ["Pouliční směnárník obchodující načerno s valutami či bony", "Prodavač v samoobsluze", "Kontrolor jízdenek", "Opravář televizorů"], "correct": 0, "explain": "Veksláci nelegálně směňovali valuty a bony, často v okolí Tuzexu."}, {"q": "Co byla spartakiáda?", "opts": ["Masová tělovýchovná vystoupení", "Televizní soutěž", "Síť obchodních domů", "Povinná školní zkouška"], "correct": 0, "explain": "Spartakiády byly rozsáhlé organizované tělovýchovné přehlídky s hromadnými skladbami."}, {"q": "Kde se konaly nejznámější celostátní spartakiády?", "opts": ["Na Strahovském stadionu v Praze", "Na Letenské pláni", "V Brně na výstavišti", "Na stadionu v Ostravě"], "correct": 0, "explain": "Celostátní spartakiády jsou spojené především s velkým Strahovským stadionem v Praze."}, {"q": "Co označovala zkratka SSM?", "opts": ["Socialistický svaz mládeže", "Svaz státních motoristů", "Správa státních médií", "Sdružení sportovní mládeže"], "correct": 0, "explain": "SSM znamenal Socialistický svaz mládeže."}, {"q": "S jakou dětskou organizací je spojován červený šátek?", "opts": ["Pionýr", "Sokol", "Junák", "Svazarm"], "correct": 0, "explain": "Červený šátek byl typickým symbolem pionýrské organizace."}, {"q": "Jak se jmenovala síť obchodů, kde bylo možné koupit i nedostatkové západní zboží?", "opts": ["Tuzex", "Prior", "Jednota", "Pramen"], "correct": 0, "explain": "Tuzex nabízel mimo jiné zahraniční a jinak obtížně dostupné zboží."}, {"q": "Ve kterém roce vznikl Tuzex?", "opts": ["1948", "1953", "1957", "1968"], "correct": 2, "explain": "Tuzex byl založen v roce 1957."}, {"q": "Jak se jmenovala měna Československa v 80. letech?", "opts": ["Československá koruna", "Česká koruna", "Federální marka", "Československý zlotý"], "correct": 0, "explain": "Platilo se československou korunou, zkráceně Kčs."}, {"q": "Co byla výjezdní doložka?", "opts": ["Povolení spojené s cestou do zahraničí", "Kupón na benzín", "Doklad k nákupu auta", "Potvrzení pro nástup do školy"], "correct": 0, "explain": "Výjezdní doložka byla dokument spojený s povolováním některých cest do zahraničí."}, {"q": "Co znamenal devizový příslib?", "opts": ["Příslib přidělení cizí měny pro cestu do zahraničí", "Povolení koupit televizor", "Slevu do Tuzexu", "Příděl benzínu"], "correct": 0, "explain": "Devizový příslib souvisel s přidělením omezeného množství cizí měny pro zahraniční cestu."}, {"q": "Jak se jmenovala velká síť obchodních domů v socialistickém Československu?", "opts": ["Prior", "Globus", "Tesco", "Kaufland"], "correct": 0, "explain": "Prior byl známou sítí obchodních domů v Československu."}, {"q": "Který československý básník získal v roce 1984 Nobelovu cenu za literaturu?", "opts": ["Jaroslav Seifert", "Bohumil Hrabal", "Milan Kundera", "Vladimír Holan"], "correct": 0, "explain": "Nobelovu cenu za literaturu získal v roce 1984 Jaroslav Seifert."}, {"q": "Která jaderná elektrárna začala dodávat elektřinu v polovině 80. let?", "opts": ["Dukovany", "Temelín", "Mochovce", "Jaslovské Bohunice V2 až v 90. letech"], "correct": 0, "explain": "První blok Jaderné elektrárny Dukovany byl uveden do provozu v roce 1985."}, {"q": "Který automobil se stal velkou novinkou československé Škody na konci 80. let?", "opts": ["Škoda Favorit", "Škoda Fabia", "Škoda Octavia I", "Škoda Felicia"], "correct": 0, "explain": "Škoda Favorit se představila ve druhé polovině 80. let a znamenala zásadní modernizaci nabídky značky."}];
+const verdicts = ["Tuzex by vás nejspíš zaskočil hned u dveří.", "Něco z té doby znáte, ale pár detailů už odvál čas.", "Slušné. Bony ani Strahov vás úplně nepřekvapily.", "Výborně. Každodenní reálie té doby znáte velmi dobře.", "14–15/15. Tohle je skoro archivářský výkon."];
+let index=0,score=0,locked=false;
+const progress=document.getElementById('progress'),question=document.getElementById('question'),answers=document.getElementById('answers'),feedback=document.getElementById('feedback'),next=document.getElementById('next'),play=document.getElementById('play'),result=document.getElementById('result');
+function renderQuestion(){
+  locked=false;feedback.className='feedback';next.className='next';
+  const item=questions[index];
+  progress.textContent=`Otázka ${index+1} / ${questions.length}`;
+  question.textContent=item.q;answers.innerHTML='';
+  item.opts.forEach((opt,oi)=>{
+    const btn=document.createElement('button');btn.className='answer';btn.textContent=opt;
+    btn.addEventListener('click',()=>choose(oi,btn));answers.appendChild(btn);
+  });
+}
+function choose(oi,clicked){
+  if(locked)return;locked=true;const item=questions[index];
+  const buttons=[...answers.querySelectorAll('.answer')];
+  buttons.forEach((btn,i)=>{btn.disabled=true;if(i===item.correct)btn.classList.add('correct');});
+  if(oi===item.correct)score++;else clicked.classList.add('wrong');
+  feedback.textContent=item.explain;feedback.classList.add('show');
+  next.textContent=index===questions.length-1?'Zobrazit výsledek':'Další otázka';next.classList.add('show');
+}
+next.addEventListener('click',()=>{index++;if(index>=questions.length)showResult();else renderQuestion();});
+function showResult(){
+  play.style.display='none';result.classList.add('show');
+  document.getElementById('score').textContent=`${score}/${questions.length}`;
+  let v=verdicts[0];
+  if(score>=14)v=verdicts[4];else if(score>=11)v=verdicts[3];else if(score>=7)v=verdicts[2];else if(score>=4)v=verdicts[1];
+  document.getElementById('verdict').textContent=v;
+}
+document.getElementById('retry').addEventListener('click',()=>{index=0;score=0;result.className='result';play.style.display='block';renderQuestion();});
+renderQuestion();
+</script>
+</body></html>
