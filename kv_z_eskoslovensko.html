@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kvíz: Československo před rokem 1989</title>
+    <style>
+        :root {
+            --primary-blue: #1e40af;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --btn-bg: #f9fafb;
+            --btn-border: #e5e7eb;
+            --btn-hover: #f3f4f6;
+            --correct-bg: #dcfce7;
+            --correct-border: #22c55e;
+            --incorrect-bg: #fee2e2;
+            --incorrect-border: #ef4444;
+            --next-btn-bg: #2563eb;
+            --next-btn-hover: #1d4ed8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 15px;
+            line-height: 1.5;
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 700px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 24px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--btn-border);
+        }
+
+        .header h1 {
+            font-size: 1.25rem;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+
+        .header p {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .progress {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .question {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 24px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: var(--btn-bg);
+            border: 2px solid var(--btn-border);
+            color: var(--text-color);
+            padding: 14px 16px;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: var(--btn-hover);
+            border-color: #d1d5db;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .option-btn.correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+        }
+
+        .option-btn.incorrect {
+            background-color: var(--incorrect-bg);
+            border-color: var(--incorrect-border);
+        }
+
+        .explanation {
+            margin-top: 20px;
+            padding: 16px;
+            background-color: #f8fafc;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 4px;
+            display: none;
+        }
+
+        .explanation p {
+            font-size: 0.95rem;
+            color: #334155;
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            background-color: var(--next-btn-bg);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            display: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .next-btn:hover {
+            background-color: var(--next-btn-hover);
+        }
+
+        .result-container {
+            text-align: center;
+            display: none;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: var(--primary-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto 24px auto;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 12px;
+        }
+
+        .result-text {
+            font-size: 1.1rem;
+            margin-bottom: 32px;
+            color: #4b5563;
+        }
+
+        @media (max-width: 560px) {
+            .quiz-container {
+                padding: 16px;
+            }
+            .question {
+                font-size: 1.1rem;
+            }
+            .option-btn {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+            .score-circle {
+                width: 100px;
+                height: 100px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <div class="header" id="quiz-header">
+            <h1>Kvíz: Československo před rokem 1989</h1>
+            <p>Jen pro zábavu. Otestujte své znalosti a paměť.</p>
+        </div>
+
+        <div id="question-container">
+            <div class="progress" id="progress">Otázka 1 / 15</div>
+            <div class="question" id="question">Načítání otázky...</div>
+            <div class="options" id="options"></div>
+            
+            <div class="explanation" id="explanation">
+                <p id="explanation-text"></p>
+            </div>
+            
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()">Další otázka</button>
+        </div>
+
+        <div class="result-container" id="result-container">
+            <div class="score-circle" id="final-score">0/15</div>
+            <h2 class="result-title" id="result-title">Hodnocení</h2>
+            <p class="result-text" id="result-text">Vyhodnocení</p>
+            <button class="next-btn" style="display: block;" onclick="restartQuiz()">Zkusit znovu</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "K čemu sloužily tzv. bony, o kterých slýcháme z doby před rokem 1989?",
+                options: ["K nákupu základních potravin na lístky", "Jako platidlo v prodejnách Tuzex", "K povolení cesty do zahraničí", "Šlo o státní dluhopisy"],
+                correct: 1,
+                explanation: "Bony byly odběrní poukázky, kterými se platilo za luxusnější nebo zahraniční nedostatkové zboží ve speciálních prodejnách Tuzex. Oficiálně se kupovaly za valuty, neoficiálně od překupníků (veksláků)."
+            },
+            {
+                question: "Jak se jmenovala pravidelná hromadná tělovýchovná vystoupení na strahovském stadionu?",
+                options: ["Sokolské slety", "Olympijské naděje", "Spartakiády", "Mírové hry"],
+                correct: 2,
+                explanation: "Spartakiády se konaly každých pět let a byly masovou přehlídkou tělesné výchovy pod záštitou socialistického státu. Účastnily se jich statisíce cvičenců od dětí až po seniory."
+            },
+            {
+                question: "Jaká barevná kombinace byla typická pro slavnostní úbor Pionýrů?",
+                options: ["Světle modrá košile a červený šátek", "Zelená košile a žlutý šátek", "Bílá košile a modrý šátek", "Hnědá košile a zelený šátek"],
+                correct: 0,
+                explanation: "Běžným úborem byla světle modrá košile a výrazný červený šátek uvázaný kolem krku. Byla to typická uniforma dětské organizace v ČSSR."
+            },
+            {
+                question: "Co znamenala tehdy všudypřítomná zkratka RVHP?",
+                options: ["Rada vzájemné hospodářské pomoci", "Republikový výbor hutního průmyslu", "Rada vojenské obrany a pomoci", "Ruské velvyslanectví hlavního podniku"],
+                correct: 0,
+                explanation: "RVHP (Rada vzájemné hospodářské pomoci) byla obchodní organizace, která sdružovala socialistické státy sovětského bloku a koordinovala jejich ekonomiky."
+            },
+            {
+                question: "Jaká automobilka vyráběla legendární osobní vůz s motorem vzadu, přezdívaný „embéčko“?",
+                options: ["Tatra", "LIAZ", "Škoda", "Trabant"],
+                correct: 2,
+                explanation: "Škoda 1000 MB byla představena v roce 1964. Zkratka MB odkazovala na Mladou Boleslav, auto se stalo velmi populárním a lidé mu často laskavě říkali „tisíc malých bolestí“."
+            },
+            {
+                question: "K čemu přesně sloužila tzv. „výjezdní doložka“?",
+                options: ["K povolení koupit si auto na pořadník", "Jako potvrzení o ukončení vojenské služby", "K možnosti studovat na vysoké škole", "Jako nezbytné povolení k vycestování do vybraných zemí"],
+                correct: 3,
+                explanation: "Výjezdní doložka byla nutná součást pasu pro cesty na „Západ“ nebo třeba do Jugoslávie. Získat ji bylo zdlouhavé a režim ji uděloval jako formu odměny či privilegia."
+            },
+            {
+                question: "Kde jste si mohli koupit motocykl značky Jawa nebo osobní automobil (často s dlouhým čekáním na pořadník)?",
+                options: ["V obchodním domě Kotva", "V síti prodejen Mototechna", "V prodejnách Pramen", "Ve vybraných pobočkách pošty"],
+                correct: 1,
+                explanation: "Mototechna byla státním podnikem, který měl v Československu monopol na prodej automobilů, motocyklů a náhradních dílů."
+            },
+            {
+                question: "Který z herců ztvárnil hlavní postavu majora Jana Zemana ve slavném normalizačním seriálu?",
+                options: ["Vladimír Menšík", "Radoslav Brzobohatý", "Vladimír Brabec", "Jiří Sovák"],
+                correct: 2,
+                explanation: "Herec Vladimír Brabec zasvětil podstatnou část své kariéry právě roli majora Zemana ve Třiceti případech majora Zemana."
+            },
+            {
+                question: "Jak se říkalo dobrovolně-povinným pracovním směnám o víkendu, při kterých se zvelebovalo okolí či budovaly prodejny?",
+                options: ["Subotnik", "Plnění pětiletky", "Akce Z", "Brigáda socialistické práce"],
+                correct: 2,
+                explanation: "Akce Z (zvelebování) byla oficiálně dobrovolná neplacená práce občanů. Reálně na ni byl často vyvíjen nátlak a stavěly se v ní samoobsluhy, kulturní domy nebo se čistily ulice."
+            },
+            {
+                question: "Co to byla legendární „Céčka“?",
+                options: ["Školní známka z chování", "Plastové výlisky, které sloužily jako hračka i platidlo mezi dětmi", "Označení pro nejlepší pracovníky podniku", "Značka tehdejšího toaletního papíru"],
+                correct: 1,
+                explanation: "Céčka se původně vyráběla jako plastové dílky závěsů do dveří, ale v 80. letech se z nich stala obrovská dětská mánie. Děti je sbíraly, měnily a hrály s nimi takzvanou čáru."
+            },
+            {
+                question: "Jaký deník byl tehdy hlavním a nejčtenějším tiskovým orgánem Komunistické strany Československa?",
+                options: ["Svobodné slovo", "Mladá fronta", "Rudé právo", "Lidová demokracie"],
+                correct: 2,
+                explanation: "Rudé právo byl hlavní deník KSČ. Do roku 1989 měl obrovský a zčásti povinný náklad, četl se v podnicích i na úřadech."
+            },
+            {
+                question: "Který populární zpěvák opakovaně a s drtivou převahou vyhrával tehdejší hudební anketu Zlatý slavík?",
+                options: ["Waldemar Matuška", "Jiří Korn", "Václav Neckář", "Karel Gott"],
+                correct: 3,
+                explanation: "Karel Gott získal za svou kariéru desítky Zlatých a později Českých slavíků. V době Československa patřil k nejstálejším a nejpopulárnějším hvězdám."
+            },
+            {
+                question: "Jaká praktická a mimořádně skladná nákupní taška, mimochodem český vynález, zažívala velký boom už před příchodem igelitek?",
+                options: ["Plátěnka", "Síťovka", "Krosna", "Žebračka"],
+                correct: 1,
+                explanation: "Síťovka je geniální český vynález Vavřína Krčila z 20. let, který zdomácněl natolik, že v éře socialismu patřila síťovka smotaná v kapse k základní výbavě na nákup."
+            },
+            {
+                question: "Jaký nápoj, který se úspěšně pije dodnes, vznikl počátkem 60. let jako tuzemská odpověď na americkou kolu?",
+                options: ["Vinea", "Kofola", "Citrocola", "Aro"],
+                correct: 1,
+                explanation: "Kofola vznikla v roce 1960. Základem úspěchu byl a je originální sirup KOFO složený z bylinných a ovocných extraktů."
+            },
+            {
+                question: "Jaký populární a velmi odolný stolní plastový nádobíček v pastelových barvách navrhl pro domácnosti designér Jiří Pelcl?",
+                options: ["Kolekci varného skla Simax", "Barevné kempingové nádobí", "Tlačítkové telefony Tesla", "Žádný, pastelový plast se nevyráběl"],
+                correct: 1,
+                explanation: "Barevné, téměř nezničitelné plastové nádobí a kelímky pro kempování či na chaty k té době neodmyslitelně patřilo, velkou část produkce zajišťovaly české plastikářské podniky."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        const questionEl = document.getElementById('question');
+        const optionsEl = document.getElementById('options');
+        const progressEl = document.getElementById('progress');
+        const explanationEl = document.getElementById('explanation');
+        const explanationTextEl = document.getElementById('explanation-text');
+        const nextBtn = document.getElementById('next-btn');
+        
+        const questionContainer = document.getElementById('question-container');
+        const resultContainer = document.getElementById('result-container');
+        const headerEl = document.getElementById('quiz-header');
+
+        function initQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            questionContainer.style.display = 'block';
+            resultContainer.style.display = 'none';
+            headerEl.style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            const currentQ = questions[currentQuestionIndex];
+            
+            progressEl.textContent = `Otázka ${currentQuestionIndex + 1} / ${questions.length}`;
+            questionEl.textContent = currentQ.question;
+            
+            optionsEl.innerHTML = '';
+            explanationEl.style.display = 'none';
+            nextBtn.style.display = 'none';
+
+            currentQ.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => selectOption(index, btn);
+                optionsEl.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex, selectedBtn) {
+            if (answered) return;
+            answered = true;
+
+            const currentQ = questions[currentQuestionIndex];
+            const allBtns = optionsEl.getElementsByClassName('option-btn');
+
+            for (let i = 0; i < allBtns.length; i++) {
+                allBtns[i].disabled = true;
+                if (i === currentQ.correct) {
+                    allBtns[i].classList.add('correct');
+                }
+            }
+
+            if (selectedIndex === currentQ.correct) {
+                score++;
+            } else {
+                selectedBtn.classList.add('incorrect');
+            }
+
+            explanationTextEl.textContent = currentQ.explanation;
+            explanationEl.style.display = 'block';
+            
+            if (currentQuestionIndex < questions.length - 1) {
+                nextBtn.textContent = 'Další otázka';
+            } else {
+                nextBtn.textContent = 'Zobrazit výsledek';
+            }
+            nextBtn.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            questionContainer.style.display = 'none';
+            headerEl.style.display = 'none';
+            resultContainer.style.display = 'block';
+            
+            document.getElementById('final-score').textContent = `${score}/${questions.length}`;
+            
+            const titleEl = document.getElementById('result-title');
+            const textEl = document.getElementById('result-text');
+            
+            if (score === questions.length) {
+                titleEl.textContent = "Fantastický výkon!";
+                textEl.textContent = "Máte neuvěřitelnou paměť nebo vynikající znalosti české historie. Odpověděli jste naprosto bezchybně!";
+            } else if (score >= 11) {
+                titleEl.textContent = "Skvělý výsledek!";
+                textEl.textContent = "Tuto dobu si pamatujete velmi dobře. Drobná zaváhání nic nemění na tom, že máte výborný přehled.";
+            } else if (score >= 6) {
+                titleEl.textContent = "Zlatá střední cesta";
+                textEl.textContent = "Základy vám neunikly, ale některé detaily už vzal čas. Skvělá příležitost si je s tímto kvízem osvěžit.";
+            } else {
+                titleEl.textContent = "Příště to bude lepší";
+                textEl.textContent = "Tahle doba vás už možná minula, nebo jste zkrátka některé fenomény zapomněli. Nevadí, aspoň jste se dozvěděli něco nového.";
+            }
+        }
+
+        function restartQuiz() {
+            initQuiz();
+        }
+
+        // Start kvízu
+        initQuiz();
+    </script>
+</body>
+</html>
