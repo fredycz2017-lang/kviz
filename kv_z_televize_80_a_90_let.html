@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kvíz: Televize 80. a 90. let</title>
+    <style>
+        :root {
+            --primary-blue: #1e40af;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --btn-bg: #f9fafb;
+            --btn-border: #e5e7eb;
+            --btn-hover: #f3f4f6;
+            --correct-bg: #dcfce7;
+            --correct-border: #22c55e;
+            --incorrect-bg: #fee2e2;
+            --incorrect-border: #ef4444;
+            --next-btn-bg: #2563eb;
+            --next-btn-hover: #1d4ed8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 15px;
+            line-height: 1.5;
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 700px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 24px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--btn-border);
+        }
+
+        .header h1 {
+            font-size: 1.25rem;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+
+        .header p {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .progress {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .question {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 24px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: var(--btn-bg);
+            border: 2px solid var(--btn-border);
+            color: var(--text-color);
+            padding: 14px 16px;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: var(--btn-hover);
+            border-color: #d1d5db;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .option-btn.correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+        }
+
+        .option-btn.incorrect {
+            background-color: var(--incorrect-bg);
+            border-color: var(--incorrect-border);
+        }
+
+        .explanation {
+            margin-top: 20px;
+            padding: 16px;
+            background-color: #f8fafc;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 4px;
+            display: none;
+        }
+
+        .explanation p {
+            font-size: 0.95rem;
+            color: #334155;
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            background-color: var(--next-btn-bg);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            display: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .next-btn:hover {
+            background-color: var(--next-btn-hover);
+        }
+
+        .result-container {
+            text-align: center;
+            display: none;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: var(--primary-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto 24px auto;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 12px;
+        }
+
+        .result-text {
+            font-size: 1.1rem;
+            margin-bottom: 32px;
+            color: #4b5563;
+        }
+
+        @media (max-width: 560px) {
+            .quiz-container {
+                padding: 16px;
+            }
+            .question {
+                font-size: 1.1rem;
+            }
+            .option-btn {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+            .score-circle {
+                width: 100px;
+                height: 100px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="header" id="quiz-header">
+            <h1>Kvíz: Televizní pořady 80. a 90. let</h1>
+            <p>Jen pro zábavu. Pamatujete si hrdiny tehdejší obrazovky?</p>
+        </div>
+
+        <div id="question-container">
+            <div class="progress" id="progress">Otázka 1 / 15</div>
+            <div class="question" id="question">Načítání otázky...</div>
+            <div class="options" id="options"></div>
+            
+            <div class="explanation" id="explanation">
+                <p id="explanation-text"></p>
+            </div>
+            
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()">Další otázka</button>
+        </div>
+
+        <div class="result-container" id="result-container">
+            <div class="score-circle" id="final-score">0/15</div>
+            <h2 class="result-title" id="result-title">Hodnocení</h2>
+            <p class="result-text" id="result-text">Vyhodnocení</p>
+            <button class="next-btn" style="display: block;" onclick="restartQuiz()">Zkusit znovu</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Kdo hrál legendárního primáře Sovu v seriálu Nemocnice na kraji města?",
+                options: ["Ladislav Chudík", "Josef Vinklář", "Miloš Kopecký", "Josef Abrhám"],
+                correct: 0,
+                explanation: "Roli rozvážného primáře Sovy mistrně ztvárnil slovenský herec Ladislav Chudík. Roli původně začal točit Karel Höger, ale po jeho náhlém úmrtí musel být přeobsazen."
+            },
+            {
+                question: "Který moderátor uváděl oblíbenou soutěž s hádáním slov Kufr?",
+                options: ["Pavel Zedníček", "Jan Rosák", "Přemek Podlaha", "Eduard Hrubeš"],
+                correct: 0,
+                explanation: "Soutěžní pořad Kufr neodmyslitelně patřil k Pavlu Zedníčkovi, kterému se často a láskyplně přezdívalo „Čmaňa“."
+            },
+            {
+                question: "Jaká tvář je neodmyslitelně spjata se soutěží Videostop?",
+                options: ["Jan Rosák", "Vladimír Menšík", "Pavel Poulíček", "Karel Šíp"],
+                correct: 0,
+                explanation: "Jan Rosák uváděl populární soutěž Videostop, kde trojice soutěžících poznávala ukázky ze slavných (nejen českých) filmů."
+            },
+            {
+                question: "Kdo radil všem kutilům a zahrádkářům v pořadu Receptář nejen na neděli?",
+                options: ["Přemek Podlaha", "Petr Novotný", "Zdeněk Srstka", "Luděk Sobota"],
+                correct: 0,
+                explanation: "Kutilové, chovatelé a zahrádkáři léta vděčně naslouchali radám a tipům legendárního Přemka Podlahy."
+            },
+            {
+                question: "Kdo ztvárnil zlého čaroděje Rumburaka v pohádkovém seriálu Arabela?",
+                options: ["Jiří Lábus", "Oldřich Kaiser", "Vladimír Dlouhý", "Vlastimil Brodský"],
+                correct: 0,
+                explanation: "Jiří Lábus v roli Rumburaka se stal jedním z nejikoničtějších českých pohádkových padouchů všech dob."
+            },
+            {
+                question: "Kdo představoval hlavní hrdinku Annu Holubovou v seriálu Žena za pultem?",
+                options: ["Jiřina Švorcová", "Iva Janžurová", "Daniela Kolářová", "Jiřina Bohdalová"],
+                correct: 0,
+                explanation: "Hlavní roli prodavačky v lahůdkách si zahrála Jiřina Švorcová v normalizačním seriálu podle scénáře Jaroslava Dietla."
+            },
+            {
+                question: "Která legendární komediální dvojice bavila národ v pořadu Možná přijde i kouzelník?",
+                options: ["Oldřich Kaiser a Jiří Lábus", "Milan Lasica a Július Satinský", "Miloslav Šimek a Jiří Krampol", "Karel Šíp a Jaroslav Uhlíř"],
+                correct: 0,
+                explanation: "Oldřich Kaiser a Jiří Lábus tvořili nezapomenutelné duo plné scének, do kterých se často zapojoval i zpěvák Jiří Korn."
+            },
+            {
+                question: "Kdo moderoval na TV Nova prvotní díly soutěže Kolotoč?",
+                options: ["Pavel Poulíček", "Rey Koranteng", "Petr Rychlý", "Vladimír Hron"],
+                correct: 0,
+                explanation: "Soutěž Kolotoč na Nově zpočátku uváděl sporťák Pavel Poulíček, a teprve později jej nahradil Honza Musil."
+            },
+            {
+                question: "Který kultovní americký seriál s rodem Ewingů uhranul na začátku 90. let i české diváky?",
+                options: ["Dallas", "Dynastie", "Pobřežní hlídka", "Beverly Hills 90210"],
+                correct: 0,
+                explanation: "Sága o bohaté naftařské rodině Ewingových, obzvláště pak o intrikujícím J. R., doslova vylidňovala při svém vysílání ulice."
+            },
+            {
+                question: "Který herec propůjčil svůj nezaměnitelný hlas večerníčku Mach a Šebestová?",
+                options: ["Petr Nárožný", "Josef Dvořák", "František Filipovský", "Jiří Sovák"],
+                correct: 0,
+                explanation: "Petr Nárožný dokonale namluvil všechny postavy – od Macha se Šebestovou až po psa Jonatána nebo paní Kadrnožkovou."
+            },
+            {
+                question: "Jak se jmenoval čert, který v dětských pořadech dělal společnost Štěpánce Haničincové?",
+                options: ["Čertík Bertík", "Čertík Míra", "Čertík Florián", "Čertík Honza"],
+                correct: 0,
+                explanation: "Čertík Bertík patřil k oblíbeným loutkám, které po boku usměvavé Štěpánky Haničincové bavily celé generace dětí."
+            },
+            {
+                question: "Který herec byl dlouhá léta hlavní tváří cyklu televizních příběhů z diváckých dopisů Bakaláři?",
+                options: ["Vladimír Menšík", "Josef Kemr", "Rudolf Hrušínský", "Jiří Sovák"],
+                correct: 0,
+                explanation: "Vladimír Menšík byl nezapomenutelným průvodcem a tváří Bakalářů od jejich samotných počátků v 70. letech."
+            },
+            {
+                question: "Jak se jmenovaly dvě hlavní plyšové postavy pořadu Studio Kamarád?",
+                options: ["Jů a Hele", "Křemílek a Vochomůrka", "Špagetka a Makaron", "Mat a Pat"],
+                correct: 0,
+                explanation: "Velké plyšové postavy Jů a Hele (s hlasy Jiřího Lábuse a Oty Jiráka) pravidelně vítaly děti svým typickým „Ahoj kamarádi“."
+            },
+            {
+                question: "Z jaké planety pocházela mimozemšťanka Majka ve slovenském seriálu Spadla z oblakov?",
+                options: ["Gurun", "Krypton", "Melmak", "Vulcan"],
+                correct: 0,
+                explanation: "Majka, která uměla létat, chodit po vodě a duplikovat předměty, pocházela z planety Gurun."
+            },
+            {
+                question: "Jak se jmenoval francouzský animovaný seriál, který dětem ukazoval, jak funguje lidské tělo?",
+                options: ["Byl jednou jeden život", "Vesmírná odysea", "Tajemství lidského těla", "Dobrodružství krve"],
+                correct: 0,
+                explanation: "Byl jednou jeden život (Il était une fois... la Vie) fascinujícím způsobem animoval například červené krvinky nebo bílé krvinky coby létající policisty."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        const questionEl = document.getElementById('question');
+        const optionsEl = document.getElementById('options');
+        const progressEl = document.getElementById('progress');
+        const explanationEl = document.getElementById('explanation');
+        const explanationTextEl = document.getElementById('explanation-text');
+        const nextBtn = document.getElementById('next-btn');
+        
+        const questionContainer = document.getElementById('question-container');
+        const resultContainer = document.getElementById('result-container');
+        const headerEl = document.getElementById('quiz-header');
+
+        function initQuiz() {
+            // Zamíchání možností (aby nebyla vždy správná první jako v zadání)
+            questions.forEach(q => {
+                const optionsWithIndex = q.options.map((opt, i) => ({ text: opt, isCorrect: i === q.correct }));
+                // Fischer-Yates shuffle
+                for (let i = optionsWithIndex.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
+                }
+                q.shuffledOptions = optionsWithIndex.map(opt => opt.text);
+                q.shuffledCorrectIndex = optionsWithIndex.findIndex(opt => opt.isCorrect);
+            });
+
+            currentQuestionIndex = 0;
+            score = 0;
+            questionContainer.style.display = 'block';
+            resultContainer.style.display = 'none';
+            headerEl.style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            const currentQ = questions[currentQuestionIndex];
+            
+            progressEl.textContent = `Otázka ${currentQuestionIndex + 1} / ${questions.length}`;
+            questionEl.textContent = currentQ.question;
+            
+            optionsEl.innerHTML = '';
+            explanationEl.style.display = 'none';
+            nextBtn.style.display = 'none';
+
+            currentQ.shuffledOptions.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => selectOption(index, btn);
+                optionsEl.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex, selectedBtn) {
+            if (answered) return;
+            answered = true;
+
+            const currentQ = questions[currentQuestionIndex];
+            const allBtns = optionsEl.getElementsByClassName('option-btn');
+
+            for (let i = 0; i < allBtns.length; i++) {
+                allBtns[i].disabled = true;
+                if (i === currentQ.shuffledCorrectIndex) {
+                    allBtns[i].classList.add('correct');
+                }
+            }
+
+            if (selectedIndex === currentQ.shuffledCorrectIndex) {
+                score++;
+            } else {
+                selectedBtn.classList.add('incorrect');
+            }
+
+            explanationTextEl.textContent = currentQ.explanation;
+            explanationEl.style.display = 'block';
+            
+            if (currentQuestionIndex < questions.length - 1) {
+                nextBtn.textContent = 'Další otázka';
+            } else {
+                nextBtn.textContent = 'Zobrazit výsledek';
+            }
+            nextBtn.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            questionContainer.style.display = 'none';
+            headerEl.style.display = 'none';
+            resultContainer.style.display = 'block';
+            
+            document.getElementById('final-score').textContent = `${score}/${questions.length}`;
+            
+            const titleEl = document.getElementById('result-title');
+            const textEl = document.getElementById('result-text');
+            
+            if (score === questions.length) {
+                titleEl.textContent = "Televizní fajnšmekr!";
+                textEl.textContent = "Fantazie! Obrazovku jste znali tehdy zpaměti a paměť vám zjevně slouží na jedničku. Skvělá práce.";
+            } else if (score >= 10) {
+                titleEl.textContent = "Zlaté časy obrazovky";
+                textEl.textContent = "Skvělý výsledek! Tuhle dobu jste u televize strávili a paměť vám funguje parádně. Pár detailů sice vybledlo, ale přehled máte úžasný.";
+            } else if (score >= 5) {
+                titleEl.textContent = "Příjemná nostalgie";
+                textEl.textContent = "Něco si matně vybavujete, ale některé tváře a jména zkrátka zmizely v propadlišti dějin. Dobrá příležitost si to připomenout!";
+            } else {
+                titleEl.textContent = "Tohle minulo cíl";
+                textEl.textContent = "Zdá se, že jste tehdy trávili čas spíše venku, s knihou nebo v přírodě, než před televizní obrazovkou. Aspoň jste se teď dozvěděli něco nového!";
+            }
+        }
+
+        function restartQuiz() {
+            initQuiz();
+        }
+
+        // Start kvízu
+        initQuiz();
+    </script>
+</body>
+</html>
