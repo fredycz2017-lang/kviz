@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kvíz – české pohádky</title>
+<style>
+:root{--bg:#f4f4f4;--card:#fff;--text:#202124;--muted:#666;--line:#d8d8d8;--accent:#2f6fed;--choice:#e8edff;--choice-border:#c8d3ff;--ok:#e9f7ee;--ok-border:#69a77a;--bad:#fdecec;--bad-border:#cf7777}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+.app{width:100%;max-width:700px;margin:0 auto;padding:22px 10px 18px}.head{text-align:center;padding:0 10px 14px}
+h1{margin:0 0 10px;font-size:29px;line-height:1.15}.sub{margin:0 auto 8px;max-width:620px;font-size:16px;line-height:1.45;color:#444}.note{margin:0;font-size:13px;color:var(--muted)}
+.quizbox{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px 20px 22px;min-height:430px}
+.progress{text-align:center;color:var(--muted);font-size:14px;margin:0 0 12px}.q{text-align:center;font-size:23px;line-height:1.28;color:var(--accent);margin:12px 0 22px}.answers{max-width:520px;margin:0 auto}
+.answer{display:block;width:100%;border:1px solid var(--choice-border);background:var(--choice);color:var(--text);padding:16px 14px;margin:10px 0;font-size:17px;cursor:pointer}
+.answer:hover{filter:brightness(.98)}.answer.correct{background:var(--ok);border-color:var(--ok-border)}.answer.wrong{background:var(--bad);border-color:var(--bad-border)}.answer:disabled{cursor:default;filter:none}
+.feedback{display:none;max-width:550px;margin:18px auto 0;padding:12px 14px;border-top:1px solid var(--line);font-size:15px;line-height:1.45;color:#444}.feedback.show{display:block}
+.next{display:none;margin:16px auto 0;border:0;border-radius:6px;padding:12px 22px;background:#222;color:white;font-size:16px;cursor:pointer}.next.show{display:block}
+.result{display:none;text-align:center;padding:34px 20px}.result.show{display:block}.score{font-size:48px;font-weight:800;margin:8px 0 12px}
+.retry{border:0;border-radius:6px;padding:12px 22px;background:#222;color:#fff;font-size:16px;cursor:pointer}
+@media(max-width:560px){.app{padding-top:14px}h1{font-size:24px}.sub{font-size:15px}.quizbox{padding:10px 12px 18px;min-height:410px}.q{font-size:20px;margin-bottom:18px}.answer{font-size:16px;padding:14px 12px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="head">
+    <h1>Jak dobře znáte české pohádky?</h1>
+    <p class="sub">Popelka, Krasomila, Petr Máchal, Petronel i Tři veteráni. Patnáct otázek z pohádek, které známe skoro nazpaměť.</p>
+    <p class="note">Vědomostní kvíz • 15 otázek • česká filmová klasika</p>
+  </div>
+  <div class="quizbox">
+    <div id="play">
+      <div id="progress" class="progress"></div>
+      <div id="question" class="q"></div>
+      <div id="answers" class="answers"></div>
+      <div id="feedback" class="feedback"></div>
+      <button id="next" class="next">Další otázka</button>
+    </div>
+    <div id="result" class="result">
+      <div>Váš výsledek</div>
+      <div id="score" class="score"></div>
+      <p id="verdict"></p>
+      <button id="retry" class="retry">Zkusit znovu</button>
+    </div>
+  </div>
+</div>
+<script>
+const questions = [{"q": "Kdo hraje Popelku ve filmu Tři oříšky pro Popelku z roku 1973?", "opts": ["Libuše Šafránková", "Jana Brejchová", "Alena Vránová", "Milena Dvorská"], "correct": 0, "explain": "Popelku ztvárnila Libuše Šafránková."}, {"q": "Kdo režíroval Tři oříšky pro Popelku?", "opts": ["Bořivoj Zeman", "Václav Vorlíček", "Hynek Bočan", "Oldřich Lipský"], "correct": 1, "explain": "Režisérem filmu byl Václav Vorlíček."}, {"q": "Co ukrývají Popelčiny kouzelné oříšky?", "opts": ["Vždy to, co právě potřebuje", "Zlaté mince", "Tři prsteny", "Dopisy od prince"], "correct": 0, "explain": "Každý oříšek ukryje oděv či výbavu, kterou Popelka právě potřebuje."}, {"q": "Jak se jmenuje pyšná princezna v pohádce Pyšná princezna?", "opts": ["Lada", "Krasomila", "Adélka", "Maruška"], "correct": 1, "explain": "Hlavní hrdinkou je princezna Krasomila."}, {"q": "Jak se jmenuje král, který chce Krasomilu napravit?", "opts": ["Miroslav", "Radovan", "Kazisvět", "Pikola"], "correct": 0, "explain": "Krasomilu napravuje král Miroslav."}, {"q": "Jak se jmenuje princezna se zlatou hvězdou na čele?", "opts": ["Lada", "Bosana", "Eliška", "Angelína"], "correct": 0, "explain": "Princezna se zlatou hvězdou se jmenuje Lada."}, {"q": "Jak se jmenuje zlý král, který chce princeznu Ladu za ženu?", "opts": ["Kazisvět", "Pikola", "Já I.", "Miroslav"], "correct": 0, "explain": "O ruku princezny Lady usiluje král Kazisvět."}, {"q": "Kdo hraje Petra Máchala v pohádce S čerty nejsou žerty?", "opts": ["Vladimír Dlouhý", "Ondřej Vetchý", "Viktor Preiss", "Petr Nárožný"], "correct": 0, "explain": "Petra Máchala ztvárnil Vladimír Dlouhý."}, {"q": "Jak se jmenuje čert, který se v S čerty nejsou žerty spřátelí s Petrem?", "opts": ["Uriáš", "Janek", "Lucifer", "Drápal"], "correct": 1, "explain": "Petrovým čertovským kamarádem je Janek, kterého hraje Ondřej Vetchý."}, {"q": "Co řekne Maruška králi v pohádce Byl jednou jeden král, když se jí zeptá, jak ho má ráda?", "opts": ["Jako zlato", "Jako sůl", "Jako med", "Jako život"], "correct": 1, "explain": "Maruška odpoví, že ho má ráda jako sůl."}, {"q": "Jak se jmenují dva hlavní hrdinové pohádky Princezna ze mlejna?", "opts": ["Eliška a Jindřich", "Lada a Radovan", "Krasomila a Miroslav", "Maruška a Janek"], "correct": 0, "explain": "Ve středu příběhu stojí Eliška a Jindřich."}, {"q": "Jak se jmenuje nešikovný anděl z pohádky Anděl Páně?", "opts": ["Uriáš", "Petronel", "Gabriel", "Matěj"], "correct": 1, "explain": "Hlavní anděl se jmenuje Petronel."}, {"q": "Kdo doprovází Petronela na zemi v pohádce Anděl Páně?", "opts": ["Čert Uriáš", "Čert Janek", "Lucifer", "Mikuláš"], "correct": 0, "explain": "Petronela doprovází čert Uriáš."}, {"q": "Jak se jmenují tři veteráni ve stejnojmenné pohádce?", "opts": ["Pankrác, Servác a Bimbác", "Miroslav, Radovan a Kazisvět", "Janek, Petr a Lucifer", "Matěj, Kuba a Honza"], "correct": 0, "explain": "Tři vysloužilci se jmenují Pankrác, Servác a Bimbác."}, {"q": "Co naroste princezně Bosaně v pohádce Tři veteráni po ovoci z frňákovníku?", "opts": ["Obří uši", "Dlouhý nos", "Rohy", "Vousy"], "correct": 1, "explain": "Po ovoci z frňákovníku začne Bosaně růst dlouhý nos."}];
+const verdicts = ["Vánoční televizní maraton vás letos asi čeká povinně.", "Něco tam je. Pár pohádek ale bude chtít zopakovat.", "Dobré. V pohádkovém království byste se neztratili.", "Výborně. Tohle už zavání pravidelným vánočním maratonem.", "14–15/15. Pohádkovou televizní klasiku máte skoro nazpaměť."];
+let index=0,score=0,locked=false;
+const progress=document.getElementById('progress'),question=document.getElementById('question'),answers=document.getElementById('answers'),feedback=document.getElementById('feedback'),next=document.getElementById('next'),play=document.getElementById('play'),result=document.getElementById('result');
+function renderQuestion(){
+  locked=false;feedback.className='feedback';next.className='next';
+  const item=questions[index];
+  progress.textContent=`Otázka ${index+1} / ${questions.length}`;
+  question.textContent=item.q;answers.innerHTML='';
+  item.opts.forEach((opt,oi)=>{
+    const btn=document.createElement('button');btn.className='answer';btn.textContent=opt;
+    btn.addEventListener('click',()=>choose(oi,btn));answers.appendChild(btn);
+  });
+}
+function choose(oi,clicked){
+  if(locked)return;locked=true;const item=questions[index];
+  const buttons=[...answers.querySelectorAll('.answer')];
+  buttons.forEach((btn,i)=>{btn.disabled=true;if(i===item.correct)btn.classList.add('correct');});
+  if(oi===item.correct)score++;else clicked.classList.add('wrong');
+  feedback.textContent=item.explain;feedback.classList.add('show');
+  next.textContent=index===questions.length-1?'Zobrazit výsledek':'Další otázka';next.classList.add('show');
+}
+next.addEventListener('click',()=>{index++;if(index>=questions.length)showResult();else renderQuestion();});
+function showResult(){
+  play.style.display='none';result.classList.add('show');
+  document.getElementById('score').textContent=`${score}/${questions.length}`;
+  let v=verdicts[0];
+  if(score>=14)v=verdicts[4];else if(score>=11)v=verdicts[3];else if(score>=7)v=verdicts[2];else if(score>=4)v=verdicts[1];
+  document.getElementById('verdict').textContent=v;
+}
+document.getElementById('retry').addEventListener('click',()=>{index=0;score=0;result.className='result';play.style.display='block';renderQuestion();});
+renderQuestion();
+</script>
+</body></html>
