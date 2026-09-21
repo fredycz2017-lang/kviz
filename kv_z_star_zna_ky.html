@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kvíz: Staré československé značky a výrobky</title>
+    <style>
+        :root {
+            --primary-blue: #1e40af;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --btn-bg: #f9fafb;
+            --btn-border: #e5e7eb;
+            --btn-hover: #f3f4f6;
+            --correct-bg: #dcfce7;
+            --correct-border: #22c55e;
+            --incorrect-bg: #fee2e2;
+            --incorrect-border: #ef4444;
+            --next-btn-bg: #2563eb;
+            --next-btn-hover: #1d4ed8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 15px;
+            line-height: 1.5;
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 700px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 24px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--btn-border);
+        }
+
+        .header h1 {
+            font-size: 1.25rem;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+
+        .header p {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .progress {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .question {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 24px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: var(--btn-bg);
+            border: 2px solid var(--btn-border);
+            color: var(--text-color);
+            padding: 14px 16px;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: var(--btn-hover);
+            border-color: #d1d5db;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .option-btn.correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+        }
+
+        .option-btn.incorrect {
+            background-color: var(--incorrect-bg);
+            border-color: var(--incorrect-border);
+        }
+
+        .explanation {
+            margin-top: 20px;
+            padding: 16px;
+            background-color: #f8fafc;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 4px;
+            display: none;
+        }
+
+        .explanation p {
+            font-size: 0.95rem;
+            color: #334155;
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            background-color: var(--next-btn-bg);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            display: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .next-btn:hover {
+            background-color: var(--next-btn-hover);
+        }
+
+        .result-container {
+            text-align: center;
+            display: none;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: var(--primary-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto 24px auto;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 12px;
+        }
+
+        .result-text {
+            font-size: 1.1rem;
+            margin-bottom: 32px;
+            color: #4b5563;
+        }
+
+        @media (max-width: 560px) {
+            .quiz-container {
+                padding: 16px;
+            }
+            .question {
+                font-size: 1.1rem;
+            }
+            .option-btn {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+            .score-circle {
+                width: 100px;
+                height: 100px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <div class="header" id="quiz-header">
+            <h1>Kvíz: Staré československé značky a výrobky</h1>
+            <p>Jen pro zábavu. Kofola, ETA, Jawa... kolik si toho pamatujete?</p>
+        </div>
+
+        <div id="question-container">
+            <div class="progress" id="progress">Otázka 1 / 15</div>
+            <div class="question" id="question">Načítání otázky...</div>
+            <div class="options" id="options"></div>
+            
+            <div class="explanation" id="explanation">
+                <p id="explanation-text"></p>
+            </div>
+            
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()">Další otázka</button>
+        </div>
+
+        <div class="result-container" id="result-container">
+            <div class="score-circle" id="final-score">0/15</div>
+            <h2 class="result-title" id="result-title">Hodnocení</h2>
+            <p class="result-text" id="result-text">Vyhodnocení</p>
+            <button class="next-btn" style="display: block;" onclick="restartQuiz()">Zkusit znovu</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Z jakého města pochází legendární sportovní obuv Botas?",
+                options: ["Zlín", "Skuteč", "Prostějov", "Pardubice"],
+                correct: 1,
+                explanation: "Značka Botas vznikla ve východočeské Skutči. Její název je zkratkou slov BOTA a Sport (původní název podniku byl Botana)."
+            },
+            {
+                question: "Jaký dopravní prostředek proslavil značku Favorit s továrnou v Rokycanech?",
+                options: ["Mopedy", "Jízdní kola", "Nákladní automobily", "Tramvaje"],
+                correct: 1,
+                explanation: "Favorit Rokycany byl v Československu takřka monopolním výrobcem populárních jízdních kol, po kterých toužil snad každý kluk."
+            },
+            {
+                question: "Co znamenala zkratka legendárního podniku Tesla, který vyráběl televizory a rádia?",
+                options: ["TEchnika SLAboproudá", "TErminály a SLožité Aparáty", "TEchnologické SLužby Armádě", "Bylo to jen jméno vynálezce, zkratka to nebyla"],
+                correct: 0,
+                explanation: "I když byl podnik původně pojmenován po Nikolu Teslovi, oficiálně se název vysvětloval jako zkratka TEchnika SLAboproudá (lidově se vtipkovalo 'TEchnicky SLAbé')."
+            },
+            {
+                question: "Která firma, proslulá výrobou žehliček, vysavačů a mixérů, sídlila v Hlinsku?",
+                options: ["Bravo", "ETA", "Zeta", "Pragotron"],
+                correct: 1,
+                explanation: "Elektrotechnické aparáty (ETA) Hlinsko vybavily spotřebiči snad každou československou domácnost."
+            },
+            {
+                question: "Z čeho se původně zrodil název světoznámé značky motocyklů Jawa?",
+                options: ["Ze slov JAko WAmpír", "Ze spojení jmen JAneček a WAnderer", "Z oblasti původu na JAvě", "Byl to přesmyk slova AWAJ"],
+                correct: 1,
+                explanation: "Továrník František Janeček zakoupil licenci na motocykly od německé firmy Wanderer. Spojením prvních slabik vzniklo slavné jméno JAWA."
+            },
+            {
+                question: "Jakou barvu a příchuť měla legendární kostka žvýkačky Pedro z velimské čokoládovny?",
+                options: ["Zelenou s příchutí máty", "Bílou s příchutí skořice", "Růžovou s ovocnou příchutí", "Modrou s příchutí borůvek"],
+                correct: 2,
+                explanation: "Pedro byla oblíbená růžová žvýkačka s ovocnou příchutí, za kterou děti s radostí utratily svou korunu."
+            },
+            {
+                question: "Kdo je autorem ikonického obalu s 'mouřenínem' popíjejícím kávu u tyčinky Kofila?",
+                options: ["Alfons Mucha", "Josef Lada", "Zdeněk Rykr", "Kamil Lhoták"],
+                correct: 2,
+                explanation: "Obal s mouřenínem navrhl ve 20. letech známý malíř a designér Zdeněk Rykr. Kofila s tímto vizuálem existuje dodnes."
+            },
+            {
+                question: "Která specifická stavebnice, vyrobená z lakovaného ocelového plechu a šroubků, pochází z Police nad Metují?",
+                options: ["Cheva", "Seva", "Merkur", "Lego"],
+                correct: 2,
+                explanation: "Kovová stavebnice Merkur bavila generace budoucích inženýrů. Mimo jiné z ní Otto Wichterle sestavil svůj první čočkostroj."
+            },
+            {
+                question: "K čemu primárně sloužil oblíbený československý kosmetický výrobek Barbus?",
+                options: ["Byl to lak na vlasy", "Bylo to mýdlo a krém na holení", "Byl to dětský pudr", "Byla to kolínská voda pro ženy"],
+                correct: 1,
+                explanation: "Barbus byl klasickým mýdlem (a krémem) na holení, jehož vůni si pamatuje z koupelen většina tehdejších dětí u svých tatínků a dědečků."
+            },
+            {
+                question: "Jaké zboží nosí hrdě název Prim a vyrábí se v Novém Městě nad Metují?",
+                options: ["Hodinky", "Fotoaparáty", "Psací stroje", "Televizory"],
+                correct: 0,
+                explanation: "Hodinky Prim tikaly na zápěstí snad každého druhého Čechoslováka. Továrna v Novém Městě nad Metují existuje dodnes."
+            },
+            {
+                question: "Jak se jmenovala plastová figurka, jejíž historicky první verze z roku 1976 představovala povolání zedníka?",
+                options: ["Céčko", "Igráček", "Mončičák", "Panáček z Lega"],
+                correct: 1,
+                explanation: "Igráček vznikl v podniku IGRA. Po zedníkovi následovaly desítky dalších povolání od kuchaře až po policistu."
+            },
+            {
+                question: "Z jaké tajné směsi extraktů a sirupů vznikla původní Kofola v roce 1960 jakožto alternativa k západním kolám?",
+                options: ["Ze sirupu Kofo", "Ze sirupu Cola-Loca", "Z extraktu Chmel", "Ze zahuštěné melasy"],
+                correct: 0,
+                explanation: "Základem dodnes milované Kofoly je sirup KOFO, který smícháním bylin a ovocných složek vyvinul docent Zdeněk Blažek."
+            },
+            {
+                question: "Co byl legendární domácí vynález 'Remoska' pocházející z 50. let?",
+                options: ["Mechanický šlehač", "Elektrická pečicí mísa s výhřevným víkem", "První československá mikrovlnka", "Přenosný vařič na tuhý líh"],
+                correct: 1,
+                explanation: "Remoska, přenosná pečicí mísa, zachránila jídlo na nejedné chatě či chalupě a s velkým úspěchem se vyvážela i do zahraničí (např. Velké Británie)."
+            },
+            {
+                question: "Jaká typická vůně je dodnes synonymem pro léčivou francovku značky Alpa?",
+                options: ["Hřebíček", "Skořice", "Mentol", "Levandule"],
+                correct: 2,
+                explanation: "Alpa, modrá lahvička se žlutou hvězdou, obsahuje mentolový extrakt a dodnes se používá k masážím i inhalacím."
+            },
+            {
+                question: "Nákladní automobily jaké české značky šestkrát s Karlem Lopraisem vyhrály slavnou Rallye Dakar?",
+                options: ["LIAZ", "Praga", "Tatra", "Avia"],
+                correct: 2,
+                explanation: "Ikonické nákladní vozy Tatra (zejména model 815) z Kopřivnice s unikátním páteřovým rámem se staly legendou nejtěžších závodů světa."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        const questionEl = document.getElementById('question');
+        const optionsEl = document.getElementById('options');
+        const progressEl = document.getElementById('progress');
+        const explanationEl = document.getElementById('explanation');
+        const explanationTextEl = document.getElementById('explanation-text');
+        const nextBtn = document.getElementById('next-btn');
+        
+        const questionContainer = document.getElementById('question-container');
+        const resultContainer = document.getElementById('result-container');
+        const headerEl = document.getElementById('quiz-header');
+
+        function initQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            questionContainer.style.display = 'block';
+            resultContainer.style.display = 'none';
+            headerEl.style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            const currentQ = questions[currentQuestionIndex];
+            
+            progressEl.textContent = `Otázka ${currentQuestionIndex + 1} / ${questions.length}`;
+            questionEl.textContent = currentQ.question;
+            
+            optionsEl.innerHTML = '';
+            explanationEl.style.display = 'none';
+            nextBtn.style.display = 'none';
+
+            // Záměrně nemícháme možnosti, aby se neztratilo pořadí u option arrayů, 
+            // ale pro jednoduchost je vkládáme přímo. Lze vylepšit o shuffle, 
+            // ale Masterplan preferuje robustnost.
+            currentQ.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => selectOption(index, btn);
+                optionsEl.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex, selectedBtn) {
+            if (answered) return;
+            answered = true;
+
+            const currentQ = questions[currentQuestionIndex];
+            const allBtns = optionsEl.getElementsByClassName('option-btn');
+
+            for (let i = 0; i < allBtns.length; i++) {
+                allBtns[i].disabled = true;
+                if (i === currentQ.correct) {
+                    allBtns[i].classList.add('correct');
+                }
+            }
+
+            if (selectedIndex === currentQ.correct) {
+                score++;
+            } else {
+                selectedBtn.classList.add('incorrect');
+            }
+
+            explanationTextEl.textContent = currentQ.explanation;
+            explanationEl.style.display = 'block';
+            
+            if (currentQuestionIndex < questions.length - 1) {
+                nextBtn.textContent = 'Další otázka';
+            } else {
+                nextBtn.textContent = 'Zobrazit výsledek';
+            }
+            nextBtn.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            questionContainer.style.display = 'none';
+            headerEl.style.display = 'none';
+            resultContainer.style.display = 'block';
+            
+            document.getElementById('final-score').textContent = `${score}/${questions.length}`;
+            
+            const titleEl = document.getElementById('result-title');
+            const textEl = document.getElementById('result-text');
+            
+            if (score === questions.length) {
+                titleEl.textContent = "Excelentní pamětník!";
+                textEl.textContent = "Vaše znalosti jsou fenomenální! Staré značky a výrobky znáte naprosto bezchybně. Jako by to bylo včera, že?";
+            } else if (score >= 10) {
+                titleEl.textContent = "Výborný přehled";
+                textEl.textContent = "Skvělý výsledek! Tuhle éru si pamatujete opravdu dobře a většina legendárních výrobků vám rukama zjevně prošla.";
+            } else if (score >= 5) {
+                titleEl.textContent = "Slušný základ";
+                textEl.textContent = "Něco málo si pamatujete, ale detaily už možná odnesl čas. Byla to skvělá příležitost si to s námi připomenout.";
+            } else {
+                titleEl.textContent = "Tohle minulo vaši generaci";
+                textEl.textContent = "Tady se ukazuje, že tuhle dobu už moc nepamatujete, nebo vás technika a značky nikdy nezajímaly. Nevadí, aspoň jste se dozvěděli kus naší historie!";
+            }
+        }
+
+        function restartQuiz() {
+            initQuiz();
+        }
+
+        // Start kvízu
+        initQuiz();
+    </script>
+</body>
+</html>
