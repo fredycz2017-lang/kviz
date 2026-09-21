@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kvíz: Ceny a nákupy za socialismu</title>
+    <style>
+        :root {
+            --primary-blue: #1e40af;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --btn-bg: #f9fafb;
+            --btn-border: #e5e7eb;
+            --btn-hover: #f3f4f6;
+            --correct-bg: #dcfce7;
+            --correct-border: #22c55e;
+            --incorrect-bg: #fee2e2;
+            --incorrect-border: #ef4444;
+            --next-btn-bg: #2563eb;
+            --next-btn-hover: #1d4ed8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 15px;
+            line-height: 1.5;
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 700px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 24px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--btn-border);
+        }
+
+        .header h1 {
+            font-size: 1.25rem;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+
+        .header p {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .progress {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .question {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 24px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: var(--btn-bg);
+            border: 2px solid var(--btn-border);
+            color: var(--text-color);
+            padding: 14px 16px;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: var(--btn-hover);
+            border-color: #d1d5db;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .option-btn.correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+        }
+
+        .option-btn.incorrect {
+            background-color: var(--incorrect-bg);
+            border-color: var(--incorrect-border);
+        }
+
+        .explanation {
+            margin-top: 20px;
+            padding: 16px;
+            background-color: #f8fafc;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 4px;
+            display: none;
+        }
+
+        .explanation p {
+            font-size: 0.95rem;
+            color: #334155;
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            background-color: var(--next-btn-bg);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            display: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .next-btn:hover {
+            background-color: var(--next-btn-hover);
+        }
+
+        .result-container {
+            text-align: center;
+            display: none;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: var(--primary-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto 24px auto;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 12px;
+        }
+
+        .result-text {
+            font-size: 1.1rem;
+            margin-bottom: 32px;
+            color: #4b5563;
+        }
+
+        @media (max-width: 560px) {
+            .quiz-container {
+                padding: 16px;
+            }
+            .question {
+                font-size: 1.1rem;
+            }
+            .option-btn {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+            .score-circle {
+                width: 100px;
+                height: 100px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <div class="header" id="quiz-header">
+            <h1>Kvíz: Ceny a nákupy za socialismu</h1>
+            <p>Jen pro zábavu. Schválně, jak dobře vám slouží paměť!</p>
+        </div>
+
+        <div id="question-container">
+            <div class="progress" id="progress">Otázka 1 / 20</div>
+            <div class="question" id="question">Načítání otázky...</div>
+            <div class="options" id="options"></div>
+            
+            <div class="explanation" id="explanation">
+                <p id="explanation-text"></p>
+            </div>
+            
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()">Další otázka</button>
+        </div>
+
+        <div class="result-container" id="result-container">
+            <div class="score-circle" id="final-score">0/20</div>
+            <h2 class="result-title" id="result-title">Hodnocení</h2>
+            <p class="result-text" id="result-text">Vyhodnocení</p>
+            <button class="next-btn" style="display: block;" onclick="restartQuiz()">Zkusit znovu</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Asi nejslavnější cenovka té doby. Kolik tehdy stál jeden obyčejný rohlík (43 gramů)?",
+                options: ["10 haléřů", "30 haléřů", "50 haléřů", "1 Kčs"],
+                correct: 1,
+                explanation: "Rohlík stál dlouhá léta stabilně 30 haléřů. Tato cena se stala symbolem tehdejší pevně dané cenové hladiny základních potravin."
+            },
+            {
+                question: "Kolik stál v hospodě půllitr točeného světlého piva (desítky)?",
+                options: ["1,20 Kčs", "1,70 Kčs", "2,50 Kčs", "3,20 Kčs"],
+                correct: 1,
+                explanation: "Světlé desetistupňové pivo stálo v hospodách nižší cenové skupiny jednotných 1,70 Kčs. Dvanáctka pak stála 2,80 Kčs."
+            },
+            {
+                question: "Litr polotučného mléka se často prodával v nešikovných igelitových sáčcích. Kolik stál?",
+                options: ["1 Kčs", "2 Kčs", "3 Kčs", "4,50 Kčs"],
+                correct: 1,
+                explanation: "Litr mléka stál v sáčku (a dříve i ve skle) 2 Kčs. Sáčky se doma často dávaly do speciálních plastových džbánků a po odstřihnutí rohu se z nich mléko nalévalo."
+            },
+            {
+                question: "Jedny z nejběžnějších cigaret byly populární Startky bez filtru. Na kolik vyšla jedna krabička?",
+                options: ["4 Kčs", "8 Kčs", "14 Kčs", "20 Kčs"],
+                correct: 0,
+                explanation: "Obyčejné Startky bez filtru stály lidových 4 Kčs. O něco luxusnější Sparty stály původně 8 Kčs, později zdražily na 14 Kčs."
+            },
+            {
+                question: "Za kolik korun se v 80. letech průměrně kupoval jeden „bon“ na černém trhu od veksláka?",
+                options: ["2 Kčs", "5 Kčs", "10 Kčs", "25 Kčs"],
+                correct: 1,
+                explanation: "Oficiální hodnota bonu byla 1 Kčs, ale od veksláků před Tuzexem se stabilně kupoval za zhruba 5 Kčs (před revolucí cena stoupala až k 5,50 Kčs)."
+            },
+            {
+                question: "Kolik tehdy zaplatilo dítě za oblíbenou žvýkačku Pedro s tetováním?",
+                options: ["50 haléřů", "1 Kčs", "2 Kčs", "5 Kčs"],
+                correct: 1,
+                explanation: "Růžová žvýkačka Pedro stála přesně 1 Kčs a patřila mezi nejoblíbenější dětské sladkosti."
+            },
+            {
+                question: "Jaká byla cena obyčejného (nepřestupního) lístku na tramvaj či autobus v Praze?",
+                options: ["50 haléřů", "1 Kčs", "2 Kčs", "3 Kčs"],
+                correct: 1,
+                explanation: "Lístek na MHD v Praze stál dlouhou dobu 1 Kčs. Lístky si cestující sami znehodnocovali ve strojcích uvnitř vozu."
+            },
+            {
+                question: "Kolik zhruba stál v 80. letech nový automobil Škoda 120 L?",
+                options: ["25 000 Kčs", "60 000 Kčs", "95 000 Kčs", "150 000 Kčs"],
+                correct: 1,
+                explanation: "Nová „stodvacítka“ stála v Mototechně kolem 58 až 65 tisíc Kčs. Na pořízení auta se často muselo dlouho šetřit nebo si brát půjčky."
+            },
+            {
+                question: "Jaká byla přibližně průměrná hrubá měsíční mzda v Československu v roce 1989?",
+                options: ["1 500 Kčs", "3 100 Kčs", "5 500 Kčs", "8 000 Kčs"],
+                correct: 1,
+                explanation: "Průměrná hrubá mzda na konci socialismu v roce 1989 činila zhruba 3 170 Kčs. Lidé v průmyslu a hornictví ale mívali výrazně více."
+            },
+            {
+                question: "Jakou barvu měla legendární stokorunová bankovka, na které byl vyobrazen Klement Gottwald?",
+                options: ["Modrou", "Červenou", "Zelenou", "Hnědou"],
+                correct: 2,
+                explanation: "Gottwaldova „stovka“ z roku 1989 byla výrazně zelená (nahradila starší zelenou stokorunu s Hradčany). Byla velmi neoblíbená a v oběhu vydržela jen krátce."
+            },
+            {
+                question: "Co znamenal tehdy hojně užívaný pojem „podpultové zboží“?",
+                options: ["Zboží prodávané s 50% slevou", "Zboží určené rovnou k vyhození", "Nedostatkové zboží, které prodavač schoval pod pult pro známé", "Zboží z dovozu, které se nesmělo vůbec vystavit v obchodech"],
+                correct: 2,
+                explanation: "Úzkoprofilové (nedostatkové) zboží se na pulty často vůbec nedostalo. Prodavačky si ho schovávaly pod pult pro své známé nebo na výměnný obchod (tzv. protislužby)."
+            },
+            {
+                question: "Co to byl (a dodnes pro spoustu pamětníků je) takzvaný „hořčičák“?",
+                options: ["Zemědělec, který pěstoval hořčici", "Skleněný obal od hořčice, ze kterého se v domácnostech běžně pilo", "Zvláštní druh malého panáka na alkohol", "Oblíbený pokrm z chleba, sádla a hořčice"],
+                correct: 1,
+                explanation: "Hořčice se prodávala v pevných, mírně kónických skleničkách bez závitu. Po umytí se staly nedílnou součástí domácího nádobí a běžně se z nich pil šťáva i voda."
+            },
+            {
+                question: "Džíny byly v obchodech nedostatkové. Jaká značka se běžně kupovala v Tuzexu a stala se u nás synonymem pro džíny vůbec?",
+                options: ["Levi's", "Wrangler", "Rifle", "Mustang"],
+                correct: 2,
+                explanation: "Značka Super Rifle z Tuzexu dala v Československu kalhotám z denimu zlidovělý název „rifle“, který spousta lidí používá dodnes."
+            },
+            {
+                question: "Na jakou maximální částku si mohli mladí manželé vzít mimořádně výhodnou státní „novomanželskou půjčku“ (v 70. a 80. letech)?",
+                options: ["10 000 Kčs", "30 000 Kčs", "50 000 Kčs", "100 000 Kčs"],
+                correct: 1,
+                explanation: "Novomanželská půjčka s úrokem 1 až 2,5 % se dala vzít až do výše 30 000 Kčs. Navíc stát při narození dítěte část jistiny odpustil."
+            },
+            {
+                question: "Jak se jmenoval oblíbený levný čisticí prostředek (prášek/písek), kterým se běžně drhly vany a dřezy?",
+                options: ["Tide", "Ariel", "AVA", "Savo"],
+                correct: 2,
+                explanation: "Prášek AVA (a také pasta Toro) byl naprostý základ každé koupelny. Výborně drhl špínu, ale mohl poškrábat smalt."
+            },
+            {
+                question: "Barevná televize byla obrovský luxus. Kolik v 80. letech zhruba stál oblíbený domácí model Tesla Color?",
+                options: ["4 000 Kčs", "8 000 Kčs", "15 000 Kčs", "30 000 Kčs"],
+                correct: 2,
+                explanation: "Televizory Tesla Color stály kolem 13 až 15 tisíc Kčs. Vzhledem k průměrné mzdě (kolem 3000 Kčs) to představovalo úspory rodiny za mnoho měsíců."
+            },
+            {
+                question: "Jaké zboží se prodávalo ve státní síti prodejen „Pramen“?",
+                options: ["Obuv", "Potraviny", "Drogerie", "Knihy"],
+                correct: 1,
+                explanation: "Pramen byla síť státních prodejen potravin ve městech (na venkově plnila tuto roli síť spotřebních družstev Jednota)."
+            },
+            {
+                question: "Když vás rodiče poslali na nákup do „Masny“, co jste měli za úkol koupit?",
+                options: ["Dřevěný nábytek", "Zeleninu a brambory", "Maso a uzeniny", "Čerstvé pečivo"],
+                correct: 2,
+                explanation: "Masna byl název státního podniku i samotných maloobchodních prodejen, které nabízely maso a uzenářské výrobky."
+            },
+            {
+                question: "Jak to tehdy bylo s dostupností jižního ovoce, jako byly mandarinky a banány?",
+                options: ["Byly běžně a levně k dostání po celý rok", "Stály se na ně dlouhé fronty, zpravidla jen před Vánoci", "Prodávaly se výhradně na přídělové lístky", "Jejich dovoz do Československa byl zákonem zakázán"],
+                correct: 1,
+                explanation: "Jižní ovoce, často dovážené spřátelenou lodí z Kuby, se v obchodech objevovalo nárazově, typicky před vánočními svátky, a stály se na něj obří fronty."
+            },
+            {
+                question: "Kolik stál v 80. letech oblíbený kokosový nanuk Eskymo?",
+                options: ["50 haléřů", "1 Kčs", "2 Kčs", "5 Kčs"],
+                correct: 0,
+                explanation: "Zatímco tvarohový nanuk Míša stál 1 Kčs, maličké kokosové Eskymo stálo pouhých 50 haléřů."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        const questionEl = document.getElementById('question');
+        const optionsEl = document.getElementById('options');
+        const progressEl = document.getElementById('progress');
+        const explanationEl = document.getElementById('explanation');
+        const explanationTextEl = document.getElementById('explanation-text');
+        const nextBtn = document.getElementById('next-btn');
+        
+        const questionContainer = document.getElementById('question-container');
+        const resultContainer = document.getElementById('result-container');
+        const headerEl = document.getElementById('quiz-header');
+
+        function initQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            questionContainer.style.display = 'block';
+            resultContainer.style.display = 'none';
+            headerEl.style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            const currentQ = questions[currentQuestionIndex];
+            
+            progressEl.textContent = `Otázka ${currentQuestionIndex + 1} / ${questions.length}`;
+            questionEl.textContent = currentQ.question;
+            
+            optionsEl.innerHTML = '';
+            explanationEl.style.display = 'none';
+            nextBtn.style.display = 'none';
+
+            currentQ.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => selectOption(index, btn);
+                optionsEl.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex, selectedBtn) {
+            if (answered) return;
+            answered = true;
+
+            const currentQ = questions[currentQuestionIndex];
+            const allBtns = optionsEl.getElementsByClassName('option-btn');
+
+            for (let i = 0; i < allBtns.length; i++) {
+                allBtns[i].disabled = true;
+                if (i === currentQ.correct) {
+                    allBtns[i].classList.add('correct');
+                }
+            }
+
+            if (selectedIndex === currentQ.correct) {
+                score++;
+            } else {
+                selectedBtn.classList.add('incorrect');
+            }
+
+            explanationTextEl.textContent = currentQ.explanation;
+            explanationEl.style.display = 'block';
+            
+            if (currentQuestionIndex < questions.length - 1) {
+                nextBtn.textContent = 'Další otázka';
+            } else {
+                nextBtn.textContent = 'Zobrazit výsledek';
+            }
+            nextBtn.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            questionContainer.style.display = 'none';
+            headerEl.style.display = 'none';
+            resultContainer.style.display = 'block';
+            
+            document.getElementById('final-score').textContent = `${score}/${questions.length}`;
+            
+            const titleEl = document.getElementById('result-title');
+            const textEl = document.getElementById('result-text');
+            
+            if (score === questions.length) {
+                titleEl.textContent = "Mistr pamětník!";
+                textEl.textContent = "Vaše paměť je naprosto fenomenální! Pamatujete si úplně všechny tehdejší ceny, obchody i nákupní zvyklosti. Hluboká poklona.";
+            } else if (score >= 15) {
+                titleEl.textContent = "Zlaté časy v paměti";
+                textEl.textContent = "Skvělý výsledek! Tuhle dobu jste zažili naplno a pamatujete si toho opravdu hodně. Pár drobných chyb nehraje žádnou roli.";
+            } else if (score >= 10) {
+                titleEl.textContent = "Slušný průměr";
+                textEl.textContent = "Něco si ještě vybavujete, ale některé částky a detaily už zkrátka vybledly. Skvělá příležitost, jak si to s naším kvízem osvěžit.";
+            } else {
+                titleEl.textContent = "Tak tohle byla historie...";
+                textEl.textContent = "Tahle doba vás už asi minula, nebo jste tehdejší starosti s nákupy hodili úspěšně za hlavu. Aspoň jste se teď dozvěděli, jak to dřív chodilo.";
+            }
+        }
+
+        function restartQuiz() {
+            initQuiz();
+        }
+
+        // Start kvízu
+        initQuiz();
+    </script>
+</body>
+</html>
