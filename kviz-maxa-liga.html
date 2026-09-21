@@ -5,164 +5,40 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Kvíz Maxa liga 2026/27</title>
 <style>
-:root {
-  --bg:#f4f4f4; --card:#fff; --text:#202124; --muted:#666; --line:#d8d8d8;
-  --accent:#2f6fed; --choice:#e8edff; --choice-border:#c8d3ff;
-  --ok:#e9f7ee; --ok-border:#69a77a; --bad:#fdecec; --bad-border:#cf7777;
-}
-* { box-sizing:border-box; }
-html,body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family:Arial,Helvetica,sans-serif; }
-.app { width:100%; max-width:700px; margin:0 auto; padding:22px 10px 18px; }
-.head { text-align:center; padding:0 10px 14px; }
-h1 { margin:0 0 10px; font-size:29px; line-height:1.15; }
-.sub { margin:0 auto 8px; max-width:620px; font-size:16px; line-height:1.45; color:#444; }
-.note { margin:0; font-size:13px; color:var(--muted); }
-.quizbox {
-  background:var(--card); border:1px solid var(--line); border-radius:6px;
-  padding:12px 20px 22px; min-height:430px;
-}
-.progress { text-align:center; color:var(--muted); font-size:14px; margin:0 0 12px; }
-.q { text-align:center; font-size:23px; line-height:1.28; color:var(--accent); margin:12px 0 22px; }
-.answers { max-width:520px; margin:0 auto; }
-.answer {
-  display:block; width:100%; border:1px solid var(--choice-border); background:var(--choice);
-  color:var(--text); padding:16px 14px; margin:10px 0; font-size:17px; cursor:pointer;
-}
-.answer:hover { filter:brightness(.98); }
-.answer.correct { background:var(--ok); border-color:var(--ok-border); }
-.answer.wrong { background:var(--bad); border-color:var(--bad-border); }
-.answer:disabled { cursor:default; filter:none; }
-.feedback {
-  display:none; max-width:550px; margin:18px auto 0; padding:12px 14px;
-  border-top:1px solid var(--line); font-size:15px; line-height:1.45; color:#444;
-}
-.feedback.show { display:block; }
-.next {
-  display:none; margin:16px auto 0; border:0; border-radius:6px; padding:12px 22px;
-  background:#222; color:white; font-size:16px; cursor:pointer;
-}
-.next.show { display:block; }
-.result { display:none; text-align:center; padding:34px 20px; }
-.result.show { display:block; }
-.score { font-size:48px; font-weight:800; margin:8px 0 12px; }
-.retry { border:0; border-radius:6px; padding:12px 22px; background:#222; color:#fff; font-size:16px; cursor:pointer; }
-@media (max-width:560px) {
-  .app { padding-top:14px; }
-  h1 { font-size:24px; }
-  .sub { font-size:15px; }
-  .quizbox { padding:10px 12px 18px; min-height:410px; }
-  .q { font-size:20px; margin-bottom:18px; }
-  .answer { font-size:16px; padding:14px 12px; }
-}
+:root{--bg:#f4f4f4;--card:#fff;--text:#202124;--muted:#666;--line:#d8d8d8;--accent:#2f6fed;--choice:#e8edff;--choice-border:#c8d3ff;--ok:#e9f7ee;--ok-border:#69a77a;--bad:#fdecec;--bad-border:#cf7777}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+.app{width:100%;max-width:700px;margin:0 auto;padding:22px 10px 18px}.head{text-align:center;padding:0 10px 14px}
+h1{margin:0 0 10px;font-size:29px;line-height:1.15}.sub{margin:0 auto 8px;max-width:620px;font-size:16px;line-height:1.45;color:#444}.note{margin:0;font-size:13px;color:var(--muted)}
+.quizbox{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px 20px 22px;min-height:430px}
+.progress{text-align:center;color:var(--muted);font-size:14px;margin:0 0 12px}.q{text-align:center;font-size:23px;line-height:1.28;color:var(--accent);margin:12px 0 22px}.answers{max-width:520px;margin:0 auto}
+.answer{display:block;width:100%;border:1px solid var(--choice-border);background:var(--choice);color:var(--text);padding:16px 14px;margin:10px 0;font-size:17px;cursor:pointer}
+.answer.correct{background:var(--ok);border-color:var(--ok-border)}.answer.wrong{background:var(--bad);border-color:var(--bad-border)}.answer:disabled{cursor:default}
+.feedback{display:none;max-width:550px;margin:18px auto 0;padding:12px 14px;border-top:1px solid var(--line);font-size:15px;line-height:1.45;color:#444}.feedback.show{display:block}
+.next{display:none;margin:16px auto 0;border:0;border-radius:6px;padding:12px 22px;background:#222;color:#fff;font-size:16px;cursor:pointer}.next.show{display:block}
+.result{display:none;text-align:center;padding:34px 20px}.result.show{display:block}.score{font-size:48px;font-weight:800;margin:8px 0 12px}.retry{border:0;border-radius:6px;padding:12px 22px;background:#222;color:#fff;font-size:16px;cursor:pointer}
+@media(max-width:560px){.app{padding-top:14px}h1{font-size:24px}.sub{font-size:15px}.quizbox{padding:10px 12px 18px;min-height:410px}.q{font-size:20px;margin-bottom:18px}.answer{font-size:16px;padding:14px 12px}}
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="head">
-    <h1>Jak dobře znáte Maxa ligu?</h1>
-    <p class="sub">Pardubické béčko, Dukla, Vsetín, Piráti i systém play-off. Patnáct otázek pro ty, kteří vědí, že hokej nekončí extraligou.</p>
-    <p class="note">Stav soutěže a sezonní otázky odpovídají 19. září 2026.</p>
-  </div>
-
-  <div class="quizbox">
-    <div id="play">
-      <div id="progress" class="progress"></div>
-      <div id="question" class="q"></div>
-      <div id="answers" class="answers"></div>
-      <div id="feedback" class="feedback"></div>
-      <button id="next" class="next">Další otázka</button>
-    </div>
-
-    <div id="result" class="result">
-      <div>Váš výsledek</div>
-      <div id="score" class="score"></div>
-      <p id="verdict"></p>
-      <button id="retry" class="retry">Zkusit znovu</button>
-    </div>
-  </div>
+<div class="head">
+<h1>Jak dobře znáte Maxa ligu 2026/27?</h1>
+<p class="sub">Systém soutěže, aktuální účastníci i první výsledky sezony. Patnáct otázek pro ty, kteří vědí, že hokej nekončí extraligou.</p>
+<p class="note">Aktualizováno pro sezonu 2026/27. Výsledkové otázky odpovídají stavu po 19. září 2026.</p>
 </div>
-
+<div class="quizbox">
+<div id="play"><div id="progress" class="progress"></div><div id="question" class="q"></div><div id="answers" class="answers"></div><div id="feedback" class="feedback"></div><button id="next" class="next">Další otázka</button></div>
+<div id="result" class="result"><div>Váš výsledek</div><div id="score" class="score"></div><p id="verdict"></p><button id="retry" class="retry">Zkusit znovu</button></div>
+</div></div>
 <script>
-const questions = [{"q": "Maxa liga je v českém mužském hokeji která nejvyšší soutěž?", "opts": ["Nejvyšší", "Druhá nejvyšší", "Třetí nejvyšší", "Juniorská"], "correct": 1, "explain": "Maxa liga je druhá nejvyšší mužská hokejová soutěž v Česku, hned pod Tipsport extraligou."}, {"q": "Kolik týmů hraje Maxa ligu v sezoně 2026/27?", "opts": ["12", "14", "16", "18"], "correct": 1, "explain": "V Maxa lize hraje 14 týmů."}, {"q": "Kolik zápasů odehraje každý tým v základní části?", "opts": ["44", "48", "52", "56"], "correct": 2, "explain": "Čtrnáct týmů hraje čtyřkolově každý s každým, takže každý odehraje 52 utkání."}, {"q": "Která mužstva jdou po základní části přímo do čtvrtfinále?", "opts": ["1.–4. místo", "1.–6. místo", "1.–8. místo", "Jen vítěz základní části"], "correct": 1, "explain": "Týmy na 1.–6. místě postupují přímo do čtvrtfinále play-off."}, {"q": "Které pozice hrají předkolo play-off?", "opts": ["5.–8.", "7.–10.", "9.–12.", "11.–14."], "correct": 1, "explain": "Předkolo hrají týmy na 7.–10. místě."}, {"q": "Co se stane s týmem, který po základní části skončí čtrnáctý?", "opts": ["Hraje baráž s extraligou", "Sestupuje do 2. ligy", "Končí sezonu bez sestupu", "Hraje předkolo play-off"], "correct": 1, "explain": "Poslední tým základní části sestupuje do 2. ligy."}, {"q": "Od které sezony se soutěž jmenuje Maxa liga?", "opts": ["2022/23", "2023/24", "2024/25", "2025/26"], "correct": 2, "explain": "Název Maxa liga se používá od sezony 2024/25, kdy Maxa nahradila Chance jako titulárního partnera."}, {"q": "Který z těchto klubů je v sezoně 2026/27 skutečně účastníkem Maxa ligy?", "opts": ["HC Dynamo Pardubice B", "HC Sparta Praha", "Bílí Tygři Liberec", "HC Kometa Brno"], "correct": 0, "explain": "V Maxa lize hraje rezerva Pardubic. Sparta, Liberec i Kometa jsou extraligové kluby."}, {"q": "Který klub Maxa ligy nese přezdívku Piráti?", "opts": ["Chomutov", "Tábor", "Sokolov", "Kolín"], "correct": 0, "explain": "Piráti Chomutov jsou tradičním účastníkem soutěže."}, {"q": "Ve kterém městě hraje domácí zápasy Dukla?", "opts": ["Jihlava", "Třebíč", "Zlín", "Přerov"], "correct": 0, "explain": "HC Dukla Jihlava hraje své domácí zápasy v Jihlavě."}, {"q": "Který klub je spojený s označením Berani?", "opts": ["Zlín", "Vsetín", "Litoměřice", "Havířov"], "correct": 0, "explain": "Berani jsou ze Zlína."}, {"q": "Který tým je rezervním mužstvem extraligového Dynama?", "opts": ["Pardubice B", "Slavia Praha", "Kolín", "Frýdek-Místek"], "correct": 0, "explain": "HC Dynamo Pardubice B je rezervní tým pardubického Dynama."}, {"q": "Kdo vedl tabulku po sobotě 19. září 2026 s 15 body z pěti zápasů?", "opts": ["Pardubice B", "Vsetín", "Kolín", "Přerov"], "correct": 0, "explain": "Pardubice B měly po pěti zápasech plných 15 bodů a vedly tabulku."}, {"q": "Který tým ve 4. kole otočil ve Frýdku-Místku z 0:3 na konečných 5:3?", "opts": ["Kolín", "Slavia Praha", "Tábor", "Sokolov"], "correct": 0, "explain": "Kolín ve Frýdku-Místku předvedl obrat z 0:3 na 5:3."}, {"q": "Kde získal Chomutov 19. září 2026 první výhru sezony?", "opts": ["V Jihlavě", "Ve Zlíně", "Na Vsetíně", "V Pardubicích"], "correct": 0, "explain": "Piráti vyhráli na ledě Dukly Jihlava 4:2 a získali první vítězství sezony."}];
-let index = 0;
-let score = 0;
-let locked = false;
-
-const progress = document.getElementById('progress');
-const question = document.getElementById('question');
-const answers = document.getElementById('answers');
-const feedback = document.getElementById('feedback');
-const next = document.getElementById('next');
-const play = document.getElementById('play');
-const result = document.getElementById('result');
-
-function renderQuestion() {
-  locked = false;
-  feedback.className = 'feedback';
-  next.className = 'next';
-  const item = questions[index];
-  progress.textContent = `Otázka ${index+1} / ${questions.length}`;
-  question.textContent = item.q;
-  answers.innerHTML = '';
-  item.opts.forEach((opt, oi) => {
-    const btn = document.createElement('button');
-    btn.className = 'answer';
-    btn.textContent = opt;
-    btn.addEventListener('click', () => choose(oi, btn));
-    answers.appendChild(btn);
-  });
-}
-
-function choose(oi, clicked) {
-  if (locked) return;
-  locked = true;
-  const item = questions[index];
-  const buttons = [...answers.querySelectorAll('.answer')];
-
-  buttons.forEach((btn, i) => {
-    btn.disabled = true;
-    if (i === item.correct) btn.classList.add('correct');
-  });
-
-  if (oi === item.correct) score++;
-  else clicked.classList.add('wrong');
-
-  feedback.textContent = item.explain;
-  feedback.classList.add('show');
-  next.textContent = index === questions.length - 1 ? 'Zobrazit výsledek' : 'Další otázka';
-  next.classList.add('show');
-}
-
-next.addEventListener('click', () => {
-  index++;
-  if (index >= questions.length) showResult();
-  else renderQuestion();
-});
-
-function showResult() {
-  play.style.display = 'none';
-  result.classList.add('show');
-  document.getElementById('score').textContent = `${score}/15`;
-
-  let verdict = '';
-  if (score <= 4) verdict = 'V pohodě. Na zimák jste možná přišli hlavně na klobásu – a to se taky počítá.';
-  else if (score <= 8) verdict = 'Základ tam je. Tabulku ještě nekontrolujete každých deset minut, ale výjezd byste zvládli.';
-  else if (score <= 12) verdict = 'Velmi slušné. Maxa liga pro vás rozhodně není jen „ta soutěž pod extraligou“.';
-  else if (score <= 14) verdict = 'Hodně silný výkon. Výsledky a tabulku zjevně sledujete skoro pracovně.';
-  else verdict = '15/15. Můžete rovnou dělat výsledkový servis Maxa ligy. Nebo minimálně moderovat cestu z výjezdu.';
-
-  document.getElementById('verdict').textContent = verdict;
-}
-
-document.getElementById('retry').addEventListener('click', () => {
-  index = 0;
-  score = 0;
-  result.className = 'result';
-  play.style.display = 'block';
-  renderQuestion();
-});
-
+const questions = [{"q": "Kolik týmů hraje Maxa ligu v sezoně 2026/27?", "opts": ["12", "14", "16", "18"], "correct": 1, "explain": "V sezoně 2026/27 má Maxa liga 14 účastníků."}, {"q": "Kolik zápasů odehraje každý tým v základní části Maxa ligy 2026/27?", "opts": ["48", "50", "52", "56"], "correct": 2, "explain": "Čtrnáct týmů hraje čtyřkolově každý s každým, takže každý odehraje 52 utkání."}, {"q": "Které týmy postupují po základní části přímo do čtvrtfinále?", "opts": ["1.–4. místo", "1.–6. místo", "1.–8. místo", "Jen vítěz základní části"], "correct": 0, "explain": "Přímo do čtvrtfinále postupují týmy na 1.–4. místě."}, {"q": "Které pozice hrají v sezoně 2026/27 předkolo play-off?", "opts": ["5.–8. místo", "5.–10. místo", "5.–12. místo", "7.–12. místo"], "correct": 2, "explain": "Předkolo hrají týmy na 5.–12. místě. Čtyři vítězové doplní první čtyři týmy ve čtvrtfinále."}, {"q": "Na kolik vítězných utkání se hraje předkolo play-off?", "opts": ["Na 2 vítězná", "Na 3 vítězná", "Na 4 vítězná", "Jen na jeden zápas"], "correct": 0, "explain": "Předkolo se hraje na dvě vítězná utkání, tedy na dva až tři zápasy."}, {"q": "Na kolik vítězných utkání se hraje čtvrtfinále Maxa ligy 2026/27?", "opts": ["Na 2", "Na 3", "Na 4", "Na 5"], "correct": 1, "explain": "Čtvrtfinále se hraje na tři vítězná utkání."}, {"q": "Na kolik vítězných utkání se hrají semifinále a finále?", "opts": ["Na 2", "Na 3", "Na 4", "Na 5"], "correct": 2, "explain": "Semifinále i finále se hrají na čtyři vítězné zápasy."}, {"q": "Co čeká vítěze play-off Maxa ligy?", "opts": ["Přímý postup do extraligy", "Baráž o účast v extralize", "Superfinále s vítězem 2. ligy", "Automatický postup až od další sezony"], "correct": 1, "explain": "Vítěz play-off Maxa ligy postupuje do baráže o účast v Tipsport extralize."}, {"q": "Co se stane s posledním týmem po základní části?", "opts": ["Hraje play-down", "Hraje baráž o udržení", "Sestupuje do 2. ligy", "Zůstává bez dalšího zápasu"], "correct": 2, "explain": "Nejhůře umístěný tým po základní části sestupuje přímo do 2. ligy."}, {"q": "Který z těchto klubů je účastníkem Maxa ligy v sezoně 2026/27?", "opts": ["HC AZ Havířov", "HC Sparta Praha", "HC Kometa Brno", "Bílí Tygři Liberec"], "correct": 0, "explain": "HC AZ Havířov je v sezoně 2026/27 mezi čtrnácti účastníky Maxa ligy."}, {"q": "Který z těchto týmů je rezervou extraligového klubu?", "opts": ["HC Dynamo Pardubice B", "HC Slavia Praha", "HC Tábor", "HC Stadion Litoměřice"], "correct": 0, "explain": "HC Dynamo Pardubice B je rezervní mužstvo extraligového Dynama Pardubice."}, {"q": "Který z těchto klubů v Maxa lize 2026/27 NENAJDETE?", "opts": ["HC Tábor", "HC AZ Havířov", "Piráti Chomutov", "LHK Jestřábi Prostějov"], "correct": 3, "explain": "Mezi účastníky Maxa ligy 2026/27 jsou Tábor, Havířov i Chomutov; Prostějov v oficiálním seznamu účastníků není."}, {"q": "Jak se v oficiálním seznamu účastníků 2026/27 jmenuje vsetínský klub?", "opts": ["Valašský hokejový klub", "VHK ROBE Vsetín", "HC Vsetín 1904", "Vsetínská Slavia"], "correct": 0, "explain": "Oficiální soutěžní web pro sezonu 2026/27 uvádí název Valašský hokejový klub."}, {"q": "Kdo vedl tabulku po zápasech 19. září 2026 s 15 body z pěti utkání?", "opts": ["HC Dynamo Pardubice B", "Valašský hokejový klub", "SC Retia Kolín", "HC ZUBR Přerov"], "correct": 0, "explain": "Pardubice B měly po pěti zápasech plných 15 bodů a vedly tabulku."}, {"q": "Který tým 19. září 2026 otočil ve Frýdku-Místku zápas z 0:3 na vítězství 5:3?", "opts": ["SC Retia Kolín", "HC Slavia Praha", "HC Tábor", "Piráti Chomutov"], "correct": 0, "explain": "Kolín ve Frýdku-Místku po stavu 0:3 skóroval pětkrát a vyhrál 5:3."}];
+let index=0,score=0,locked=false;
+const progress=document.getElementById('progress'),question=document.getElementById('question'),answers=document.getElementById('answers'),feedback=document.getElementById('feedback'),next=document.getElementById('next'),play=document.getElementById('play'),result=document.getElementById('result');
+function renderQuestion(){locked=false;feedback.className='feedback';next.className='next';const item=questions[index];progress.textContent=`Otázka ${index+1} / ${questions.length}`;question.textContent=item.q;answers.innerHTML='';item.opts.forEach((opt,oi)=>{const btn=document.createElement('button');btn.className='answer';btn.textContent=opt;btn.addEventListener('click',()=>choose(oi,btn));answers.appendChild(btn);});}
+function choose(oi,clicked){if(locked)return;locked=true;const item=questions[index];const buttons=[...answers.querySelectorAll('.answer')];buttons.forEach((btn,i)=>{btn.disabled=true;if(i===item.correct)btn.classList.add('correct');});if(oi===item.correct)score++;else clicked.classList.add('wrong');feedback.textContent=item.explain;feedback.classList.add('show');next.textContent=index===questions.length-1?'Zobrazit výsledek':'Další otázka';next.classList.add('show');}
+next.addEventListener('click',()=>{index++;if(index>=questions.length)showResult();else renderQuestion();});
+function showResult(){play.style.display='none';result.classList.add('show');document.getElementById('score').textContent=`${score}/15`;let verdict='';if(score<=4)verdict='Na zimák jste možná dorazili hlavně na klobásu. A víte co? I to je legitimní začátek.';else if(score<=8)verdict='Základ máte. Rozpis ještě nesledujete od snídaně, ale na výjezdu byste se neztratili.';else if(score<=12)verdict='Velmi slušné. Maxa liga pro vás rozhodně není jen „ta soutěž pod extraligou“.';else if(score<=14)verdict='Hodně silný výkon. Tohle už zavání pravidelnou kontrolou tabulky.';else verdict='15/15. Můžete rovnou dělat výsledkový servis Maxa ligy. Nebo minimálně organizovat cestu na další výjezd.';document.getElementById('verdict').textContent=verdict;}
+document.getElementById('retry').addEventListener('click',()=>{index=0;score=0;result.className='result';play.style.display='block';renderQuestion();});
 renderQuestion();
 </script>
-</body>
-</html>
+</body></html>
