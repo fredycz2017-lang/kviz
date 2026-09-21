@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kvíz: Geopolitické bizarnosti</title>
+    <style>
+        :root {
+            --primary-blue: #1e40af;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --btn-bg: #f9fafb;
+            --btn-border: #e5e7eb;
+            --btn-hover: #f3f4f6;
+            --correct-bg: #dcfce7;
+            --correct-border: #22c55e;
+            --incorrect-bg: #fee2e2;
+            --incorrect-border: #ef4444;
+            --next-btn-bg: #2563eb;
+            --next-btn-hover: #1d4ed8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 15px;
+            line-height: 1.5;
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 700px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 24px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--btn-border);
+        }
+
+        .header h1 {
+            font-size: 1.25rem;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+
+        .header p {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .progress {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .question {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 24px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: var(--btn-bg);
+            border: 2px solid var(--btn-border);
+            color: var(--text-color);
+            padding: 14px 16px;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: var(--btn-hover);
+            border-color: #d1d5db;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .option-btn.correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+        }
+
+        .option-btn.incorrect {
+            background-color: var(--incorrect-bg);
+            border-color: var(--incorrect-border);
+        }
+
+        .explanation {
+            margin-top: 20px;
+            padding: 16px;
+            background-color: #f8fafc;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 4px;
+            display: none;
+        }
+
+        .explanation p {
+            font-size: 0.95rem;
+            color: #334155;
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            background-color: var(--next-btn-bg);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            display: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .next-btn:hover {
+            background-color: var(--next-btn-hover);
+        }
+
+        .result-container {
+            text-align: center;
+            display: none;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: var(--primary-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto 24px auto;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 12px;
+        }
+
+        .result-text {
+            font-size: 1.1rem;
+            margin-bottom: 32px;
+            color: #4b5563;
+        }
+
+        @media (max-width: 560px) {
+            .quiz-container {
+                padding: 16px;
+            }
+            .question {
+                font-size: 1.1rem;
+            }
+            .option-btn {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+            .score-circle {
+                width: 100px;
+                height: 100px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <div class="header" id="quiz-header">
+            <h1>Kvíz: Geopolitické bizarnosti</h1>
+            <p>Jen pro zábavu. Přece nemůže být všechno ve světě úplně normální!</p>
+        </div>
+
+        <div id="question-container">
+            <div class="progress" id="progress">Otázka 1 / 15</div>
+            <div class="question" id="question">Načítání otázky...</div>
+            <div class="options" id="options"></div>
+            
+            <div class="explanation" id="explanation">
+                <p id="explanation-text"></p>
+            </div>
+            
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()">Další otázka</button>
+        </div>
+
+        <div class="result-container" id="result-container">
+            <div class="score-circle" id="final-score">0/15</div>
+            <h2 class="result-title" id="result-title">Hodnocení</h2>
+            <p class="result-text" id="result-text">Vyhodnocení</p>
+            <button class="next-btn" style="display: block;" onclick="restartQuiz()">Zkusit znovu</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Která země vyhlásila regulérní válku emuům (velkým ptákům) a ostudně ji prohrála?",
+                options: ["Austrálie", "Nový Zéland", "Jihoafrická republika", "Čína"],
+                correct: 0,
+                explanation: "V roce 1932 australská armáda nasadila kulomety proti přemnoženým emuům. Ptáci se ukázali jako nečekaně taktický protivník, vojáky unavili a „válku“ fakticky vyhráli."
+            },
+            {
+                question: "Který stát si dal na svou státní vlajku siluetu útočné pušky AK-47?",
+                options: ["Mosambik", "Somálsko", "Afghánistán", "Texas"],
+                correct: 0,
+                explanation: "Mosambik má na své státní vlajce Kalašnikov s nasazeným bajonetem jako symbol obrany a bdělosti národa."
+            },
+            {
+                question: "Jaká je nejmenší vzdálenost mezi Ruskem a USA?",
+                options: ["Necelé 4 kilometry", "85 kilometrů", "400 kilometrů", "Vůbec spolu nesousedí"],
+                correct: 0,
+                explanation: "Ruský ostrov Velký Diomédes a americký Malý Diomédes jsou od sebe necelé 4 kilometry v Beringově průlivu. Prochází mezi nimi i datová hranice."
+            },
+            {
+                question: "Který suverénní stát je tak malý, že by se s přehledem vešel do pražské Stromovky?",
+                options: ["Monako", "Lucembursko", "Andorra", "Malta"],
+                correct: 0,
+                explanation: "Monako má rozlohu pouhé 2 km², což z něj dělá druhý nejmenší stát světa hned po Vatikánu. Pražská Stromovka se svou rozlohou tomuto státečku velmi blíží."
+            },
+            {
+                question: "Jaký stát se pyšní hlavním městem s naprosto geniálním názvem Ouagadougou?",
+                options: ["Burkina Faso", "Mali", "Niger", "Togo"],
+                correct: 0,
+                explanation: "Ouagadougou (často zkracováno jako 'Ouaga') zní možná jako vtipná říkanka, ale je to reálné a velmi důležité centrum státu Burkina Faso."
+            },
+            {
+                question: "Které dvě velmoci proti sobě v roce 1859 málem rozpoutaly válku kvůli zastřelenému praseti, které kradlo brambory?",
+                options: ["USA a Velká Británie", "Francie a Prusko", "Čína a Japonsko", "Španělsko a Portugalsko"],
+                correct: 0,
+                explanation: "Tzv. Prasečí válka vznikla na hranicích USA a britských kolonií. Armády obou států byly v pohotovosti, ale skutečně jedinou obětí sporu se stalo ono kradoucí prase."
+            },
+            {
+                question: "Jak se jmenuje slavný mikronárod, který vyhlásil nezávislost na opuštěné vojenské plošině v moři kousek od Británie?",
+                options: ["Sealand", "Waterland", "Atlantida", "Britannia"],
+                correct: 0,
+                explanation: "Knížectví Sealand je stará protiletadlová plošina. Má vlastní „vládu“, měnu, pasy a svého času tam došlo i k opravdovému pokusu o ozbrojený převrat."
+            },
+            {
+                question: "Která země má jako jediná na světě státní vlajku, která není ani čtverec, ani obdélník?",
+                options: ["Nepál", "Švýcarsko", "Bhútán", "Vatikán"],
+                correct: 0,
+                explanation: "Nepálská vlajka se skládá ze dvou spojených trojúhelníků, které symbolizují Himálaj a dvě hlavní místní náboženství."
+            },
+            {
+                question: "Který stát leží kompletně celý uvnitř jiného státu (kromě Vatikánu a San Marina)?",
+                options: ["Lesotho", "Svazijsko", "Andorra", "Bhútán"],
+                correct: 0,
+                explanation: "Království Lesotho v jižní Africe tvoří kompletní enklávu – celým svým územím je ze všech stran obklopené Jihoafrickou republikou."
+            },
+            {
+                question: "Který ostrovní stát v roce 1995 posunul mezinárodní datovou hranici, aby jako první na světě oslavil nové milénium?",
+                options: ["Kiribati", "Fidži", "Tonga", "Samoa"],
+                correct: 0,
+                explanation: "Republika Kiribati záměrně „vykousla“ obří zub do datové hranice směrem na východ, čímž strategicky přilákala světovou pozornost na přelomu let 1999/2000."
+            },
+            {
+                question: "Pokud začnete v Praze kopat díru přesně skrz střed Zeměkoule, kde vylezete?",
+                options: ["V oceánu poblíž Nového Zélandu", "V australské poušti", "V Číně", "V Argentině"],
+                correct: 0,
+                explanation: "Častý omyl je, že vylezeme u 'protinožců' v Austrálii. Ve skutečnosti bychom se vynořili ve vlnách Tichého oceánu stovky kilometrů východně od Nového Zélandu."
+            },
+            {
+                question: "Podle slavné internetové konspirační teorie jedna evropská země vůbec neexistuje. Která?",
+                options: ["Finsko", "Norsko", "Dánsko", "Island"],
+                correct: 0,
+                explanation: "Virální internetový mem na Redditu tvrdil, že Finsko neexistuje a území zvané „Finsko“ je jen výmysl Japonska a Ruska kvůli rybolovným kvótám. Celé to byl samozřejmě vtip."
+            },
+            {
+                question: "Kde ve skutečnosti vznikla kontroverzní 'Havajská pizza' s ananasem?",
+                options: ["V Kanadě", "Na Havaji", "V Itálii", "V Řecku"],
+                correct: 0,
+                explanation: "Sladko-slanou pizzu s ananasem a šunkou vynalezl v roce 1962 Sam Panopoulos, řecký imigrant provozující restauraci v kanadském Ontariu."
+            },
+            {
+                question: "Bažantí ostrov je bizarní kousek země, který si každých 6 měsíců vymění majitele. Kdo se o něj střídá?",
+                options: ["Francie a Španělsko", "USA a Kanada", "Švédsko a Finsko", "Británie a Irsko"],
+                correct: 0,
+                explanation: "Ostrov na řece Bidasoa funguje jako tzv. kondominium. Půl roku patří Španělsku a půl roku Francii. Slavnostní předání správy probíhá už po staletí!"
+            },
+            {
+                question: "Která země má tvar víceméně dokonalého šestiúhelníku, takže se jí tak i přezdívá (L'Hexagone)?",
+                options: ["Francie", "Německo", "Polsko", "Španělsko"],
+                correct: 0,
+                explanation: "Pevninská Francie svým tvarem připomíná šestiúhelník natolik věrně, že se pro ni ve francouzštině běžně ustálila přezdívka 'L'Hexagone'."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        const questionEl = document.getElementById('question');
+        const optionsEl = document.getElementById('options');
+        const progressEl = document.getElementById('progress');
+        const explanationEl = document.getElementById('explanation');
+        const explanationTextEl = document.getElementById('explanation-text');
+        const nextBtn = document.getElementById('next-btn');
+        
+        const questionContainer = document.getElementById('question-container');
+        const resultContainer = document.getElementById('result-container');
+        const headerEl = document.getElementById('quiz-header');
+
+        function initQuiz() {
+            // Promícháme možnosti a pamatujeme si správnou odpověď
+            questions.forEach(q => {
+                const optionsWithIndex = q.options.map((opt, i) => ({ text: opt, isCorrect: i === q.correct }));
+                // Fischer-Yates shuffle pro možnosti
+                for (let i = optionsWithIndex.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
+                }
+                q.shuffledOptions = optionsWithIndex.map(opt => opt.text);
+                q.shuffledCorrectIndex = optionsWithIndex.findIndex(opt => opt.isCorrect);
+            });
+
+            currentQuestionIndex = 0;
+            score = 0;
+            questionContainer.style.display = 'block';
+            resultContainer.style.display = 'none';
+            headerEl.style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            const currentQ = questions[currentQuestionIndex];
+            
+            progressEl.textContent = `Otázka ${currentQuestionIndex + 1} / ${questions.length}`;
+            questionEl.textContent = currentQ.question;
+            
+            optionsEl.innerHTML = '';
+            explanationEl.style.display = 'none';
+            nextBtn.style.display = 'none';
+
+            currentQ.shuffledOptions.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => selectOption(index, btn);
+                optionsEl.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex, selectedBtn) {
+            if (answered) return;
+            answered = true;
+
+            const currentQ = questions[currentQuestionIndex];
+            const allBtns = optionsEl.getElementsByClassName('option-btn');
+
+            for (let i = 0; i < allBtns.length; i++) {
+                allBtns[i].disabled = true;
+                if (i === currentQ.shuffledCorrectIndex) {
+                    allBtns[i].classList.add('correct');
+                }
+            }
+
+            if (selectedIndex === currentQ.shuffledCorrectIndex) {
+                score++;
+            } else {
+                selectedBtn.classList.add('incorrect');
+            }
+
+            explanationTextEl.textContent = currentQ.explanation;
+            explanationEl.style.display = 'block';
+            
+            if (currentQuestionIndex < questions.length - 1) {
+                nextBtn.textContent = 'Další otázka';
+            } else {
+                nextBtn.textContent = 'Zobrazit výsledek';
+            }
+            nextBtn.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            questionContainer.style.display = 'none';
+            headerEl.style.display = 'none';
+            resultContainer.style.display = 'block';
+            
+            document.getElementById('final-score').textContent = `${score}/${questions.length}`;
+            
+            const titleEl = document.getElementById('result-title');
+            const textEl = document.getElementById('result-text');
+            
+            if (score === questions.length) {
+                titleEl.textContent = "Geopolitický mistr!";
+                textEl.textContent = "Fantazie! Znáte i ty největší bizarnosti našeho světa. Z vás by měl pan učitel zeměpisu vážně radost (nebo by z vás šílel).";
+            } else if (score >= 10) {
+                titleEl.textContent = "Světoběžník tělem i duší";
+                textEl.textContent = "Skvělý výsledek! Máte obrovský přehled o světě a jen tak nějaká vtipná anomálie vás nepřekvapí.";
+            } else if (score >= 5) {
+                titleEl.textContent = "Střízlivý realista";
+                textEl.textContent = "Víte, kde leží Evropa, ale války s emuy a mikronárody vám možná zní jako sci-fi. Aspoň jste teď bohatší o pár vtipných historek do hospody!";
+            } else {
+                titleEl.textContent = "Ztraceni v mapě";
+                textEl.textContent = "Geopolitika zjevně není váš denní chléb a nejraději byste zůstali doma na gauči. Nevadí, svět je prostě jedno velké a občas šílené místo!";
+            }
+        }
+
+        function restartQuiz() {
+            initQuiz();
+        }
+
+        // Start kvízu
+        initQuiz();
+    </script>
+</body>
+</html>
