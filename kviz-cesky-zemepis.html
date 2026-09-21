@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kvíz – český zeměpis</title>
+<style>
+:root{--bg:#f4f4f4;--card:#fff;--text:#202124;--muted:#666;--line:#d8d8d8;--accent:#2f6fed;--choice:#e8edff;--choice-border:#c8d3ff;--ok:#e9f7ee;--ok-border:#69a77a;--bad:#fdecec;--bad-border:#cf7777}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+.app{width:100%;max-width:700px;margin:0 auto;padding:22px 10px 18px}.head{text-align:center;padding:0 10px 14px}
+h1{margin:0 0 10px;font-size:29px;line-height:1.15}.sub{margin:0 auto 8px;max-width:620px;font-size:16px;line-height:1.45;color:#444}.note{margin:0;font-size:13px;color:var(--muted)}
+.quizbox{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px 20px 22px;min-height:430px}
+.progress{text-align:center;color:var(--muted);font-size:14px;margin:0 0 12px}.q{text-align:center;font-size:23px;line-height:1.28;color:var(--accent);margin:12px 0 22px}.answers{max-width:520px;margin:0 auto}
+.answer{display:block;width:100%;border:1px solid var(--choice-border);background:var(--choice);color:var(--text);padding:16px 14px;margin:10px 0;font-size:17px;cursor:pointer}
+.answer:hover{filter:brightness(.98)}.answer.correct{background:var(--ok);border-color:var(--ok-border)}.answer.wrong{background:var(--bad);border-color:var(--bad-border)}.answer:disabled{cursor:default;filter:none}
+.feedback{display:none;max-width:550px;margin:18px auto 0;padding:12px 14px;border-top:1px solid var(--line);font-size:15px;line-height:1.45;color:#444}.feedback.show{display:block}
+.next{display:none;margin:16px auto 0;border:0;border-radius:6px;padding:12px 22px;background:#222;color:white;font-size:16px;cursor:pointer}.next.show{display:block}
+.result{display:none;text-align:center;padding:34px 20px}.result.show{display:block}.score{font-size:48px;font-weight:800;margin:8px 0 12px}
+.retry{border:0;border-radius:6px;padding:12px 22px;background:#222;color:#fff;font-size:16px;cursor:pointer}
+@media(max-width:560px){.app{padding-top:14px}h1{font-size:24px}.sub{font-size:15px}.quizbox{padding:10px 12px 18px;min-height:410px}.q{font-size:20px;margin-bottom:18px}.answer{font-size:16px;padding:14px 12px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="head">
+    <h1>Jak dobře znáte Česko?</h1>
+    <p class="sub">Hory, řeky, kraje i města. Patnáct otázek z českého zeměpisu, které vypadají jednoduše jen do první chyby.</p>
+    <p class="note">Vědomostní kvíz • 15 otázek • jedna správná odpověď</p>
+  </div>
+  <div class="quizbox">
+    <div id="play">
+      <div id="progress" class="progress"></div>
+      <div id="question" class="q"></div>
+      <div id="answers" class="answers"></div>
+      <div id="feedback" class="feedback"></div>
+      <button id="next" class="next">Další otázka</button>
+    </div>
+    <div id="result" class="result">
+      <div>Váš výsledek</div>
+      <div id="score" class="score"></div>
+      <p id="verdict"></p>
+      <button id="retry" class="retry">Zkusit znovu</button>
+    </div>
+  </div>
+</div>
+<script>
+const questions = [{"q": "Jaká je nejvyšší hora Česka?", "opts": ["Praděd", "Sněžka", "Lysá hora", "Klínovec"], "correct": 1, "explain": "Nejvyšším bodem Česka je Sněžka v Krkonoších, vysoká přibližně 1 603 metrů."}, {"q": "Která řeka je nejdelší na území Česka?", "opts": ["Labe", "Morava", "Vltava", "Ohře"], "correct": 2, "explain": "Vltava je nejdelší řekou na území Česka; od pramene po soutok s Labem měří zhruba 430 kilometrů."}, {"q": "Která vodní nádrž je rozlohou největší v Česku?", "opts": ["Orlík", "Slapy", "Lipno", "Nechranice"], "correct": 2, "explain": "Největší přehradní nádrží podle rozlohy je Lipno."}, {"q": "Který rybník je největší v Česku?", "opts": ["Svět", "Rožmberk", "Bezdrev", "Hejtman"], "correct": 1, "explain": "Největším českým rybníkem je Rožmberk na Třeboňsku."}, {"q": "Které je největší přírodní jezero v Česku?", "opts": ["Černé jezero", "Čertovo jezero", "Plešné jezero", "Prášilské jezero"], "correct": 0, "explain": "Černé jezero na Šumavě je největším přírodním jezerem v Česku."}, {"q": "Kolik krajů má Česká republika včetně hlavního města Prahy?", "opts": ["12", "13", "14", "15"], "correct": 2, "explain": "Česko se dělí na 14 krajů, přičemž Praha má zároveň postavení kraje."}, {"q": "Které město je sídlem Jihomoravského kraje?", "opts": ["Zlín", "Brno", "Jihlava", "Olomouc"], "correct": 1, "explain": "Krajským městem Jihomoravského kraje je Brno."}, {"q": "Který z těchto států NEMÁ společnou hranici s Českem?", "opts": ["Rakousko", "Polsko", "Maďarsko", "Slovensko"], "correct": 2, "explain": "Česko sousedí s Německem, Polskem, Slovenskem a Rakouskem, nikoli s Maďarskem."}, {"q": "U kterého místa opouští Labe území České republiky směrem do Německa?", "opts": ["Hřensko", "Děčínský Sněžník", "Harrachov", "Aš"], "correct": 0, "explain": "Labe překračuje česko-německou hranici u Hřenska."}, {"q": "Která řeka protéká centrem Prahy?", "opts": ["Berounka", "Sázava", "Vltava", "Jizera"], "correct": 2, "explain": "Prahou protéká Vltava."}, {"q": "Ve kterém pohoří leží Sněžka?", "opts": ["Jeseníky", "Krkonoše", "Beskydy", "Šumava"], "correct": 1, "explain": "Sněžka leží v Krkonoších na česko-polské hranici."}, {"q": "Který národní park zahrnuje českou část nejvyššího pohoří země?", "opts": ["NP Šumava", "Krkonošský národní park", "NP Podyjí", "NP České Švýcarsko"], "correct": 1, "explain": "Českou část Krkonoš chrání Krkonošský národní park."}, {"q": "Které město je krajským městem Vysočiny?", "opts": ["Třebíč", "Žďár nad Sázavou", "Jihlava", "Havlíčkův Brod"], "correct": 2, "explain": "Sídlem Kraje Vysočina je Jihlava."}, {"q": "Které město leží na soutoku Labe a Vltavy?", "opts": ["Mělník", "Litoměřice", "Poděbrady", "Kolín"], "correct": 0, "explain": "Vltava se vlévá do Labe u Mělníka."}, {"q": "Který z těchto krajů leží nejvíce na západě Česka?", "opts": ["Karlovarský", "Pardubický", "Olomoucký", "Zlínský"], "correct": 0, "explain": "Karlovarský kraj leží na západě republiky při hranici s Německem."}];
+const verdicts = ["Mapa by dnes asi pomohla.", "Základ tam je, ale atlas by ještě nebyl špatný kamarád.", "Slušné. V Česku byste se rozhodně neztratili.", "Výborně. Tohle už je velmi solidní zeměpisný přehled.", "14–15/15. Českou mapu máte skoro v hlavě."];
+let index=0,score=0,locked=false;
+const progress=document.getElementById('progress'),question=document.getElementById('question'),answers=document.getElementById('answers'),feedback=document.getElementById('feedback'),next=document.getElementById('next'),play=document.getElementById('play'),result=document.getElementById('result');
+function renderQuestion(){
+  locked=false;feedback.className='feedback';next.className='next';
+  const item=questions[index];
+  progress.textContent=`Otázka ${index+1} / ${questions.length}`;
+  question.textContent=item.q;answers.innerHTML='';
+  item.opts.forEach((opt,oi)=>{
+    const btn=document.createElement('button');btn.className='answer';btn.textContent=opt;
+    btn.addEventListener('click',()=>choose(oi,btn));answers.appendChild(btn);
+  });
+}
+function choose(oi,clicked){
+  if(locked)return;locked=true;const item=questions[index];
+  const buttons=[...answers.querySelectorAll('.answer')];
+  buttons.forEach((btn,i)=>{btn.disabled=true;if(i===item.correct)btn.classList.add('correct');});
+  if(oi===item.correct)score++;else clicked.classList.add('wrong');
+  feedback.textContent=item.explain;feedback.classList.add('show');
+  next.textContent=index===questions.length-1?'Zobrazit výsledek':'Další otázka';next.classList.add('show');
+}
+next.addEventListener('click',()=>{index++;if(index>=questions.length)showResult();else renderQuestion();});
+function showResult(){
+  play.style.display='none';result.classList.add('show');
+  document.getElementById('score').textContent=`${score}/${questions.length}`;
+  let v=verdicts[0];
+  if(score>=14)v=verdicts[4];else if(score>=11)v=verdicts[3];else if(score>=7)v=verdicts[2];else if(score>=4)v=verdicts[1];
+  document.getElementById('verdict').textContent=v;
+}
+document.getElementById('retry').addEventListener('click',()=>{index=0;score=0;result.className='result';play.style.display='block';renderQuestion();});
+renderQuestion();
+</script>
+</body></html>
