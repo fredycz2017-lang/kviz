@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kvíz: české bankovky a mince</title>
+<style>
+:root{--bg:#f4f4f4;--card:#fff;--text:#202124;--muted:#666;--line:#d8d8d8;--accent:#2f6fed;--choice:#e8edff;--choice-border:#c8d3ff;--ok:#e9f7ee;--ok-border:#69a77a;--bad:#fdecec;--bad-border:#cf7777}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+.app{width:100%;max-width:700px;margin:0 auto;padding:20px 10px 18px}.head{text-align:center;padding:0 10px 14px}
+h1{margin:0 0 9px;font-size:28px;line-height:1.15}.sub{margin:0 auto 7px;max-width:620px;font-size:16px;line-height:1.45;color:#444}.note{margin:0;font-size:13px;color:var(--muted)}
+.quizbox{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px 20px 22px;min-height:430px}
+.progress{text-align:center;color:var(--muted);font-size:14px;margin:0 0 10px}
+.q{text-align:center;font-size:22px;line-height:1.28;color:var(--accent);margin:9px 0 20px}
+.answers{max-width:530px;margin:0 auto}
+.answer{display:block;width:100%;border:1px solid var(--choice-border);background:var(--choice);color:var(--text);padding:15px 13px;margin:9px 0;font-size:16px;line-height:1.3;cursor:pointer}
+.answer:hover{filter:brightness(.98)}.answer.correct{background:var(--ok);border-color:var(--ok-border)}.answer.wrong{background:var(--bad);border-color:var(--bad-border)}
+.answer:disabled{cursor:default;filter:none}.feedback{display:none;max-width:555px;margin:17px auto 0;padding:12px 14px;border-top:1px solid var(--line);font-size:15px;line-height:1.45;color:#444}.feedback.show{display:block}
+.next{display:none;margin:15px auto 0;border:0;border-radius:6px;padding:12px 22px;background:#222;color:#fff;font-size:16px;cursor:pointer}.next.show{display:block}
+.result{display:none;text-align:center;padding:34px 20px}.result.show{display:block}.score{font-size:48px;font-weight:800;margin:8px 0 12px}.retry{border:0;border-radius:6px;padding:12px 22px;background:#222;color:#fff;font-size:16px;cursor:pointer}
+@media(max-width:560px){.app{padding-top:13px}h1{font-size:23px}.sub{font-size:15px}.quizbox{padding:10px 12px 18px;min-height:420px}.q{font-size:19px}.answer{font-size:15px;padding:13px 11px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="head">
+    <h1>Poznáte české bankovky a mince podle detailu?</h1>
+    <p class="sub">Osobnosti, nominály, ochranné prvky i tvary mincí. Deset otázek z českých platidel ukáže, jestli poznáte peníze i bez hledání v peněžence.</p>
+    <p class="note">Kvíz vychází z údajů České národní banky a pracuje s běžnými českými bankovkami a mincemi.</p>
+  </div>
+  <div class="quizbox">
+    <div id="play">
+      <div id="progress" class="progress"></div>
+      <div id="question" class="q"></div>
+      <div id="answers" class="answers"></div>
+      <div id="feedback" class="feedback"></div>
+      <button id="next" class="next">Další otázka</button>
+    </div>
+    <div id="result" class="result">
+      <div>Váš výsledek</div>
+      <div id="score" class="score"></div>
+      <p id="verdict"></p>
+      <button id="retry" class="retry">Zkusit znovu</button>
+    </div>
+  </div>
+</div>
+<script>
+const questions=[{"q": "Která osobnost je na české bankovce 100 Kč?", "opts": ["Karel IV.", "Jan Amos Komenský", "František Palacký", "Tomáš Garrigue Masaryk"], "correct": 0, "explain": "Na bankovce 100 Kč je portrét Karla IV."}, {"q": "Která osobnost je na bankovce 500 Kč?", "opts": ["Božena Němcová", "Ema Destinnová", "Milada Horáková", "Eliška Přemyslovna"], "correct": 0, "explain": "Bankovka 500 Kč nese portrét spisovatelky Boženy Němcové."}, {"q": "Která česká bankovka má portrét Emy Destinnové?", "opts": ["1 000 Kč", "2 000 Kč", "500 Kč", "5 000 Kč"], "correct": 1, "explain": "Ema Destinnová je vyobrazena na bankovce 2 000 Kč."}, {"q": "Která osobnost je na bankovce 5 000 Kč?", "opts": ["Tomáš Garrigue Masaryk", "Václav Havel", "František Palacký", "Karel IV."], "correct": 0, "explain": "Na bankovce 5 000 Kč je portrét Tomáše Garrigua Masaryka."}, {"q": "Která bankovka má vodoznak tvořený portrétem Emy Destinnové, hodnotovým číslem 2000 a ornamentem připomínajícím péřovou ozdobu?", "opts": ["500 Kč", "1 000 Kč", "2 000 Kč", "5 000 Kč"], "correct": 2, "explain": "Jde o vodoznak na bankovce 2 000 Kč vzoru 2007."}, {"q": "Která česká oběžná mince je bimetalová, tedy má střed a mezikruží z odlišně řešených materiálových částí?", "opts": ["20 Kč", "50 Kč", "10 Kč", "5 Kč"], "correct": 1, "explain": "Mince 50 Kč je bimetalová: má střed a mezikruží."}, {"q": "Která česká mince má třináctihranný tvar?", "opts": ["10 Kč", "20 Kč", "50 Kč", "2 Kč"], "correct": 1, "explain": "Mince 20 Kč má tvar třináctihranu."}, {"q": "Která česká mince má jedenáctihranný tvar?", "opts": ["1 Kč", "2 Kč", "5 Kč", "10 Kč"], "correct": 1, "explain": "Mince 2 Kč má jedenáctihranný tvar."}, {"q": "Na které minci najdete na rubové straně stylizovaný Karlův most s hladinou Vltavy?", "opts": ["1 Kč", "2 Kč", "5 Kč", "10 Kč"], "correct": 2, "explain": "Na rubu mince 5 Kč je hodnotové číslo na pozadí stylizovaného Karlova mostu s hladinou Vltavy."}, {"q": "Která mince má na rubu motiv národní kulturní památky Petrov v Brně?", "opts": ["5 Kč", "10 Kč", "20 Kč", "50 Kč"], "correct": 1, "explain": "Na rubové straně mince 10 Kč je hodnotové číslo na pozadí motivu Petrova v Brně."}];
+let index=0,score=0,locked=false;
+const progress=document.getElementById('progress'),question=document.getElementById('question'),answers=document.getElementById('answers'),feedback=document.getElementById('feedback'),next=document.getElementById('next'),play=document.getElementById('play'),result=document.getElementById('result');
+function renderQuestion(){locked=false;feedback.className='feedback';next.className='next';const item=questions[index];progress.textContent=`Otázka ${index+1} / ${questions.length}`;question.textContent=item.q;answers.innerHTML='';item.opts.forEach((opt,oi)=>{const btn=document.createElement('button');btn.className='answer';btn.textContent=opt;btn.addEventListener('click',()=>choose(oi,btn));answers.appendChild(btn);});}
+function choose(oi,clicked){if(locked)return;locked=true;const item=questions[index];const buttons=[...answers.querySelectorAll('.answer')];buttons.forEach((btn,i)=>{btn.disabled=true;if(i===item.correct)btn.classList.add('correct');});if(oi===item.correct)score++;else clicked.classList.add('wrong');feedback.textContent=item.explain;feedback.classList.add('show');next.textContent=index===questions.length-1?'Zobrazit výsledek':'Další otázka';next.classList.add('show');}
+next.addEventListener('click',()=>{index++;if(index>=questions.length)showResult();else renderQuestion();});
+function showResult(){play.style.display='none';result.classList.add('show');document.getElementById('score').textContent=`${score}/10`;let v='';if(score<=3)v='České peníze vás dnes docela potrápily.';else if(score<=6)v='Základ máte, ale pár detailů z bankovek a mincí uteklo.';else if(score<=8)v='Velmi slušné. Většinu českých platidel poznáte bez problémů.';else if(score===9)v='9/10. Jeden detail vás nachytal.';else v='10/10. Peníze byste poznali i poslepu podle reliéfu.';document.getElementById('verdict').textContent=v;}
+document.getElementById('retry').addEventListener('click',()=>{index=0;score=0;result.className='result';play.style.display='block';renderQuestion();});
+renderQuestion();
+</script>
+</body>
+</html>
