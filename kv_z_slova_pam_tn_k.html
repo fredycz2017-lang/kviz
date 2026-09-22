@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kvíz: Slova našich babiček</title>
+<style>
+  body { background: #f8f9fa; font-family: sans-serif; padding: 20px; }
+  .card { background: #ffffff; max-width: 700px; margin: 0 auto; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+  h2, h3 { color: #0056b3; }
+  .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; background: #ffffff; cursor: pointer; font-size: 16px; text-align: left; }
+  .btn:hover { background: #e9ecef; }
+  .correct { background: #28a745 !important; color: #ffffff; border-color: #28a745; }
+  .wrong { background: #dc3545 !important; color: #ffffff; border-color: #dc3545; }
+  .hidden { display: none; }
+  .expl { margin-top: 15px; padding: 15px; background: #e2e3e5; border-left: 5px solid #0056b3; }
+  #next-btn, #restart-btn { background: #0056b3; color: #ffffff; text-align: center; font-weight: bold; border: none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div id="quiz-header">
+    <h2>Slova pamětníků</h2>
+    <p>Jen pro zábavu...</p>
+  </div>
+  
+  <div id="question-container">
+    <h3 id="question-text"></h3>
+    <div id="answers"></div>
+    <div id="explanation" class="hidden expl"></div>
+    <button id="next-btn" class="hidden btn">Další otázka</button>
+  </div>
+  
+  <div id="result-container" class="hidden">
+    <h2 id="score-text"></h2>
+    <p id="eval-text"></p>
+    <button id="restart-btn" class="btn">Zkusit znovu</button>
+  </div>
+</div>
+
+<script>
+const q = [
+  {q: "K čemu se v domácnosti dříve používala valcha?", a: ["K žehlení", "K pečení chleba", "K ručnímu praní prádla", "K drcení obilí"], c: 2, e: "Valcha byla zvlněná deska, o kterou se drhlo špinavé prádlo."},
+  {q: "Co to bylo, když babička řekla, ať jí podáte štokrle?", a: ["Nádoba na mléko", "Stolička bez opěradla", "Hadr na podlahu", "Dřevěná lžíce"], c: 1, e: "Štokrle je lidový název pro jednoduchou dřevěnou stoličku bez opěradla."},
+  {q: "Kdo v minulosti sedával na verpánku?", a: ["Švec při spravování bot", "Kovář u kovadliny", "Mlynář u mlýnského kola", "Hrnčíř u kruhu"], c: 0, e: "Verpánek je malá třínohá stolička, typická pro ševcovské řemeslo."},
+  {q: "Co jste nesli domů, když jste měli plnou síťovku?", a: ["Dříví na zátop", "Nákup z obchodu", "Ulovené ryby", "Nářadí ze zahrady"], c: 1, e: "Síťovka byla legendární pružná taška spletená ze síťoviny, ideální na nákupy."},
+  {q: "Kdo to byl za minulého režimu vekslák?", a: ["Řidič tramvaje", "Prodavač v Tuzexu", "Nelegální obchodník s valutami a bony", "Opravář televizorů"], c: 2, e: "Veksláci postávali před hotely a Tuzexy a nelegálně měnili cizí měnu."},
+  {q: "Co to znamenalo, když se šlo 'do bijáku'?", a: ["Na rvačku do hospody", "Do kina na film", "Na fotbalový zápas", "Do továrny na směnu"], c: 1, e: "Biják je starý slangový výraz pro kino nebo filmové představení."},
+  {q: "Z čeho se v dobách totality šily oblíbené nemačkavé pánské kalhoty, tzv. tesilky?", a: ["Z čisté bavlny", "Z umělého polyesterového vlákna (Tesil)", "Ze lnu", "Z ovčí vlny"], c: 1, e: "Tesilky byly extrémně populární pro svou odolnost a vytlačené puky, které držely tvar."},
+  {q: "Co je to kvelb?", a: ["Sklep nebo klenutý krámek", "Dřevěný sud", "Nástroj na sekání trávy", "Kus starého oblečení"], c: 0, e: "Kvelb je starší označení pro krám, obchod, případně klenutou místnost."},
+  {q: "Když někomu 'spadnul hřebínek', co to znamenalo?", a: ["Ztratil hřeben na vlasy", "Přišel o peníze", "Ztratil sebevědomí a pýchu", "Onemocněl"], c: 2, e: "Znamená to, že někdo přestal být tak namyšlený a ztratil svou pýchu."},
+  {q: "Co to byly kšíry?", a: ["Kožené popruhy pro zvířata i děti", "Druh sladkého pečiva", "Látkové kapesníky", "Nádoby na pití"], c: 0, e: "Kšíry jsou popruhy (postroj), používané ať už u koní, tak u malých dětí pro bezpečnost."}
+];
+
+let currentQuestion = 0;
+let score = 0;
+const $ = id => document.getElementById(id);
+
+function loadQuestion() {
+  if (currentQuestion >= q.length) {
+    $('question-container').classList.add('hidden');
+    $('result-container').classList.remove('hidden');
+    $('score-text').innerText = `Skóre: ${score}/${q.length}`;
+    $('eval-text').innerText = score > 7 ? 'Výborně! Paměť funguje bezchybně!' : 'To chce víc naslouchat babičkám a dědečkům!';
+    return;
+  }
+  
+  $('question-text').innerText = q[currentQuestion].q;
+  $('answers').innerHTML = '';
+  $('explanation').classList.add('hidden');
+  $('next-btn').classList.add('hidden');
+  
+  q[currentQuestion].a.forEach((answer, index) => {
+    let btn = document.createElement('button');
+    btn.className = 'btn';
+    btn.innerText = answer;
+    btn.onclick = () => checkAnswer(index, btn);
+    $('answers').appendChild(btn);
+  });
+}
+
+function checkAnswer(selectedIndex, btn) {
+  let allBtns = $('answers').children;
+  for (let b of allBtns) b.disabled = true;
+  
+  if (selectedIndex === q[currentQuestion].c) {
+    btn.classList.add('correct');
+    score++;
+  } else {
+    btn.classList.add('wrong');
+    allBtns[q[currentQuestion].c].classList.add('correct');
+  }
+  
+  $('explanation').innerText = q[currentQuestion].e;
+  $('explanation').classList.remove('hidden');
+  $('next-btn').classList.remove('hidden');
+}
+
+$('next-btn').onclick = () => {
+  currentQuestion++;
+  loadQuestion();
+};
+
+$('restart-btn').onclick = () => {
+  currentQuestion = 0;
+  score = 0;
+  $('question-container').classList.remove('hidden');
+  $('result-container').classList.add('hidden');
+  loadQuestion();
+};
+
+loadQuestion();
+</script>
+</body>
+</html>
