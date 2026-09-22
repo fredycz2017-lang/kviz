@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kvíz: Letectví</title>
+<style>
+  body { background: #f8f9fa; font-family: sans-serif; padding: 20px; }
+  .card { background: #ffffff; max-width: 700px; margin: 0 auto; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+  h2, h3 { color: #0056b3; }
+  .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; background: #ffffff; cursor: pointer; font-size: 16px; text-align: left; }
+  .btn:hover { background: #e9ecef; }
+  .correct { background: #28a745 !important; color: #ffffff; border-color: #28a745; }
+  .wrong { background: #dc3545 !important; color: #ffffff; border-color: #dc3545; }
+  .hidden { display: none; }
+  .expl { margin-top: 15px; padding: 15px; background: #e2e3e5; border-left: 5px solid #0056b3; }
+  #next-btn, #restart-btn { background: #0056b3; color: #ffffff; text-align: center; font-weight: bold; border: none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div id="quiz-header">
+    <h2>Letectví pro každého</h2>
+    <p>Jen pro zábavu...</p>
+  </div>
+  
+  <div id="question-container">
+    <h3 id="question-text"></h3>
+    <div id="answers"></div>
+    <div id="explanation" class="hidden expl"></div>
+    <button id="next-btn" class="hidden btn">Další otázka</button>
+  </div>
+  
+  <div id="result-container" class="hidden">
+    <h2 id="score-text"></h2>
+    <p id="eval-text"></p>
+    <button id="restart-btn" class="btn">Zkusit znovu</button>
+  </div>
+</div>
+
+<script>
+const q = [
+  {q: "Jakou barvu má ve skutečnosti takzvaná 'černá skříňka' v letadle?", a: ["Černou", "Oranžovou", "Stříbrnou", "Modrou"], c: 1, e: "Zapisovače letových údajů jsou zářivě oranžové, aby se daly snadno najít v troskách."},
+  {q: "Který slavný dopravní letoun získal přezdívku 'Jumbo Jet'?", a: ["Airbus A380", "Boeing 737", "Boeing 747", "Concorde"], c: 2, e: "Boeing 747 se svou ikonickou 'koulí' na střeše byl prvním letadlem se dvěma uličkami."},
+  {q: "V jaké výšce běžně létají velká dopravní letadla na dlouhých tratích?", a: ["3 až 5 km", "10 až 12 km", "15 až 18 km", "Kolem 20 km"], c: 1, e: "Běžná cestovní hladina je kolem 10–12 kilometrů, kde je řidší vzduch a menší odpor."},
+  {q: "Co znamená v mezinárodním letectví signál 'Mayday'?", a: ["Žádost o změnu kurzu", "Hlášení o turbulenci", "Nouzové volání při ohrožení života", "Povolení k přistání"], c: 2, e: "Mayday je absolutní nouzový signál, odvozený z francouzského 'venez m'aider' (přijďte mi na pomoc)."},
+  {q: "Který americký výrobce produkuje nesmírně populární řadu letadel 737 (včetně verzí NG a MAX)?", a: ["Airbus", "Embraer", "Lockheed Martin", "Boeing"], c: 3, e: "Boeing 737 je jedním z nejprodávanějších dopravních letadel všech dob."},
+  {q: "Co se stane, když piloti (nebo vy v simulátoru) vysunou vztlakové klapky (flaps)?", a: ["Zvýší se rychlost letadla", "Letadlo začne couvat", "Zvýší se vztlak a umožní se let při nižší rychlosti", "Zhasnou motory"], c: 2, e: "Klapky se používají hlavně při vzletu a přistání, aby se letadlo udrželo ve vzduchu i při nižší rychlosti."},
+  {q: "Jak se jmenuje největší letiště v České republice?", a: ["Letiště Leoše Janáčka Ostrava", "Letiště Václava Havla Praha", "Letiště Brno-Tuřany", "Letiště Karlovy Vary"], c: 1, e: "Pražská Ruzyně, dnes Letiště Václava Havla, odbaví v ČR suverénně nejvíc cestujících."},
+  {q: "Co znamená zkratka ATC v letecké terminologii?", a: ["Aircraft Technical Control", "Air Traffic Control (Řízení letového provozu)", "Auto Throttle Control", "Air Transit Company"], c: 1, e: "Řídící letového provozu (ATC) zajišťují bezpečný rozestup letadel na nebi i na zemi."},
+  {q: "Který plyn způsobil legendární zkázu vzducholodi Hindenburg?", a: ["Helium", "Vodík", "Kyslík", "Dusík"], c: 1, e: "Vodík je vysoce hořlavý. Dnes se pro bezpečné plnění vzducholodí používá nehořlavé helium."},
+  {q: "Co označuje anglické slovo 'fuselage'?", a: ["Podvozek", "Křídlo", "Ocasní plochu", "Trup letadla"], c: 3, e: "Fuselage je hlavní trupová část letadla, kde sedí cestující a posádka."}
+];
+
+let currentQuestion = 0;
+let score = 0;
+const $ = id => document.getElementById(id);
+
+function loadQuestion() {
+  if (currentQuestion >= q.length) {
+    $('question-container').classList.add('hidden');
+    $('result-container').classList.remove('hidden');
+    $('score-text').innerText = `Skóre: ${score}/${q.length}`;
+    $('eval-text').innerText = score > 7 ? 'Létáš v oblacích! Skvělá práce.' : 'Ještě trochu potrénuj na simulátoru.';
+    return;
+  }
+  
+  $('question-text').innerText = q[currentQuestion].q;
+  $('answers').innerHTML = '';
+  $('explanation').classList.add('hidden');
+  $('next-btn').classList.add('hidden');
+  
+  q[currentQuestion].a.forEach((answer, index) => {
+    let btn = document.createElement('button');
+    btn.className = 'btn';
+    btn.innerText = answer;
+    btn.onclick = () => checkAnswer(index, btn);
+    $('answers').appendChild(btn);
+  });
+}
+
+function checkAnswer(selectedIndex, btn) {
+  let allBtns = $('answers').children;
+  for (let b of allBtns) b.disabled = true;
+  
+  if (selectedIndex === q[currentQuestion].c) {
+    btn.classList.add('correct');
+    score++;
+  } else {
+    btn.classList.add('wrong');
+    allBtns[q[currentQuestion].c].classList.add('correct');
+  }
+  
+  $('explanation').innerText = q[currentQuestion].e;
+  $('explanation').classList.remove('hidden');
+  $('next-btn').classList.remove('hidden');
+}
+
+$('next-btn').onclick = () => {
+  currentQuestion++;
+  loadQuestion();
+};
+
+$('restart-btn').onclick = () => {
+  currentQuestion = 0;
+  score = 0;
+  $('question-container').classList.remove('hidden');
+  $('result-container').classList.add('hidden');
+  loadQuestion();
+};
+
+loadQuestion();
+</script>
+</body>
+</html>
