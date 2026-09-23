@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kvíz pro pamětníky: Československé televizní seriály</title>
+<style>
+:root{--card:#fff;--text:#171714;--muted:#5f615b;--line:#dfdfd8;--accent:#b16d00;--ok:#146c45;--ok-soft:#e9f7ef;--bad:#a82f2f;--bad-soft:#fff0f0}*{box-sizing:border-box}html,body{margin:0;padding:0;background:transparent;font-family:Arial,"Segoe UI",sans-serif;color:var(--text)}body{padding:10px}.quiz{width:min(700px,100%);margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden}.hero{padding:26px 28px 20px;background:linear-gradient(180deg,#fff 0%,#faf8f3 100%);border-bottom:1px solid var(--line)}.kicker{font-size:14px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}h1{font-size:32px;line-height:1.08;margin:0 0 10px}.subtitle{font-size:17px;line-height:1.5;color:var(--muted);margin:0}.status{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:20px;font-size:14px;font-weight:700}.score{padding:8px 12px;border-radius:999px;background:#f1f1ed;border:1px solid var(--line)}.progress{height:8px;background:#ecebe6}.progress>div{height:100%;width:0;background:linear-gradient(90deg,#a76700,#d89a26);transition:width .25s ease}.main{padding:28px}.question{font-size:23px;line-height:1.32;font-weight:800;margin:0 0 20px}.answers{display:grid;gap:12px}.answer{width:100%;text-align:left;border:2px solid var(--line);background:#fff;color:var(--text);padding:16px 17px;border-radius:14px;font-size:17px;line-height:1.35;font-weight:700;cursor:pointer;min-height:56px}.answer:hover:not(:disabled){border-color:#b8b8af;background:#fbfaf7}.answer:focus-visible{outline:4px solid rgba(177,109,0,.24);outline-offset:2px}.answer:disabled{cursor:default}.answer.correct{border-color:#8ac8a7;background:var(--ok-soft);color:#0c5a37}.answer.wrong{border-color:#d8a1a1;background:var(--bad-soft);color:#8d2828}.feedback{display:none;margin-top:18px;padding:16px;border-radius:14px;background:#f7f6f2;border:1px solid var(--line);font-size:16px;line-height:1.5}.feedback.show{display:block}.feedback strong{display:block;margin-bottom:4px}.next{display:none;margin-top:18px;width:100%;border:0;border-radius:14px;padding:15px 16px;background:#171714;color:white;font-size:16px;font-weight:800;cursor:pointer;min-height:52px}.next.show{display:block}.result{display:none;text-align:center;padding:40px 28px}.result.show{display:block}.big{font-size:56px;font-weight:900;margin:10px 0}.result h2{font-size:27px;margin:0 0 8px}.result p{font-size:17px;color:var(--muted);line-height:1.5;max-width:520px;margin:0 auto 22px}.retry{border:0;border-radius:14px;background:#171714;color:#fff;padding:14px 22px;font-size:16px;font-weight:800;cursor:pointer}.note{text-align:center;color:#77786f;font-size:12px;padding:0 18px 18px}@media(max-width:560px){body{padding:6px}.quiz{border-radius:17px}.hero,.main{padding-left:18px;padding-right:18px}h1{font-size:27px}.subtitle{font-size:16px}.question{font-size:20px}.answer{font-size:16px;padding:15px}}
+</style>
+</head>
+<body>
+<div class="quiz">
+  <section id="play">
+    <div class="hero">
+      <div class="kicker">Kvíz pro pamětníky • 15 otázek</div>
+      <h1>Jak dobře si pamatujete televizní klasiky?</h1>
+      <p class="subtitle">Chalupáři, Nemocnice na kraji města, Sanitka, Pan Tau, Arabela i další seriály, které znaly celé generace.</p>
+      <div class="status"><div id="counter">Otázka 1 z 15</div><div id="score" class="score">Skóre 0</div></div>
+    </div>
+    <div class="progress"><div id="bar"></div></div>
+    <main class="main">
+      <div id="question" class="question"></div>
+      <div id="answers" class="answers"></div>
+      <div id="feedback" class="feedback" aria-live="polite"></div>
+      <button id="next" class="next" type="button">Další otázka →</button>
+    </main>
+  </section>
+  <section id="result" class="result" aria-live="polite">
+    <div class="kicker">Hotovo</div><h2>Vaše skóre</h2><div id="bigscore" class="big">0/15</div><p id="resulttext"></p><button id="retry" class="retry" type="button">Zkusit znovu</button>
+  </section>
+  <div class="note">Větší písmo a kontrast jsou zvolené schválně, aby se kvíz pohodlně četl i na menším displeji.</div>
+</div>
+<script>
+const questions=[
+{q:"Do které vesnice se v seriálu Chalupáři přestěhuje Evžen Huml?",opts:["Ouplavice","Třešňová","Křečovice","Hoštice"],correct:1,explain:"Evžen Huml si pořídí chalupu ve vesnici Třešňová."},
+{q:"Kdo v Chalupářích ztvárnil Evžena Humla?",opts:["Josef Kemr","Miloš Kopecký","Jiří Sovák","Vladimír Menšík"],correct:2,explain:"Evžena Humla hrál Jiří Sovák."},
+{q:"Kdo napsal scénář k seriálu Nemocnice na kraji města?",opts:["Jaroslav Dietl","Jiří Hubač","Ota Hofman","Miloš Macourek"],correct:0,explain:"Autorem scénáře byl Jaroslav Dietl."},
+{q:"Který herec hrál doktora Štrosmajera v Nemocnici na kraji města?",opts:["Ladislav Chudík","Josef Abrhám","Jaromír Hanzlík","Miloš Kopecký"],correct:3,explain:"Doktora Štrosmajera ztvárnil Miloš Kopecký."},
+{q:"Ve kterém roce měla premiéru Nemocnice na kraji města?",opts:["1975","1978","1981","1984"],correct:1,explain:"Premiéra seriálu Nemocnice na kraji města proběhla v roce 1978."},
+{q:"Jak se jmenuje hlavní lékařská postava seriálu Sanitka, kterou hrál Jaromír Hanzlík?",opts:["Vojtěch Jandera","Karel Sova","Arnošt Blažej","Petr Čeňek"],correct:0,explain:"Jaromír Hanzlík hrál doktora Vojtěcha Janderu."},
+{q:"Kolik dílů má původní seriál Sanitka z roku 1984?",opts:["8","13","11","20"],correct:2,explain:"Původní Sanitka má 11 dílů."},
+{q:"Který předmět je neodmyslitelně spojený s Panem Tau?",opts:["Stříbrný deštník","Červený kufřík","Kapesní hodinky","Kouzelná buřinka"],correct:3,explain:"Pan Tau kouzlí pomocí své charakteristické buřinky."},
+{q:"Kdo ztvárnil Pana Tau v původním seriálu?",opts:["František Filipovský","Otto Šimánek","Vladimír Menšík","Josef Bek"],correct:1,explain:"Pana Tau hrál Otto Šimánek."},
+{q:"Kdo režíroval seriál Arabela?",opts:["Jindřich Polák","František Filip","Václav Vorlíček","Jiří Adamec"],correct:2,explain:"Režisérem Arabely byl Václav Vorlíček."},
+{q:"Kdo v Arabele ztvárnil čaroděje Rumburaka?",opts:["Jiří Lábus","Vladimír Dlouhý","Vladimír Menšík","Jiří Sovák"],correct:0,explain:"Rumburaka hrál Jiří Lábus."},
+{q:"Ve kterém roce vznikl kultovní seriál Návštěvníci?",opts:["1977","1986","1990","1983"],correct:3,explain:"Návštěvníci byli vyrobeni v roce 1983."},
+{q:"Ve které fiktivní obci žijí Potůčkovi v seriálu Tři chlapi v chalupě?",opts:["Třešňová","Hrušín","Ouplavice","Dobrá Voda"],correct:2,explain:"Rodina Potůčků žije v seriálových Ouplavicích."},
+{q:"Která dvojice tvoří hlavní hrdiny seriálu Byli jednou dva písaři?",opts:["Huml a Císař","Bouvard a Pécuchet","Sova a Štrosmajer","Jandera a Fanda"],correct:1,explain:"Hlavními postavami jsou Bouvard a Pécuchet."},
+{q:"Kteří dva herci ztvárnili hlavní dvojici v seriálu Byli jednou dva písaři?",opts:["Josef Kemr a Jiří Sovák","Miloš Kopecký a Ladislav Chudík","Jaromír Hanzlík a Pavel Zedníček","Jiří Sovák a Miroslav Horníček"],correct:3,explain:"Bouvarda a Pécucheta hráli Jiří Sovák a Miroslav Horníček."}
+];
+let index=0,score=0,locked=false;const q=document.getElementById('question'),a=document.getElementById('answers'),f=document.getElementById('feedback'),next=document.getElementById('next'),counter=document.getElementById('counter'),scoreEl=document.getElementById('score'),bar=document.getElementById('bar'),play=document.getElementById('play'),result=document.getElementById('result');
+function render(){locked=false;const item=questions[index];counter.textContent=`Otázka ${index+1} z ${questions.length}`;scoreEl.textContent=`Skóre ${score}`;bar.style.width=`${(index/questions.length)*100}%`;q.textContent=item.q;a.innerHTML='';f.className='feedback';f.innerHTML='';next.className='next';item.opts.forEach((opt,i)=>{const b=document.createElement('button');b.type='button';b.className='answer';b.textContent=opt;b.addEventListener('click',()=>choose(i,b));a.appendChild(b);});}
+function choose(choice,button){if(locked)return;locked=true;const item=questions[index],buttons=[...a.querySelectorAll('.answer')];buttons.forEach(b=>b.disabled=true);buttons[item.correct].classList.add('correct');if(choice===item.correct){score++;f.innerHTML=`<strong>Správně.</strong>${item.explain}`}else{button.classList.add('wrong');f.innerHTML=`<strong>Tentokrát ne.</strong>Správná odpověď je <b>${item.opts[item.correct]}</b>. ${item.explain}`}scoreEl.textContent=`Skóre ${score}`;f.className='feedback show';next.textContent=index===questions.length-1?'Zobrazit výsledek →':'Další otázka →';next.className='next show';}
+next.addEventListener('click',()=>{if(index<questions.length-1){index++;render()}else finish()});
+function finish(){bar.style.width='100%';play.style.display='none';result.className='result show';document.getElementById('bigscore').textContent=`${score}/${questions.length}`;let text='';if(score===15)text='Výborně. Tohle je výsledek opravdového televizního pamětníka.';else if(score>=12)text='Skvělý výkon. Československé televizní klasiky máte pořád velmi dobře v paměti.';else if(score>=8)text='Solidní výsledek. Hodně seriálů jste poznali, pár detailů ale uteklo.';else text='Některé seriály už jsou přece jen pěkných pár desetiletí staré. Druhý pokus může být výrazně lepší.';document.getElementById('resulttext').textContent=text;}
+document.getElementById('retry').addEventListener('click',()=>{index=0;score=0;locked=false;result.className='result';play.style.display='block';render()});render();
+</script>
+</body>
+</html>
