@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kvíz: Návštěvníci – 20 otázek</title>
+<style>
+  :root{
+    --bg:#f3f3f3;
+    --card:#ffffff;
+    --ink:#1c2c43;
+    --text:#202124;
+    --muted:#6f7379;
+    --line:#dddfe3;
+    --soft:#ece9e4;
+    --amber:#9a5b07;
+    --amber2:#c07a12;
+    --green:#17824b;
+    --green-bg:#ecf8f1;
+    --red:#b4232b;
+    --red-bg:#fff0f1;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--text)}
+  body{padding:32px 16px}
+  .quiz-shell{max-width:700px;margin:0 auto;background:var(--card);border:1px solid #d9dce1;border-radius:24px;overflow:hidden;box-shadow:0 1px 0 rgba(0,0,0,.015)}
+  .head{padding:27px 28px 22px}
+  .eyebrow{font-weight:800;letter-spacing:.08em;color:var(--amber);font-size:13px;text-transform:uppercase;margin-bottom:8px}
+  h1{font-size:31px;line-height:1.04;letter-spacing:-.025em;color:var(--ink);margin:0 0 12px;font-weight:800;max-width:610px}
+  .dek{font-size:16px;line-height:1.45;color:var(--muted);margin:0 0 25px;max-width:620px}
+  .meta{display:flex;align-items:center;justify-content:space-between;gap:18px;font-size:15px;font-weight:800;color:#1d1d1f}
+  .score{border:1px solid #dadde2;background:#f7f6f3;border-radius:22px;padding:8px 14px;white-space:nowrap}
+  .progress-track{height:9px;background:var(--soft);border-top:1px solid #e3e1dd;border-bottom:1px solid #e3e1dd}
+  .progress-fill{height:100%;width:5%;background:var(--amber2);transition:width .25s ease}
+  .body{padding:27px 28px 18px}
+  .question{font-size:23px;line-height:1.22;font-weight:800;letter-spacing:-.012em;margin:0 0 22px;color:#202124}
+  .answers{display:grid;gap:12px}
+  button.answer{width:100%;text-align:left;background:#fff;border:2px solid #dcdfe4;border-radius:14px;padding:16px 17px;font:700 16px/1.25 Arial,Helvetica,sans-serif;color:#1f2023;cursor:pointer;transition:border-color .15s,background .15s,transform .05s}
+  button.answer:hover:not(:disabled){border-color:#b7bcc4;background:#fbfbfb}
+  button.answer:active:not(:disabled){transform:translateY(1px)}
+  button.answer.correct{border-color:var(--green);background:var(--green-bg);color:#0f6038}
+  button.answer.wrong{border-color:var(--red);background:var(--red-bg);color:#8d1820}
+  button.answer:disabled{cursor:default}
+  .feedback{display:none;margin-top:16px;border-radius:13px;padding:13px 15px;font-size:15px;line-height:1.4;border:1px solid #e0e2e5;background:#fafafa;color:#444}
+  .feedback.show{display:block}
+  .feedback strong{color:#202124}
+  .controls{display:flex;justify-content:flex-end;margin-top:14px}
+  .next{display:none;border:0;border-radius:12px;background:var(--ink);color:#fff;padding:12px 17px;font:800 15px/1 Arial,Helvetica,sans-serif;cursor:pointer}
+  .next.show{display:inline-block}
+  .foot{padding:9px 28px 17px;text-align:center;font-size:12px;line-height:1.35;color:#858990}
+  .result{display:none;padding:32px 28px 30px;text-align:left}
+  .result.show{display:block}
+  .result .badge{display:inline-block;text-transform:uppercase;letter-spacing:.08em;font-size:12px;font-weight:800;color:var(--amber);margin-bottom:9px}
+  .result h2{font-size:30px;line-height:1.07;color:var(--ink);margin:0 0 12px;letter-spacing:-.025em}
+  .result p{font-size:16px;line-height:1.5;color:#555b62;margin:0 0 20px;max-width:600px}
+  .result .big-score{font-size:54px;font-weight:900;color:#202124;line-height:1;margin:8px 0 20px;letter-spacing:-.04em}
+  .restart{border:0;border-radius:12px;background:var(--ink);color:#fff;padding:13px 18px;font:800 15px/1 Arial,Helvetica,sans-serif;cursor:pointer}
+  @media (max-width:520px){
+    body{padding:12px 8px}
+    .quiz-shell{border-radius:18px}
+    .head{padding:22px 19px 18px}
+    h1{font-size:27px}
+    .dek{font-size:15px;margin-bottom:21px}
+    .body{padding:23px 19px 15px}
+    .question{font-size:21px}
+    button.answer{padding:14px 14px;font-size:15px}
+    .foot{padding:8px 19px 15px}
+    .result{padding:27px 19px}
+  }
+</style>
+</head>
+<body>
+<main class="quiz-shell" aria-live="polite">
+  <section id="quizView">
+    <header class="head">
+      <div class="eyebrow">ČESKÉ FILMY A SERIÁLY • 20 OTÁZEK</div>
+      <h1>Amarouny zná každý. Ale pamatujete si Návštěvníky opravdu do detailu?</h1>
+      <p class="dek">CML, Kamenice, krycí identity i vynálezy z budoucnosti. První otázky zahřejí, druhá polovina už prověří opravdové znalce seriálu.</p>
+      <div class="meta">
+        <div id="counter">Otázka 1 z 20</div>
+        <div class="score">Skóre <span id="score">0</span></div>
+      </div>
+    </header>
+    <div class="progress-track" aria-hidden="true"><div id="progress" class="progress-fill"></div></div>
+    <section class="body">
+      <h2 id="question" class="question"></h2>
+      <div id="answers" class="answers"></div>
+      <div id="feedback" class="feedback"></div>
+      <div class="controls"><button id="next" class="next" type="button">Další otázka</button></div>
+    </section>
+    <footer class="foot">Kvíz hodnotí znalosti děje, postav, techniky i vybraných zákulisních detailů seriálu Návštěvníci.</footer>
+  </section>
+
+  <section id="resultView" class="result">
+    <div class="badge">VÝSLEDEK KVÍZU</div>
+    <h2 id="resultTitle">Hotovo.</h2>
+    <div id="bigScore" class="big-score">0/20</div>
+    <p id="resultText"></p>
+    <button id="restart" class="restart" type="button">Zkusit znovu</button>
+  </section>
+</main>
+
+<script>
+const quiz = [
+  {
+    q:"Co v seriálu znamená zkratka CML?",
+    a:["Centrální mozek lidstva","Centrum mezihvězdné logistiky","Centrální modul letů","Civilizační monitor lidstva"],
+    c:0,
+    e:"CML je Centrální mozek lidstva – počítač, který v roce 2484 upozorní na hrozící kosmické nebezpečí."
+  },
+  {
+    q:"Ve kterém roce začíná děj budoucnosti, odkud vyráží expedice?",
+    a:["2284","2384","2484","2584"],
+    c:2,
+    e:"Výchozím bodem seriálu je rok 2484. Právě odtud se expedice vydává proti proudu času."
+  },
+  {
+    q:"Jaké označení nese výprava vyslaná do minulosti?",
+    a:["Bernau 84","Adam 84","Kamenice 84","CML 84"],
+    c:1,
+    e:"Čtyřčlenná vědecká expedice nese označení Adam 84 podle Adama Bernaua, jehož zápisky hledá."
+  },
+  {
+    q:"Co mají Návštěvníci v minulosti získat od mladého Adama Bernaua?",
+    a:["Plán stroje času","Vzorec pro přesun kontinentů","Návod na CML","Výpočet dráhy komety"],
+    c:1,
+    e:"Cílem jsou Adamovy školní zápisky s principem, který má umožnit přesun kontinentů a pomoci zachránit Zemi."
+  },
+  {
+    q:"Do jakého městečka expedice v minulosti zamíří?",
+    a:["Kamenice","Ledeč","Třeboň","Beroun"],
+    c:0,
+    e:"Děj minulosti se odehrává ve fiktivní Kamenici, kam expedice přijíždí za Adamem a jeho rodinou."
+  },
+  {
+    q:"Za koho se Návštěvníci v Kamenici vydávají, aby byli nenápadní?",
+    a:["Za pracovníky televize","Za geology","Za geometry vyměřující dálnici","Za opraváře elektrického vedení"],
+    c:2,
+    e:"Ubytují se jako geodeti – v seriálu se o nich mluví jako o „geometrech“ – kteří mají vyměřovat trasu budoucí dálnice."
+  },
+  {
+    q:"Který předmět z budoucnosti se expedici ztratí při hašení domu Bernauových?",
+    a:["Reaktivní deštník","Laserová pilka","Solarizátor","Oko 1"],
+    c:1,
+    e:"Při hašení zmizí laserová pilka. Dostane se k dědovi Drchlíkovi a způsobí další sérii problémů."
+  },
+  {
+    q:"Kdo ztvárnil Aloise Drchlíka, kterému Návštěvníci říkají Velký učitel?",
+    a:["Vladimír Menšík","Vlastimil Brodský","Jiří Císler","Otakar Brousek"],
+    c:1,
+    e:"Dědu Drchlíka, jednu z klíčových postav závěru seriálu, hraje Vlastimil Brodský."
+  },
+  {
+    q:"Jak se jmenuje proslulé jídlo z budoucnosti, které členové expedice pojídají?",
+    a:["Amarouny","Humidony","CML kostky","Bernauky"],
+    c:0,
+    e:"Amarouny se staly jedním z nejslavnějších pojmů seriálu – výsledek přípravy má podobu barevného želé."
+  },
+  {
+    q:"Co dělá Adam s listy ze sešitu v dílu Génius v hladomorně?",
+    a:["Pálí je v kamnech","Skládá z nich vlaštovky","Schovává je do zdi","Dává je Ali"],
+    c:1,
+    e:"Právě ve chvíli, kdy se zdá, že akademik výpočty získá, Adam trhá listy ze sešitu a skládá z nich papírové vlaštovky."
+  },
+  {
+    q:"Pod jakým jménem vystupuje v minulosti Leo Kane?",
+    a:["Emil Karas","Michal Noll","Petr Malát","Karel Bernau"],
+    c:0,
+    e:"Technik expedice Leo Kane používá v minulosti krycí identitu Emil Karas."
+  },
+  {
+    q:"Jakou krycí identitu používá Emilia Fernandez?",
+    a:["Ali Lábusová","Káťa Jandová","Jiřina Nováková","Eva Karasová"],
+    c:1,
+    e:"Emilia Fernandez vystupuje v Kamenici jako Káťa Jandová."
+  },
+  {
+    q:"Jak se v minulosti jmenuje doktor Jacques Michell?",
+    a:["Jan Richard","Michal Noll","Miloš Nehasil","Petr Malát"],
+    c:1,
+    e:"Lékař výpravy Jacques Michell používá krycí jméno Michal Noll."
+  },
+  {
+    q:"Jakým zařízením doktor Noll tajně léčí kolotočáře Edu v nemocnici?",
+    a:["Solarizátorem","Humidátorem","Reaktivním skenerem","Laserovou pilkou"],
+    c:0,
+    e:"V dílu Stane se zítra používá doktor Noll k léčbě Edy zařízení nazývané solarizátor."
+  },
+  {
+    q:"Čím Návštěvníci znovu naplní rybník poté, co při spojení s budoucností vyvaří vodu?",
+    a:["Požárními hadicemi","Reaktivními deštníky","Čerpadlem z auta","Umělým sněhem"],
+    c:1,
+    e:"K záchraně situace použijí reaktivní deštníky, pomocí nichž vyvolají déšť a rybník znovu naplní."
+  },
+  {
+    q:"Jaký problém má zásilka peněz, kterou výprava dostane z budoucnosti?",
+    a:["Jsou padělané","Jsou mokré a nečitelné","V minulosti ještě neplatí","Už dávno neplatí"],
+    c:3,
+    e:"Děda Drchlík návštěvníky upozorní, že peníze ze zásilky už dávno neplatí. Mnohem víc ho zaujmou noviny, do nichž byly zabalené."
+  },
+  {
+    q:"Jaký automobil slouží Návštěvníkům jako stroj času?",
+    a:["Škoda 1203","Lada Niva 2121","Tatra 613","Volha GAZ-24"],
+    c:1,
+    e:"Seriálovým strojem času je Lada Niva 2121. Auto přitom navenek působí jako vůz geodetů."
+  },
+  {
+    q:"Které skutečné české město si v seriálu zahrálo fiktivní Kamenici?",
+    a:["Pelhřimov","Tábor","Jičín","Litomyšl"],
+    c:0,
+    e:"Fiktivní Kamenici představoval především Pelhřimov, který je s vizuální podobou seriálu silně spojený."
+  },
+  {
+    q:"Který slavný český tvůrce je u Návštěvníků podepsán pod animací?",
+    a:["Jiří Trnka","Karel Zeman","Jan Švankmajer","Břetislav Pojar"],
+    c:2,
+    e:"Animaci vytvořil Jan Švankmajer. Mezi další výrazné tvůrce patřili hudební skladatel Karel Svoboda a kostýmní výtvarník Theodor Pištěk."
+  },
+  {
+    q:"Koho Návštěvníci nakonec vezmou s sebou do budoucnosti?",
+    a:["Adama Bernaua","Petra Maláta","Dědu Drchlíka","Nadstrážmistra Vyskočila"],
+    c:2,
+    e:"Do budoucnosti se s expedicí dostane děda Drchlík. Jeho zásah se nakonec ukáže jako klíčový pro vyřešení celé hrozby."
+  }
+];
+
+let index = 0;
+let score = 0;
+let locked = false;
+
+const counter = document.getElementById('counter');
+const scoreEl = document.getElementById('score');
+const progress = document.getElementById('progress');
+const question = document.getElementById('question');
+const answers = document.getElementById('answers');
+const feedback = document.getElementById('feedback');
+const next = document.getElementById('next');
+const quizView = document.getElementById('quizView');
+const resultView = document.getElementById('resultView');
+const bigScore = document.getElementById('bigScore');
+const resultTitle = document.getElementById('resultTitle');
+const resultText = document.getElementById('resultText');
+
+function render(){
+  locked = false;
+  const item = quiz[index];
+  counter.textContent = `Otázka ${index + 1} z ${quiz.length}`;
+  scoreEl.textContent = score;
+  progress.style.width = `${((index + 1) / quiz.length) * 100}%`;
+  question.textContent = item.q;
+  answers.innerHTML = '';
+  feedback.className = 'feedback';
+  feedback.textContent = '';
+  next.className = 'next';
+  next.textContent = index === quiz.length - 1 ? 'Zobrazit výsledek' : 'Další otázka';
+
+  item.a.forEach((label, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'answer';
+    btn.textContent = label;
+    btn.addEventListener('click', () => choose(i));
+    answers.appendChild(btn);
+  });
+}
+
+function choose(choice){
+  if(locked) return;
+  locked = true;
+  const item = quiz[index];
+  const btns = [...answers.querySelectorAll('.answer')];
+  btns.forEach((b,i) => {
+    b.disabled = true;
+    if(i === item.c) b.classList.add('correct');
+  });
+
+  if(choice === item.c){
+    score++;
+    scoreEl.textContent = score;
+    feedback.innerHTML = `<strong>Správně.</strong> ${item.e}`;
+  } else {
+    btns[choice].classList.add('wrong');
+    feedback.innerHTML = `<strong>Správná odpověď: ${item.a[item.c]}.</strong> ${item.e}`;
+  }
+  feedback.classList.add('show');
+  next.classList.add('show');
+}
+
+function finish(){
+  quizView.style.display = 'none';
+  resultView.classList.add('show');
+  bigScore.textContent = `${score}/${quiz.length}`;
+  let title, text;
+  if(score === 20){
+    title = 'CML hlásí plný počet.';
+    text = 'Dvacet z dvaceti. Tohle už není jen vzpomínka na amarouny – seriál máte v hlavě skoro jako akademik Richard Adamovo dílo.';
+  } else if(score >= 17){
+    title = 'Velký znalec Návštěvníků.';
+    text = 'Výborný výsledek. Děj, krycí identity i technické hračky z budoucnosti vám očividně zůstaly v paměti.';
+  } else if(score >= 12){
+    title = 'Do expedice Adam 84 byste prošli.';
+    text = 'Základ znáte velmi dobře, ale několik detailů z Kamenice a pozdějších dílů vás ještě dokázalo nachytat.';
+  } else if(score >= 7){
+    title = 'Kamenici byste našli.';
+    text = 'CML, amarouny a hlavní postavy znáte, jenže druhá polovina kvízu už chtěla opravdu pečlivou seriálovou paměť.';
+  } else {
+    title = 'CML doporučuje reprízu.';
+    text = 'Základní pojmy možná naskočily, ale detaily expedice se rozutekly v čase. Ideální důvod dát si Návštěvníky znovu.';
+  }
+  resultTitle.textContent = title;
+  resultText.textContent = text;
+}
+
+next.addEventListener('click', () => {
+  if(!locked) return;
+  if(index < quiz.length - 1){
+    index++;
+    render();
+  } else {
+    finish();
+  }
+});
+
+document.getElementById('restart').addEventListener('click', () => {
+  index = 0; score = 0; locked = false;
+  resultView.classList.remove('show');
+  quizView.style.display = '';
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+render();
+</script>
+</body>
+</html>
