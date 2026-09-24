@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>K čemu tahle věc byla? Retro kvíz z československých domácností</title>
+<style>
+:root{
+  --bg:#f4f4f3;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --line:#d9dde3;
+  --accent:#9a5a0a;
+  --soft:#f7f6f3;
+  --good:#16803b;
+  --good-bg:#ecf8ef;
+  --bad:#b42318;
+  --bad-bg:#fff0ee;
+  --navy:#21324a;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#18181b}
+body{padding:32px 14px}
+.quiz-shell{max-width:700px;margin:0 auto;background:var(--card);border:1px solid #d7dbe1;border-radius:24px;overflow:hidden;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+.header{padding:28px 28px 20px}
+.kicker{font-size:13px;font-weight:800;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+h1{font-size:31px;line-height:1.05;color:var(--navy);margin:0 0 14px;font-weight:800}
+.lead{font-size:16px;line-height:1.5;color:#70757d;margin:0 0 24px}
+.meta{display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:15px;font-weight:800}
+.score{border:1px solid #dcdfe4;background:var(--soft);padding:9px 14px;border-radius:999px;white-space:nowrap}
+.progress-wrap{height:9px;background:#ebe9e6;border-top:1px solid #e2dfdb;border-bottom:1px solid #e2dfdb}
+.progress{height:100%;width:0;background:#b06b13;transition:width .25s ease}
+.main{padding:28px}
+.subject{display:inline-block;margin:0 0 10px;font-size:12px;font-weight:900;letter-spacing:.07em;color:var(--accent);text-transform:uppercase}
+.question{font-size:23px;line-height:1.3;font-weight:800;margin:0 0 22px;color:#1f2024}
+.answers{display:grid;gap:12px}
+.answer{width:100%;text-align:left;border:2px solid #dde1e6;background:#fff;border-radius:14px;padding:16px 18px;font-size:16px;line-height:1.35;font-weight:700;color:#222;cursor:pointer;transition:border-color .15s,background .15s,transform .05s}
+.answer:hover:not(:disabled){border-color:#aeb7c2;background:#fbfbfc}
+.answer:active:not(:disabled){transform:scale(.995)}
+.answer:disabled{cursor:default}
+.answer.correct{border-color:var(--good);background:var(--good-bg);color:#0e5c2a}
+.answer.wrong{border-color:var(--bad);background:var(--bad-bg);color:#8e1d15}
+.feedback{display:none;margin-top:18px;padding:15px 17px;border-radius:13px;background:#f7f7f7;border:1px solid #e0e2e6;font-size:15px;line-height:1.5;color:#3f444c}
+.feedback.show{display:block}
+.feedback strong{color:#222}
+.controls{display:none;justify-content:flex-end;margin-top:18px}
+.controls.show{display:flex}
+.next{border:0;border-radius:12px;background:#21324a;color:#fff;padding:13px 20px;font-size:15px;font-weight:800;cursor:pointer}
+.next:hover{filter:brightness(1.08)}
+.footer{padding:0 28px 24px;text-align:center;color:#8a8f97;font-size:12px;line-height:1.45}
+.result{display:none;text-align:center;padding:6px 2px 8px}
+.result.show{display:block}
+.result-score{font-size:54px;line-height:1;font-weight:900;color:var(--navy);margin:4px 0 10px}
+.result-title{font-size:24px;font-weight:900;margin:0 0 10px}
+.result-text{font-size:16px;line-height:1.5;color:#5f6670;max-width:520px;margin:0 auto 22px}
+.restart{border:0;border-radius:12px;background:#21324a;color:white;padding:14px 21px;font-size:15px;font-weight:800;cursor:pointer}
+@media(max-width:520px){
+ body{padding:12px 8px}
+ .quiz-shell{border-radius:18px}
+ .header{padding:22px 20px 16px}
+ h1{font-size:27px}
+ .lead{font-size:15px}
+ .main{padding:22px 20px}
+ .question{font-size:21px}
+ .answer{padding:14px 15px;font-size:15px}
+ .footer{padding:0 20px 20px}
+}
+</style>
+</head>
+<body>
+<div class="quiz-shell">
+  <section class="header">
+    <div class="kicker">RETRO DOMÁCNOST • 10 OTÁZEK</div>
+    <h1>K čemu tahle věc byla?</h1>
+    <p class="lead">Žádná remoska, sifon ani valcha. Tentokrát vytahujeme méně nápadné pomocníky ze zásuvek, skříní a spíží československých domácností.</p>
+    <div class="meta"><span id="counter">Otázka 1 z 10</span><span class="score">Skóre <span id="score">0</span></span></div>
+  </section>
+  <div class="progress-wrap"><div class="progress" id="progress"></div></div>
+  <main class="main">
+    <section id="quizArea">
+      <div class="subject" id="subject"></div>
+      <h2 class="question" id="question"></h2>
+      <div class="answers" id="answers"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="controls" id="controls"><button class="next" id="nextBtn">Další otázka</button></div>
+    </section>
+    <section class="result" id="result">
+      <div class="result-score"><span id="finalScore">0</span>/10</div>
+      <h2 class="result-title" id="resultTitle"></h2>
+      <p class="result-text" id="resultText"></p>
+      <button class="restart" id="restartBtn">Zkusit znovu</button>
+    </section>
+  </main>
+  <div class="footer">Kvíz používá popisy běžných historických domácích pomůcek a hodnotí pouze znalost jejich funkce.</div>
+</div>
+<script>
+const questions = [{"s": "Zavařování", "q": "Kovové kleště se zahnutými čelistmi se v domácnosti používaly hlavně k čemu?", "a": ["K vytahování horkých zavařovacích sklenic z vody", "K utahování víček na lahvích od mléka", "K porcování horkého masa přímo v pekáči", "K vytahování uhlíků z kamen"], "c": 0, "e": "Šlo o kleště na bezpečné vytahování zavařovacích sklenic z horké vody. Česká televize zachycuje takovou pomůcku mezi kuchyňskými novinkami roku 1984."}, {"s": "Domácí nudle", "q": "Malý ruční strojek s klikou a řadou nožů měl v kuchyni ulehčit kterou práci?", "a": ["Sekání cibule na drobné kostky", "Krájení vyváleného těsta na nudle", "Drcení skořápek od vajec", "Porcování másla na stejné díly"], "c": 1, "e": "Strojky na nudle vedly vyválený plát těsta přes soustavu nožů a vytvářely pravidelné nudličky. Podobné pomůcky se objevují i v československých dobových záběrech."}, {"s": "Brambory", "q": "Ruční škrabač na brambory s klikou měl jediný hlavní úkol. Jaký?", "a": ["Vykrajovat z brambor hranolky", "Loupat nebo mechanicky obrušovat slupku", "Lisovat vařené brambory na kaši", "Odstraňovat z brambor přebytečnou vodu"], "c": 1, "e": "Ruční škrabač měl zrychlit loupání brambor mechanickým obrušováním slupky. Archiv ČT připomíná takový přístroj už v záběrech z roku 1957."}, {"s": "Zavařovací sklenice", "q": "Plochá kovová pomůcka, která sevřela okraj víčka zavařovací sklenice, pomáhala s čím?", "a": ["S měřením teploty nálevu", "S nasazováním gumového těsnění", "S povolením a otevřením pevně držícího víčka", "S označením data zavaření do víčka"], "c": 2, "e": "Existovaly speciální otevírače víček zavařovacích sklenic, které pomáhaly povolit pevně držící uzávěr bez páčení nožem."}, {"s": "Ovoce", "q": "Patrová pomůcka se síťovanými plochami, na které se rozkládaly plátky jablek nebo hrušek, sloužila k čemu?", "a": ["K domácímu sušení ovoce", "K lisování šťávy", "K rychlému chlazení kompotů", "K prosévání mouky"], "c": 0, "e": "Sušák umožňoval rozložit ovoce v tenké vrstvě a nechat z něj postupně odcházet vlhkost. Sušáky na ovoce patřily mezi dobové kuchyňské pomocníky."}, {"s": "Pečení", "q": "Prořezávač dortů vypadal trochu jako rámek nebo vodítko se strunou. K čemu byl?", "a": ["K vytvoření ozdobného okraje na polevě", "K rozdělení korpusu vodorovně na stejné pláty", "K vykrajování kulatých sušenek", "K odměřování množství krému"], "c": 1, "e": "Prořezávač dortů pomáhal vést řez vodorovně a rozdělit korpus na rovnoměrné vrstvy pro další plnění."}, {"s": "Pečení masa", "q": "Kovový stojánek, na který se nasadilo celé kuře, měl při pečení hlavně jakou funkci?", "a": ["Držel kuře ve vzpřímené poloze při pečení", "Odděloval kosti od masa ještě před pečením", "Měřil vnitřní teplotu masa", "Sloužil jen k servírování hotového kuřete"], "c": 0, "e": "Grilovací stojánek držel celé kuře ve vzpřímené poloze, aby se při pečení nebo grilování dalo opékat ze všech stran."}, {"s": "Pečení", "q": "Kuchyňská mašlovačka bývala často z peří nebo štětin. Co se s ní dělalo?", "a": ["Čistila se mouka ze stolu po pečení", "Potíralo se pečivo vejcem, tukem nebo jinou tekutinou", "Rozdělovalo se těsto na stejné díly", "Vyšlehávaly se bílky do pěny"], "c": 1, "e": "Mašlovačka je kuchyňský štětec. Používá se k potírání těsta a dalších pokrmů například vejcem, tukem nebo jinou tekutinou."}, {"s": "Úklid", "q": "Proutěná nebo plastová „plácačka“ se smyčkami se nosila s kobercem ven. Proč?", "a": ["Aby se koberec ručně zbavil prachu vyklepáváním", "Aby se do něj vetřel prací prášek", "Aby se s ní měřila délka koberce", "Aby se narovnaly zkroucené okraje koberce"], "c": 0, "e": "Klepačka či prakl sloužily k vyklepávání prachu z koberců. Koberce se přehazovaly přes klepadlo a ručně vyklepávaly."}, {"s": "Káva", "q": "Dřevěná nebo kovová krabička s klikou nahoře a malou zásuvkou dole byla často co?", "a": ["Ruční lis na česnek", "Mechanický mlýnek na kávu", "Dávkovač cukru", "Strojek na výrobu strouhanky"], "c": 1, "e": "Typický ruční kafemlejnek měl kliku, mlecí mechanismus a zásuvku, do které padala namletá káva. Mlýnky bývaly běžnou součástí domácností."}];
+
+let index = 0;
+let score = 0;
+let locked = false;
+
+const counter = document.getElementById('counter');
+const scoreEl = document.getElementById('score');
+const progress = document.getElementById('progress');
+const subjectEl = document.getElementById('subject');
+const questionEl = document.getElementById('question');
+const answersEl = document.getElementById('answers');
+const feedbackEl = document.getElementById('feedback');
+const controls = document.getElementById('controls');
+const nextBtn = document.getElementById('nextBtn');
+const quizArea = document.getElementById('quizArea');
+const result = document.getElementById('result');
+
+function render(){
+  locked = false;
+  const item = questions[index];
+  counter.textContent = `Otázka ${index + 1} z ${questions.length}`;
+  scoreEl.textContent = score;
+  progress.style.width = `${(index / questions.length) * 100}%`;
+  subjectEl.textContent = item.s;
+  questionEl.textContent = item.q;
+  answersEl.innerHTML = '';
+  feedbackEl.className = 'feedback';
+  feedbackEl.innerHTML = '';
+  controls.className = 'controls';
+
+  item.a.forEach((text, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'answer';
+    btn.textContent = text;
+    btn.addEventListener('click', () => answer(i));
+    answersEl.appendChild(btn);
+  });
+}
+
+function answer(chosen){
+  if(locked) return;
+  locked = true;
+  const item = questions[index];
+  const buttons = [...answersEl.querySelectorAll('.answer')];
+  buttons.forEach((b,i) => {
+    b.disabled = true;
+    if(i === item.c) b.classList.add('correct');
+  });
+  if(chosen === item.c){
+    score++;
+    scoreEl.textContent = score;
+    feedbackEl.innerHTML = `<strong>Správně.</strong> ${item.e}`;
+  } else {
+    buttons[chosen].classList.add('wrong');
+    feedbackEl.innerHTML = `<strong>Tentokrát ne.</strong> ${item.e}`;
+  }
+  feedbackEl.classList.add('show');
+  controls.classList.add('show');
+  progress.style.width = `${((index + 1) / questions.length) * 100}%`;
+  nextBtn.textContent = index === questions.length - 1 ? 'Zobrazit výsledek' : 'Další otázka';
+}
+
+function finish(){
+  quizArea.style.display = 'none';
+  result.classList.add('show');
+  counter.textContent = 'Hotovo';
+  progress.style.width = '100%';
+  document.getElementById('finalScore').textContent = score;
+  let title, text;
+  if(score === 10){
+    title = 'Domácnost by vás nepřekvapila';
+    text = 'Plný počet. Zřejmě byste se neztratili ani v kuchyňské zásuvce před čtyřiceti lety.';
+  } else if(score >= 8){
+    title = 'Pamětnická forma drží';
+    text = 'Většinu méně nápadných pomocníků jste poznali. To už není jen vzpomínka na remosku a sifon.';
+  } else if(score >= 5){
+    title = 'Něco zůstalo, něco zapadlo';
+    text = 'Běžnější pomocníci byli doma, ale některé specializované vychytávky už čas odnesl.';
+  } else {
+    title = 'Zásuvka po babičce by byla dobrodružství';
+    text = 'Tentokrát jsme schválně vynechali nejprofláklejší retro věci. Aspoň jste pár zapomenutých pomocníků objevili.';
+  }
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultText').textContent = text;
+}
+
+nextBtn.addEventListener('click', () => {
+  if(index < questions.length - 1){
+    index++;
+    render();
+  } else {
+    finish();
+  }
+});
+
+document.getElementById('restartBtn').addEventListener('click', () => {
+  index = 0;
+  score = 0;
+  quizArea.style.display = '';
+  result.classList.remove('show');
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
