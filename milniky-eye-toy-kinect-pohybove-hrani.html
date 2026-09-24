@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Milníky vývoje hraní pohybem</title>
+<style>
+:root {
+  --navy:#183550;
+  --blue:#607fdc;
+  --text:#17191f;
+  --muted:#666d78;
+  --line:#d8dce4;
+  --soft:#f6f8fb;
+  --card:#ffffff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:transparent;color:var(--text);font-family:Arial,"Segoe UI",sans-serif}
+body{padding:10px}
+.wrap{width:min(700px,100%);margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.head{padding:19px 20px 13px}
+.kicker{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:5px}
+h2{margin:0;font-size:22px;line-height:1.2;color:var(--navy)}
+.lead{margin:9px 0 0;font-size:14px;line-height:1.5;color:var(--muted)}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:640px}
+thead th{background:var(--navy);color:#fff;text-align:left;padding:10px 11px;font-size:14px;line-height:1.2;vertical-align:top}
+tbody td{padding:10px 11px;border-bottom:1px solid var(--line);font-size:14px;line-height:1.3;vertical-align:top}
+tbody tr:nth-child(even){background:var(--soft)}
+tbody tr:last-child td{border-bottom:0}
+tbody td:first-child{width:90px;font-weight:700}
+.note{padding:14px 18px 17px;border-top:1px solid var(--line);background:#fbfcfe;font-size:13.5px;line-height:1.52;color:#363b45}
+.note strong{color:var(--text)}
+@media(max-width:560px){
+  body{padding:6px}
+  .card{border-radius:14px}
+  .head{padding:16px 16px 11px}
+  h2{font-size:19px}
+  .lead{font-size:13px}
+  thead th,tbody td{font-size:13px;padding:9px}
+  .note{font-size:13px;padding:12px 14px 15px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section class="card">
+  <div class="head">
+    <div class="kicker">Časová osa</div>
+    <h2>Jak se hraní pohybem dostalo k masovému publiku</h2>
+    <p class="lead">Stručná časová osa od raných konceptů přes EyeToy až po Kinect — tedy chvíle, kdy se kamera začala měnit z experimentu v běžný herní vstup.</p>
+  </div>
+  <div class="table-scroll">
+    <table aria-label="Milníky vývoje hraní pohybem">
+      <thead>
+        <tr><th>Rok</th><th>Milník</th><th>Co se změnilo</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1999</td><td>vývoj raných konceptů</td><td>kamera má převádět tělo hráče do herního vstupu</td></tr>
+<tr><td>2003</td><td>EyeToy na PS2</td><td>controller-free hraní se dostává k masovému publiku</td></tr>
+<tr><td>2004</td><td>3,55 mil. kusů EyeToy: Play expedováno</td><td>z experimentu se stává úspěšná platforma</td></tr>
+<tr><td>2010</td><td>Kinect pro Xbox 360</td><td>pokročilejší snímání těla popularizuje stejnou základní ideu znovu</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note"><strong>Smysl tabulky:</strong> ukazuje postupný posun od prvních pokusů s kamerou k produktům, které dostaly ovládání pohybem do milionů domácností.</div>
+</section>
+</div>
+</body>
+</html>
