@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kvíz pro pamětníky – analogové mládí</title>
+<style>
+:root{
+ --card:#fff;--ink:#17181c;--muted:#666a72;--line:#dde0e5;
+ --navy:#183550;--accent:#c17a12;--accent2:#efb64c;
+ --ok:#126a43;--okbg:#eaf7f0;--bad:#a32e2e;--badbg:#fff0f0
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:transparent;font-family:Arial,"Segoe UI",sans-serif;color:var(--ink)}
+body{padding:10px}
+.quiz{width:min(700px,100%);margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.hero{padding:26px 28px 20px;background:radial-gradient(circle at 100% 0%,rgba(193,122,18,.14),transparent 31%),linear-gradient(180deg,#fff,#faf9f6);border-bottom:1px solid var(--line)}
+.kicker{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.09em;color:var(--accent);margin-bottom:8px}
+h1{font-size:30px;line-height:1.08;margin:0 0 10px;color:var(--navy);letter-spacing:-.02em}
+.sub{font-size:16px;line-height:1.5;color:var(--muted);margin:0}
+.meta{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:20px;font-size:14px;font-weight:800}
+.score{padding:8px 12px;border-radius:999px;background:#f3f1ec;border:1px solid var(--line)}
+.progress{height:8px;background:#ebe9e4}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s}
+.main{padding:27px 28px 29px}
+.q{font-size:22px;line-height:1.32;font-weight:850;margin:0 0 20px}
+.answers{display:grid;gap:11px}
+.answer{width:100%;min-height:56px;text-align:left;padding:15px 17px;border-radius:14px;border:2px solid var(--line);background:#fff;color:var(--ink);font-size:16px;line-height:1.35;font-weight:750;cursor:pointer}
+.answer:hover:not(:disabled){border-color:#bdb9ad;background:#fbfaf7}
+.answer:focus-visible{outline:4px solid rgba(193,122,18,.22);outline-offset:2px}
+.answer.correct{border-color:#86c4a2;background:var(--okbg);color:#0b5d39}
+.answer.wrong{border-color:#d6a1a1;background:var(--badbg);color:#8c2828}
+.answer:disabled{cursor:default}
+.feedback{display:none;margin-top:17px;padding:15px 16px;border:1px solid var(--line);border-radius:14px;background:#f8f7f4;font-size:15px;line-height:1.5}
+.feedback.show{display:block}
+.feedback strong{display:block;margin-bottom:4px}
+.next{display:none;margin-top:17px;width:100%;min-height:52px;border:0;border-radius:14px;background:var(--navy);color:#fff;font-size:16px;font-weight:850;cursor:pointer}
+.next.show{display:block}
+.result{display:none;text-align:center;padding:40px 28px}
+.result.show{display:block}
+.big{font-size:56px;font-weight:900;margin:10px 0;color:var(--navy)}
+.result h2{font-size:27px;margin:0 0 8px}
+.result p{font-size:16px;color:var(--muted);line-height:1.5;max-width:520px;margin:0 auto 22px}
+.retry{border:0;border-radius:14px;background:var(--navy);color:#fff;padding:14px 22px;font-size:16px;font-weight:850;cursor:pointer}
+.note{text-align:center;color:#7a7d84;font-size:12px;padding:0 18px 18px}
+@media(max-width:560px){
+ body{padding:6px}.quiz{border-radius:17px}.hero,.main{padding-left:18px;padding-right:18px}
+ h1{font-size:26px}.sub{font-size:15px}.q{font-size:20px}.answer{font-size:15px;padding:14px}
+}
+</style>
+</head>
+<body>
+<div class="quiz">
+<section id="play">
+  <div class="hero">
+    <div class="kicker">Analogové mládí • 15 otázek</div>
+    <h1>Kazety, gramofon, Walkman a VHS. Kolik toho ještě poznáte?</h1>
+    <p class="sub">Tužka v kazetě, jehla na desce, šum pásku a přetáčení videa. Patnáct otázek z techniky, která provázela mládí celých generací.</p>
+    <div class="meta"><div id="counter">Otázka 1 z 15</div><div id="score" class="score">Skóre 0</div></div>
+  </div>
+  <div class="progress"><div id="bar"></div></div>
+  <main class="main">
+    <div id="question" class="q"></div>
+    <div id="answers" class="answers"></div>
+    <div id="feedback" class="feedback" aria-live="polite"></div>
+    <button id="next" class="next" type="button">Další otázka →</button>
+  </main>
+</section>
+<section id="result" class="result" aria-live="polite">
+  <div class="kicker">Hotovo</div>
+  <h2>Jak dobře znáte analogové mládí?</h2>
+  <div id="bigscore" class="big">0/15</div>
+  <p id="resulttext"></p>
+  <button id="retry" class="retry" type="button">Zkusit znovu</button>
+</section>
+<div class="note">Nostalgický znalostní kvíz. Nejde o test paměti ani inteligence.</div>
+</div>
+<script>
+const questions=[{"q": "Kdo v roce 1963 představil kompaktní audiokazetu, která pak ovládla domácí nahrávání?", "opts": ["Sony", "JVC", "Philips", "Grundig"], "correct": 2, "explain": "Philips představil první kompaktní kazetový rekordér v srpnu 1963 na výstavě v Berlíně."}, {"q": "Co u audiokazety označení C90 znamenalo?", "opts": ["Přibližně 90 minut záznamu celkem", "90 minut na každé straně", "90 metrů pásku na každé straně", "Devadesátou generaci kazety"], "correct": 0, "explain": "C90 byla kazeta s přibližně 90 minutami záznamu celkem, tedy zhruba 45 minut na každé straně."}, {"q": "Proč se do otvoru cívky audiokazety často strkala tužka nebo propiska?", "opts": ["Kvůli mazání nahrávky", "Kvůli zvýšení hlasitosti", "Kvůli odblokování ochrany proti zápisu", "Kvůli ručnímu převinutí nebo napnutí pásku"], "correct": 3, "explain": "Otvor v cívce umožňoval kazetu ručně převíjet a někdy i zachránit povolený nebo zamotaný pásek."}, {"q": "Ve kterém roce uvedlo Sony první Walkman?", "opts": ["1976", "1979", "1982", "1985"], "correct": 1, "explain": "První Walkman Sony TPS-L2 se začal prodávat 1. července 1979."}, {"q": "Jaké označení měl první model Walkmanu?", "opts": ["WM-D6C", "TC-50", "TPS-L2", "D-50"], "correct": 2, "explain": "První Walkman nesl modelové označení TPS-L2."}, {"q": "Co prvnímu Walkmanu TPS-L2 záměrně chybělo?", "opts": ["Funkce nahrávání", "Sluchátkový výstup", "Přehrávání kazet", "Napájení z baterií"], "correct": 0, "explain": "Sony odstranilo nahrávací funkci i reproduktor a udělalo z přístroje čistě osobní přehrávač."}, {"q": "Jakou rychlostí se běžně přehrává klasická dlouhohrající LP deska?", "opts": ["45 otáček za minutu", "78 otáček za minutu", "16 otáček za minutu", "33⅓ otáčky za minutu"], "correct": 3, "explain": "Klasické 12palcové LP se standardně přehrává rychlostí 33⅓ otáčky za minutu."}, {"q": "Která rychlost byla typická pro mnohé malé singly?", "opts": ["33⅓ otáčky za minutu", "45 otáček za minutu", "78 otáček za minutu", "100 otáček za minutu"], "correct": 1, "explain": "RCA Victor uvedla v roce 1949 systém 45 otáček za minutu, který se silně spojil zejména se singly."}, {"q": "Co u gramofonu fyzicky sleduje drážku desky?", "opts": ["Magnetofonová hlava", "Capstan", "Hrot přenosky", "Přítlačná kladka"], "correct": 2, "explain": "Drážku gramofonové desky sleduje hrot přenosky, který převádí její mechanické chvění na elektrický signál."}, {"q": "Na jakém principu ukládá běžná audiokazeta zvuk?", "opts": ["Magneticky na pásku", "Opticky do drážek", "Digitálně do čipu", "Mechanicky do papírové pásky"], "correct": 0, "explain": "Zvuk je na audiokazetě uložen jako změny magnetizace na magnetickém pásku."}, {"q": "Co znamenala u kazetového přehrávače funkce auto-reverse?", "opts": ["Automatické smazání staré nahrávky", "Zrychlené převíjení kazety", "Automatické přepnutí na rádio", "Přehrání druhé strany bez ručního otočení kazety"], "correct": 3, "explain": "Auto-reverse dokázal po dohrání jedné strany změnit směr přehrávání a pokračovat druhou stranou."}, {"q": "Který domácí videoformát uvedlo Sony v roce 1975?", "opts": ["VHS", "Betamax", "Video 2000", "VHS-C"], "correct": 1, "explain": "Sony uvedlo spotřebitelský Betamax videorekordér v roce 1975."}, {"q": "Která firma vyvinula VHS a v roce 1976 uvedla první domácí VHS videorekordér?", "opts": ["Sony", "Philips", "JVC", "Panasonic"], "correct": 2, "explain": "VHS vyvinula JVC a její HR-3300 z roku 1976 je uváděn jako první domácí VHS videorekordér."}, {"q": "Který přístroj Sony CDP-101 uvedený v roce 1982 představoval?", "opts": ["První komerčně prodávaný CD přehrávač Sony", "První Walkman", "První VHS videorekordér", "První kazetový magnetofon"], "correct": 0, "explain": "Sony CDP-101 byl uveden v roce 1982 jako první komerčně prodávaný CD přehrávač Sony a patřil k úplnému začátku éry CD."}, {"q": "Jaký symbol se stal po roce 1949 výrazným znakem Supraphonu?", "opts": ["Kůň s trubkou", "Orel s deskou", "Houslový klíč v hvězdě", "Lev s lyrou"], "correct": 3, "explain": "Známé logo Supraphonu s lvem a lyrou vzniklo v roce 1949."}];
+let i=0,score=0,locked=false;
+const q=document.getElementById('question'),answers=document.getElementById('answers'),
+feedback=document.getElementById('feedback'),next=document.getElementById('next'),
+counter=document.getElementById('counter'),scoreEl=document.getElementById('score'),
+bar=document.getElementById('bar'),play=document.getElementById('play'),result=document.getElementById('result');
+
+function render(){
+ locked=false;
+ const item=questions[i];
+ counter.textContent=`Otázka ${i+1} z ${questions.length}`;
+ scoreEl.textContent=`Skóre ${score}`;
+ bar.style.width=`${(i/questions.length)*100}%`;
+ q.textContent=item.q;
+ answers.innerHTML='';
+ feedback.className='feedback';
+ feedback.innerHTML='';
+ next.className='next';
+ item.opts.forEach((opt,idx)=>{
+   const b=document.createElement('button');
+   b.type='button';b.className='answer';b.textContent=opt;
+   b.addEventListener('click',()=>choose(idx,b));
+   answers.appendChild(b);
+ });
+}
+function choose(choice,button){
+ if(locked)return;
+ locked=true;
+ const item=questions[i];
+ const buttons=[...answers.querySelectorAll('.answer')];
+ buttons.forEach(b=>b.disabled=true);
+ buttons[item.correct].classList.add('correct');
+ if(choice===item.correct){
+   score++;
+   feedback.innerHTML=`<strong>Správně.</strong>${item.explain}`;
+ }else{
+   button.classList.add('wrong');
+   feedback.innerHTML=`<strong>Tentokrát ne.</strong>Správná odpověď je <b>${item.opts[item.correct]}</b>. ${item.explain}`;
+ }
+ scoreEl.textContent=`Skóre ${score}`;
+ feedback.className='feedback show';
+ next.textContent=i===questions.length-1?'Zobrazit výsledek →':'Další otázka →';
+ next.className='next show';
+}
+next.addEventListener('click',()=>{if(i<questions.length-1){i++;render();}else finish();});
+function finish(){
+ bar.style.width='100%';
+ play.style.display='none';
+ result.className='result show';
+ document.getElementById('bigscore').textContent=`${score}/${questions.length}`;
+ let t='';
+ if(score===15)t='Perfektní. Kazeta, gramofon ani VHS před vámi nic neutají.';
+ else if(score>=12)t='Výborný výkon. Analogovou techniku svého mládí máte pořád velmi dobře v paměti.';
+ else if(score>=8)t='Solidní výsledek. Základní rituály sedí, pár technických detailů ale nachytalo.';
+ else t='Některé věci už odvál čas. Druhý pokus může dopadnout výrazně lépe.';
+ document.getElementById('resulttext').textContent=t;
+}
+document.getElementById('retry').addEventListener('click',()=>{
+ i=0;score=0;locked=false;result.className='result';play.style.display='block';render();
+});
+render();
+</script>
+</body>
+</html>
