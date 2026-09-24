@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Velký duel generací – 20 otázek</title>
+<style>
+:root{
+  --bg:#f3f3f2; --card:#fff; --navy:#21324a; --muted:#70757d; --line:#d9dde3;
+  --accent:#9a5a0a; --soft:#f7f6f3; --good:#16783a; --goodbg:#ecf8ef; --bad:#b42318; --badbg:#fff0ee;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#1f2024}
+body{padding:32px 14px}
+.shell{max-width:700px;margin:0 auto;background:#fff;border:1px solid #d7dbe1;border-radius:24px;overflow:hidden}
+.head{padding:28px 28px 20px}
+.kicker{font-size:13px;font-weight:900;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+h1{font-size:31px;line-height:1.05;color:var(--navy);margin:0 0 14px;font-weight:900}
+.lead{font-size:16px;line-height:1.5;color:var(--muted);margin:0 0 24px}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:15px;font-weight:800}
+.score{padding:9px 14px;border:1px solid #dcdfe4;background:var(--soft);border-radius:999px;white-space:nowrap}
+.progress-wrap{height:9px;background:#ebe9e6;border-top:1px solid #e2dfdb;border-bottom:1px solid #e2dfdb}
+.progress{height:100%;width:0;background:#b06b13;transition:width .25s ease}
+.main{padding:28px}
+.side{display:inline-block;margin:0 0 11px;font-size:12px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:var(--accent)}
+.question{font-size:23px;line-height:1.3;font-weight:900;margin:0 0 22px}
+.answers{display:grid;gap:12px}
+.answer{width:100%;text-align:left;border:2px solid #dde1e6;background:#fff;border-radius:14px;padding:16px 18px;font-size:16px;line-height:1.35;font-weight:700;cursor:pointer}
+.answer:hover:not(:disabled){border-color:#aeb7c2;background:#fbfbfc}
+.answer:disabled{cursor:default}
+.answer.correct{border-color:var(--good);background:var(--goodbg);color:#0e5c2a}
+.answer.wrong{border-color:var(--bad);background:var(--badbg);color:#8e1d15}
+.feedback{display:none;margin-top:18px;padding:15px 17px;border-radius:13px;background:#f7f7f7;border:1px solid #e0e2e6;font-size:15px;line-height:1.5;color:#3f444c}
+.feedback.show{display:block}
+.controls{display:none;justify-content:flex-end;margin-top:18px}
+.controls.show{display:flex}
+.next,.restart{border:0;border-radius:12px;background:var(--navy);color:#fff;padding:13px 20px;font-size:15px;font-weight:900;cursor:pointer}
+.footer{padding:0 28px 24px;text-align:center;color:#8a8f97;font-size:12px;line-height:1.45}
+.result{display:none;text-align:center}
+.result.show{display:block}
+.total{font-size:54px;line-height:1;font-weight:900;color:var(--navy);margin:4px 0 10px}
+.result h2{font-size:25px;margin:0 0 10px}
+.result p{font-size:16px;line-height:1.5;color:#5f6670;margin:0 auto 20px;max-width:540px}
+.duel{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0 22px}
+.duel-card{border:1px solid #dfe2e6;background:#f8f8f7;border-radius:14px;padding:16px}
+.duel-label{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#7c8188;font-weight:900;margin-bottom:5px}
+.duel-score{font-size:28px;color:var(--navy);font-weight:900}
+@media(max-width:520px){
+ body{padding:12px 8px} .shell{border-radius:18px} .head{padding:22px 20px 16px}
+ h1{font-size:27px} .lead{font-size:15px} .main{padding:22px 20px}
+ .question{font-size:21px} .answer{padding:14px 15px;font-size:15px} .footer{padding:0 20px 20px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <section class="head">
+    <div class="kicker">VELKÝ DUEL GENERACÍ • 20 OTÁZEK</div>
+    <h1>Gramofon proti TikToku. Který svět znáte lépe?</h1>
+    <p class="lead">Deset kol nahrává pamětníkům, deset mladší digitální generaci. Otázky se střídají a na konci uvidíte i skóre obou polovin.</p>
+    <div class="meta">
+      <span id="counter">Otázka 1 z 20</span>
+      <span class="score">Skóre <span id="score">0</span></span>
+    </div>
+  </section>
+  <div class="progress-wrap"><div class="progress" id="progress"></div></div>
+  <main class="main">
+    <section id="quizArea">
+      <div class="side" id="side"></div>
+      <h2 class="question" id="question"></h2>
+      <div class="answers" id="answers"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="controls" id="controls"><button class="next" id="nextBtn">Další otázka</button></div>
+    </section>
+    <section class="result" id="result">
+      <div class="total"><span id="finalTotal">0</span>/20</div>
+      <h2 id="resultTitle"></h2>
+      <p id="resultText"></p>
+      <div class="duel">
+        <div class="duel-card">
+          <div class="duel-label">Pamětnická polovina</div>
+          <div class="duel-score"><span id="oldScore">0</span>/10</div>
+        </div>
+        <div class="duel-card">
+          <div class="duel-label">Digitální polovina</div>
+          <div class="duel-score"><span id="youngScore">0</span>/10</div>
+        </div>
+      </div>
+      <button class="restart" id="restartBtn">Zkusit znovu</button>
+    </section>
+  </main>
+  <div class="footer">Otázky porovnávají dva technologické světy. „Výhoda“ označuje zaměření otázky, ne věk hráče.</div>
+</div>
+<script>
+const questions = [{"side": "Výhoda: pamětníci", "group": "old", "q": "První Sony Walkman TPS-L2 z roku 1979 přehrával jaké médium?", "a": ["Kompaktní audiokazetu", "MiniDisc", "CD", "Mikrokazetu"], "c": 0, "e": "První Walkman TPS-L2 byl přenosný stereo kazetový přehrávač. Sony ho uvedlo v roce 1979."}, {"side": "Výhoda: mladší", "group": "young", "q": "K čemu slouží tři velké čtvercové vzory v rozích QR kódu?", "a": ["K určení polohy a orientace kódu při čtení", "K uložení názvu webové stránky", "K označení verze operačního systému", "K měření síly mobilního signálu"], "c": 0, "e": "Tři výrazné rohové vzory jsou poziční značky. Čtečce pomáhají QR kód rychle najít a určit jeho orientaci."}, {"side": "Výhoda: pamětníci", "group": "old", "q": "Jakou kapacitu měla běžná vysokohustotní 3,5palcová disketa, která dominovala počítačům v 90. letech?", "a": ["360 kB", "720 kB", "1,44 MB", "12 MB"], "c": 2, "e": "Běžná vysokohustotní 3,5palcová disketa měla kapacitu 1,44 MB."}, {"side": "Výhoda: mladší", "group": "young", "q": "Co je hlavní mechanická výhoda konektoru USB-C oproti staršímu USB-A?", "a": ["Lze ho zasunout oběma orientacemi", "Funguje pouze pro nabíjení", "Nemá žádné kovové kontakty", "Vyžaduje vždy bezdrátový přenos dat"], "c": 0, "e": "USB-C má reverzibilní konektor, takže zástrčku není nutné před zasunutím otáčet do jediné správné polohy."}, {"side": "Výhoda: pamětníci", "group": "old", "q": "Na jaké rychlosti se typicky přehrává klasická dlouhohrající LP deska?", "a": ["16 otáček za minutu", "33⅓ otáčky za minutu", "45 otáček za minutu", "78 otáček za minutu"], "c": 1, "e": "Dlouhohrající LP se standardně přehrává rychlostí 33⅓ otáčky za minutu."}, {"side": "Výhoda: mladší", "group": "young", "q": "Co musí vícefaktorové ověřování přidat oproti samotnému heslu?", "a": ["Alespoň další nezávislý způsob ověření identity", "Druhé heslo napsané stejným způsobem", "Povinně veřejný profil na sociální síti", "Novou e-mailovou adresu pro každé přihlášení"], "c": 0, "e": "MFA používá dva nebo více ověřovacích faktorů. Smyslem je, že samotné kompromitované heslo útočníkovi nestačí."}, {"side": "Výhoda: pamětníci", "group": "old", "q": "Čím se v Československu běžně platilo v prodejnách Tuzex?", "a": ["Bony", "Stravenkami", "Losy", "Poštovními známkami"], "c": 0, "e": "Tuzex používal zvláštní poukázky zvané bony, za které se nakupovalo mimo jiné nedostatkové západní zboží."}, {"side": "Výhoda: mladší", "group": "young", "q": "Jaký je základní účel systému reCAPTCHA na webu?", "a": ["Rozlišovat lidské návštěvníky od automatizovaných botů", "Překládat web do jiného jazyka", "Zrychlit načítání obrázků", "Ukládat hesla do prohlížeče"], "c": 0, "e": "reCAPTCHA má pomáhat odlišit lidi od automatizovaného softwaru a chránit weby před spamem a zneužitím."}, {"side": "Výhoda: pamětníci", "group": "old", "q": "Kam se u klasického analogového televizního signálu ukládala teletextová data?", "a": ["Do nevyužitých řádků během zatemňovacího intervalu", "Do zvukové stopy místo sterea", "Do samostatné rádiové frekvence FM", "Na magnetický proužek uvnitř televizoru"], "c": 0, "e": "Teletext využíval nevyužité řádky televizního signálu v takzvaném vertikálním zatemňovacím intervalu."}, {"side": "Výhoda: mladší", "group": "young", "q": "K čemu slouží AirDrop na zařízeních Apple?", "a": ["Ke sdílení fotek, dokumentů a dalšího obsahu s blízkými zařízeními Apple", "K přenosu mobilního tarifu mezi operátory", "K automatickému mazání duplicitních fotek", "K převodu videa na živé vysílání"], "c": 0, "e": "AirDrop slouží k bezdrátovému sdílení obsahu mezi blízkými zařízeními Apple."}, {"side": "Výhoda: pamětníci", "group": "old", "q": "MiniDisc, který Sony uvedlo na začátku 90. let, byl jaký typ média?", "a": ["Magneto-optický disk v ochranné kazetě", "Pásková kazeta se dvěma cívkami", "Čistě mechanická vinylová destička", "Paměťová karta bez pohyblivých částí"], "c": 0, "e": "MiniDisc využíval magneto-optický záznam a samotný disk byl uzavřený v ochranném pouzdře."}, {"side": "Výhoda: mladší", "group": "young", "q": "Co je na TikToku feed „For You“?", "a": ["Personalizovaný proud doporučeného obsahu", "Seznam pouze videí od účtů, které sledujete", "Archiv všech uložených konceptů", "Soukromá složka přijatých zpráv"], "c": 0, "e": "For You je personalizovaný feed, který doporučovací systém přizpůsobuje podle zájmů a interakcí uživatele."}, {"side": "Výhoda: pamětníci", "group": "old", "q": "Jaká je standardní rychlost posuvu pásku u běžné kompaktní audiokazety?", "a": ["15/16 palce za sekundu", "1⅞ palce za sekundu", "3¾ palce za sekundu", "7½ palce za sekundu"], "c": 1, "e": "Standardní kompaktní kazeta používá rychlost 1⅞ palce za sekundu, tedy přibližně 4,76 cm/s."}, {"side": "Výhoda: mladší", "group": "young", "q": "Co umí Snap Map ve Snapchatu?", "a": ["Zobrazovat a podle nastavení sdílet polohu na mapě", "Automaticky měnit filtr podle počasí", "Převádět zprávy na hlasové hovory", "Skrýt všechny starší fotografie z galerie"], "c": 0, "e": "Snap Map pracuje s polohou a umožňuje podle nastavení zobrazovat či sdílet, kde se uživatel nachází."}, {"side": "Výhoda: pamětníci", "group": "old", "q": "Který formát domácího videa uvedlo Sony pro spotřebitele v roce 1975?", "a": ["Betamax", "VHS-C", "Video8", "MiniDV"], "c": 0, "e": "Sony uvedlo spotřebitelský videorekordér Betamax SL-6300 v roce 1975."}, {"side": "Výhoda: mladší", "group": "young", "q": "Co dělá Spotify při zapnutém Smart Shuffle?", "a": ["Míchá do přehrávání i personalizovaná doporučení", "Přehrává skladby výhradně podle abecedy", "Automaticky zvyšuje kvalitu všech starých nahrávek", "Zamkne playlist proti úpravám"], "c": 0, "e": "Smart Shuffle kromě náhodného pořadí vkládá také doporučené skladby, které mají odpovídat stylu poslouchané hudby."}, {"side": "Výhoda: pamětníci", "group": "old", "q": "Jak se jmenoval první CD přehrávač Sony uvedený v roce 1982?", "a": ["CDP-101", "TPS-L2", "MZ-1", "SL-6300"], "c": 0, "e": "Sony CDP-101 byl uveden v roce 1982 jako první CD přehrávač firmy a patřil k úplným začátkům komerčního formátu CD."}, {"side": "Výhoda: mladší", "group": "young", "q": "Co je eSIM?", "a": ["Digitální SIM umožňující aktivovat mobilní tarif bez fyzické nano-SIM", "Paměťová karta určená jen pro fotografie", "Šifrovaná Wi-Fi síť zabudovaná v telefonu", "Záložní baterie uložená uvnitř telefonu"], "c": 0, "e": "eSIM je digitální SIM zabudovaná v zařízení, která umožňuje aktivovat mobilní tarif bez vložení fyzické SIM karty."}, {"side": "Výhoda: pamětníci", "group": "old", "q": "Který přístroj ze čtveřice patřil do rodiny Sony Walkman jako první přenosný MiniDisc model z roku 1992?", "a": ["MZ-1", "CDP-101", "TPS-L2", "KV-1310"], "c": 0, "e": "MZ-1 byl první MD Walkman. Sony ho uvedlo v roce 1992 jako přenosný přístroj pro formát MiniDisc."}, {"side": "Výhoda: mladší", "group": "young", "q": "Jak jsou typicky uspořádané komunity na Discordu?", "a": ["Do serverů, které obsahují například textové a hlasové kanály", "Do jednotlivých webů bez společných místností", "Pouze do soukromých e-mailových vláken", "Výhradně do jedné veřejné místnosti pro celý Discord"], "c": 0, "e": "Discord používá servery jako komunitní huby a uvnitř nich textové a hlasové kanály."}];
+let index=0, score=0, oldScore=0, youngScore=0, locked=false;
+
+const counter=document.getElementById('counter');
+const scoreEl=document.getElementById('score');
+const progress=document.getElementById('progress');
+const sideEl=document.getElementById('side');
+const questionEl=document.getElementById('question');
+const answersEl=document.getElementById('answers');
+const feedbackEl=document.getElementById('feedback');
+const controls=document.getElementById('controls');
+const nextBtn=document.getElementById('nextBtn');
+const quizArea=document.getElementById('quizArea');
+const result=document.getElementById('result');
+
+function render(){
+  locked=false;
+  const item=questions[index];
+  counter.textContent=`Otázka ${index+1} z ${questions.length}`;
+  scoreEl.textContent=score;
+  progress.style.width=`${(index/questions.length)*100}%`;
+  sideEl.textContent=item.side;
+  questionEl.textContent=item.q;
+  answersEl.innerHTML='';
+  feedbackEl.className='feedback';
+  feedbackEl.innerHTML='';
+  controls.className='controls';
+  item.a.forEach((txt,i)=>{
+    const b=document.createElement('button');
+    b.className='answer';
+    b.textContent=txt;
+    b.addEventListener('click',()=>answer(i));
+    answersEl.appendChild(b);
+  });
+}
+
+function answer(chosen){
+  if(locked) return;
+  locked=true;
+  const item=questions[index];
+  const buttons=[...answersEl.querySelectorAll('.answer')];
+  buttons.forEach((b,i)=>{
+    b.disabled=true;
+    if(i===item.c) b.classList.add('correct');
+  });
+  if(chosen===item.c){
+    score++;
+    if(item.group==='old') oldScore++; else youngScore++;
+    scoreEl.textContent=score;
+    feedbackEl.innerHTML=`<strong>Správně.</strong> ${item.e}`;
+  } else {
+    buttons[chosen].classList.add('wrong');
+    feedbackEl.innerHTML=`<strong>Tentokrát ne.</strong> ${item.e}`;
+  }
+  feedbackEl.classList.add('show');
+  controls.classList.add('show');
+  progress.style.width=`${((index+1)/questions.length)*100}%`;
+  nextBtn.textContent=index===questions.length-1?'Zobrazit duel':'Další otázka';
+}
+
+function finish(){
+  quizArea.style.display='none';
+  result.classList.add('show');
+  counter.textContent='Hotovo';
+  progress.style.width='100%';
+  document.getElementById('finalTotal').textContent=score;
+  document.getElementById('oldScore').textContent=oldScore;
+  document.getElementById('youngScore').textContent=youngScore;
+  let title,text;
+  if(score>=18){
+    title='Generační univerzál';
+    text='Analog, digitál, retro i dnešní aplikace. Mezi oběma světy přepínáte bez většího zaváhání.';
+  } else if(score>=14){
+    title='Oba světy drží pohromadě';
+    text='Velmi slušný výsledek. Teď se podívejte na rozdělené skóre a zjistěte, která polovina vám sedla víc.';
+  } else if(score>=9){
+    title='Jedna generace měla navrch';
+    text='Celkové skóre je solidní, ale rozdělení dole ukáže, jestli vás víc podržel analogový, nebo digitální svět.';
+  } else {
+    title='Dvě generace, dvakrát jiný jazyk';
+    text='Tenhle duel je schválně postavený na dvou odlišných světech. Rozdělené skóre prozradí, kde vznikla největší mezera.';
+  }
+  document.getElementById('resultTitle').textContent=title;
+  document.getElementById('resultText').textContent=text;
+}
+
+nextBtn.addEventListener('click',()=>{
+  if(index<questions.length-1){index++;render();} else finish();
+});
+document.getElementById('restartBtn').addEventListener('click',()=>{
+  index=0;score=0;oldScore=0;youngScore=0;
+  quizArea.style.display='';
+  result.classList.remove('show');
+  render();
+});
+render();
+</script>
+</body>
+</html>
