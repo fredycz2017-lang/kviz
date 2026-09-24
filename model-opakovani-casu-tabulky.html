@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kolik času udělá pár minut denně</title>
+<style>
+:root {
+  --navy:#183550;
+  --blue:#607fdc;
+  --text:#17191f;
+  --muted:#666d78;
+  --line:#d8dce4;
+  --soft:#f6f8fb;
+  --card:#ffffff;
+  --accent:#eef3ff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:transparent;color:var(--text);font-family:Arial,"Segoe UI",sans-serif}
+body{padding:10px}
+.wrap{width:min(700px,100%);margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-bottom:18px}
+.head{padding:19px 20px 13px}
+.kicker{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:5px}
+h2{margin:0;font-size:22px;line-height:1.2;color:var(--navy)}
+.lead{margin:9px 0 0;font-size:14px;line-height:1.5;color:var(--muted)}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:620px}
+thead th{background:var(--navy);color:#fff;text-align:left;padding:10px 11px;font-size:14px;line-height:1.2}
+tbody td{padding:10px 11px;border-bottom:1px solid var(--line);font-size:14px;line-height:1.3}
+tbody tr:nth-child(even){background:var(--soft)}
+tbody tr:last-child td{border-bottom:0}
+.year th:first-child,.year td:first-child{width:170px;font-weight:700}
+.work th:first-child,.work td:first-child{width:210px;font-weight:700}
+.comment{padding:14px 18px 17px;border-top:1px solid var(--line);background:#fbfcfe;font-size:13.5px;line-height:1.52;color:#363b45}
+.comment p{margin:0 0 10px}
+.comment p:last-child{margin-bottom:0}
+.brake{margin-top:12px;padding:12px 13px;border-radius:12px;background:var(--accent);color:#39445b}
+@media(max-width:560px){
+  body{padding:6px}
+  .card{border-radius:14px}
+  .head{padding:16px 16px 11px}
+  h2{font-size:19px}
+  .lead{font-size:13px}
+  thead th,tbody td{font-size:13px;padding:9px}
+  .comment{font-size:13px;padding:12px 14px 15px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section class="card">
+  <div class="head">
+    <div class="kicker">Vlastní model</div>
+    <h2>365 opakování stejné drobnosti</h2>
+    <p class="lead">První model je schválně brutálně jednoduchý. Předpokládá, že se stejná věc opakuje každý den v roce, tedy 365krát. Neříká, že těchto 365 epizod je „ztracených“. Jen ukazuje jejich součet.</p>
+  </div>
+
+  <div class="table-scroll">
+    <table class="year" aria-label="Součet každodenně opakovaných minut za 365 dní">
+      <thead>
+        <tr><th>Denně</th><th>Za rok v minutách</th><th>Za rok v hodinách</th><th>Nepřetržitě</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>5 minut</td><td>1 825 min</td><td>30 h 25 min</td><td>1 den 6 h 25 min</td></tr>
+<tr><td>10 minut</td><td>3 650 min</td><td>60 h 50 min</td><td>2 dny 12 h 50 min</td></tr>
+<tr><td>20 minut</td><td>7 300 min</td><td>121 h 40 min</td><td>5 dnů 1 h 40 min</td></tr>
+<tr><td>30 minut</td><td>10 950 min</td><td>182 h 30 min</td><td>7 dnů 14 h 30 min</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="comment">
+    <p>Nejpůsobivější je pro mě prostřední číslo. Deset minut denně znamená 3 650 minut za rok. To je 60 hodin a 50 minut – tedy dva celé dny, dvanáct hodin a ještě padesát minut navrch. Půlhodina denně už dělá 182,5 hodiny, což odpovídá více než sedmi a půl nepřetržitým dnům.</p>
+    <p class="brake"><strong>Důležitá brzda:</strong> převod na celé dny je jen způsob, jak si číslo představit. Nikdo běžně nežije 24 hodin denně vzhůru a nikdo nedostane na konci roku zpět sedm souvislých dnů. Je to měřítko, ne návod na život.</p>
+  </div>
+</section>
+
+<section class="card">
+  <div class="head">
+    <div class="kicker">Pracovní model</div>
+    <h2>Pracovní rok ukazuje totéž v menším měřítku</h2>
+    <p class="lead">Druhý model počítá pouze s 250 pracovními dny. Je to záměrně zaokrouhlený model, ne oficiální počet pracovních dnů konkrétního roku – ten se mění podle kalendáře, svátků a samozřejmě dovolené. Pro srovnání ale funguje dobře.</p>
+  </div>
+
+  <div class="table-scroll">
+    <table class="work" aria-label="Součet každodenně opakovaných minut za 250 pracovních dní">
+      <thead>
+        <tr><th>Každý pracovní den</th><th>Za 250 dní</th><th>Celkem hodin</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>5 minut</td><td>1 250 min</td><td>20 h 50 min</td></tr>
+<tr><td>10 minut</td><td>2 500 min</td><td>41 h 40 min</td></tr>
+<tr><td>20 minut</td><td>5 000 min</td><td>83 h 20 min</td></tr>
+<tr><td>30 minut</td><td>7 500 min</td><td>125 hodin</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="comment">
+    <p>Tady se ukáže další zajímavá perspektiva. Půlhodina v každém pracovním dni znamená za tento modelový rok 125 hodin. Při osmi hodinách práce je to ekvivalent 15 celých osmihodinových pracovních dnů a ještě pěti hodin navíc.</p>
+    <p>Deset minut denně v pracovním režimu je 41 hodin a 40 minut. Samostatně je to pořád „jen deset minut“. V součtu je to víc než jeden běžný pracovní týden.</p>
+  </div>
+</section>
+
+</div>
+</body>
+</html>
