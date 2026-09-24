@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Klíčové okamžiky úniku</title>
+<style>
+:root {
+  --navy:#183550;
+  --blue:#607fdc;
+  --text:#17191f;
+  --muted:#666d78;
+  --line:#d8dce4;
+  --soft:#f6f8fb;
+  --card:#ffffff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:transparent;color:var(--text);font-family:Arial,"Segoe UI",sans-serif}
+body{padding:10px}
+.wrap{width:min(700px,100%);margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.head{padding:19px 20px 13px}
+.kicker{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:5px}
+h2{margin:0;font-size:22px;line-height:1.2;color:var(--navy)}
+.lead{margin:9px 0 0;font-size:14px;line-height:1.5;color:var(--muted)}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:560px}
+thead th{background:var(--navy);color:#fff;text-align:left;padding:10px 11px;font-size:14px;line-height:1.2;vertical-align:top}
+tbody td{padding:10px 11px;border-bottom:1px solid var(--line);font-size:14px;line-height:1.3;vertical-align:top}
+tbody tr:nth-child(even){background:var(--soft)}
+tbody tr:last-child td{border-bottom:0}
+tbody td:first-child{width:210px;font-weight:700}
+.note{padding:14px 18px 17px;border-top:1px solid var(--line);background:#fbfcfe;font-size:13.5px;line-height:1.52;color:#363b45}
+.note strong{color:var(--text)}
+@media(max-width:560px){
+  body{padding:6px}
+  .card{border-radius:14px}
+  .head{padding:16px 16px 11px}
+  h2{font-size:19px}
+  .lead{font-size:13px}
+  thead th,tbody td{font-size:13px;padding:9px}
+  .note{font-size:13px;padding:12px 14px 15px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section class="card">
+  <div class="head">
+    <div class="kicker">Shrnutí děje</div>
+    <h2>Klíčové okamžiky úniku</h2>
+    <p class="lead">Stručná tabulka zachycující hlavní body celé sekvence — od okamžiku po výbuchu až po samotný výstup z ponorky.</p>
+  </div>
+  <div class="table-scroll">
+    <table aria-label="Klíčové okamžiky úniku">
+      <thead>
+        <tr><th>Okamžik</th><th>Co rozhodovalo</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Po výbuchu</td><td>zadní oddíl zůstal krátce obyvatelný</td></tr>
+<tr><td>Příprava úniku</td><td>Davisův kyslíkový přístroj + únikový poklop</td></tr>
+<tr><td>Vyrovnání tlaku</td><td>oddíl bylo nutné kontrolovaně zaplavit</td></tr>
+<tr><td>Výstup</td><td>čtyři muži opustili ponorku; na břeh se dostal jen Capes</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note"><strong>Smysl tabulky:</strong> v několika řádcích shrnuje, co v jednotlivých fázích rozhodovalo o šanci na přežití — od krátce obyvatelného oddílu přes přípravu úniku až po samotné opuštění ponorky.</div>
+</section>
+</div>
+</body>
+</html>
