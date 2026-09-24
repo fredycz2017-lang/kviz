@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kvíz pro Husákovy děti – hračky 70. a 80. let</title>
+<style>
+:root{
+ --card:#fff;--ink:#17181c;--muted:#666a72;--line:#dddfe4;
+ --navy:#183550;--accent:#b67516;--accent2:#e8ad48;
+ --ok:#126a43;--okbg:#eaf7f0;--bad:#a32e2e;--badbg:#fff0f0
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:transparent;font-family:Arial,"Segoe UI",sans-serif;color:var(--ink)}
+body{padding:10px}
+.quiz{width:min(700px,100%);margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.hero{padding:26px 28px 20px;background:radial-gradient(circle at 100% 0%,rgba(182,117,22,.14),transparent 31%),linear-gradient(180deg,#fff,#faf9f6);border-bottom:1px solid var(--line)}
+.kicker{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.09em;color:var(--accent);margin-bottom:8px}
+h1{font-size:30px;line-height:1.08;margin:0 0 10px;color:var(--navy);letter-spacing:-.02em}
+.sub{font-size:16px;line-height:1.5;color:var(--muted);margin:0}
+.meta{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:20px;font-size:14px;font-weight:800}
+.score{padding:8px 12px;border-radius:999px;background:#f3f1ec;border:1px solid var(--line)}
+.progress{height:8px;background:#ebe9e4}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s}
+.main{padding:27px 28px 29px}
+.q{font-size:22px;line-height:1.32;font-weight:850;margin:0 0 20px}
+.answers{display:grid;gap:11px}
+.answer{width:100%;min-height:56px;text-align:left;padding:15px 17px;border-radius:14px;border:2px solid var(--line);background:#fff;color:var(--ink);font-size:16px;line-height:1.35;font-weight:750;cursor:pointer}
+.answer:hover:not(:disabled){border-color:#bdb9ad;background:#fbfaf7}
+.answer:focus-visible{outline:4px solid rgba(182,117,22,.22);outline-offset:2px}
+.answer.correct{border-color:#86c4a2;background:var(--okbg);color:#0b5d39}
+.answer.wrong{border-color:#d6a1a1;background:var(--badbg);color:#8c2828}
+.answer:disabled{cursor:default}
+.feedback{display:none;margin-top:17px;padding:15px 16px;border:1px solid var(--line);border-radius:14px;background:#f8f7f4;font-size:15px;line-height:1.5}
+.feedback.show{display:block}
+.feedback strong{display:block;margin-bottom:4px}
+.next{display:none;margin-top:17px;width:100%;min-height:52px;border:0;border-radius:14px;background:var(--navy);color:#fff;font-size:16px;font-weight:850;cursor:pointer}
+.next.show{display:block}
+.result{display:none;text-align:center;padding:40px 28px}
+.result.show{display:block}
+.big{font-size:56px;font-weight:900;margin:10px 0;color:var(--navy)}
+.result h2{font-size:27px;margin:0 0 8px}
+.result p{font-size:16px;color:var(--muted);line-height:1.5;max-width:520px;margin:0 auto 22px}
+.retry{border:0;border-radius:14px;background:var(--navy);color:#fff;padding:14px 22px;font-size:16px;font-weight:850;cursor:pointer}
+.note{text-align:center;color:#7a7d84;font-size:12px;padding:0 18px 18px}
+@media(max-width:560px){
+ body{padding:6px}.quiz{border-radius:17px}.hero,.main{padding-left:18px;padding-right:18px}
+ h1{font-size:26px}.sub{font-size:15px}.q{font-size:20px}.answer{font-size:15px;padding:14px}
+}
+</style>
+</head>
+<body>
+<div class="quiz">
+<section id="play">
+  <div class="hero">
+    <div class="kicker">Hračky našeho dětství • 15 otázek</div>
+    <h1>Igráček, Merkur, céčka nebo Rubikova kostka. Co si ještě pamatujete?</h1>
+    <p class="sub">Patnáct otázek z hraček, hlavolamů a sběratelských mánií, které provázely dětství 70. a 80. let.</p>
+    <div class="meta"><div id="counter">Otázka 1 z 15</div><div id="score" class="score">Skóre 0</div></div>
+  </div>
+  <div class="progress"><div id="bar"></div></div>
+  <main class="main">
+    <div id="question" class="q"></div>
+    <div id="answers" class="answers"></div>
+    <div id="feedback" class="feedback" aria-live="polite"></div>
+    <button id="next" class="next" type="button">Další otázka →</button>
+  </main>
+</section>
+<section id="result" class="result" aria-live="polite">
+  <div class="kicker">Hotovo</div>
+  <h2>Kolik hraček svého dětství opravdu znáte?</h2>
+  <div id="bigscore" class="big">0/15</div>
+  <p id="resulttext"></p>
+  <button id="retry" class="retry" type="button">Zkusit znovu</button>
+</section>
+<div class="note">Nostalgický znalostní kvíz. Nejde o test paměti, inteligence ani politických postojů.</div>
+</div>
+<script>
+const questions=[{"q": "Ve kterém roce se poprvé objevil Igráček?", "opts": ["1972", "1980", "1976", "1984"], "correct": 2, "explain": "Igráček se poprvé objevil v roce 1976."}, {"q": "Jaké povolání měla úplně první figurka Igráčka?", "opts": ["Zedník", "Výpravčí", "Hasič", "Kuchař"], "correct": 0, "explain": "První Igráček z roku 1976 byl zedník."}, {"q": "Kdo je uváděn jako konstruktér původního Igráčka?", "opts": ["Stanislav Holý", "Radek Pilař", "Zdeněk Miler", "Jiří Kalina"], "correct": 3, "explain": "Konstruktérem původního Igráčka byl Jiří Kalina."}, {"q": "Pod jakým názvem začínala stavebnice, z níž později vznikl Merkur?", "opts": ["Metropol", "Inventor", "Popular", "Elektrus"], "correct": 1, "explain": "V roce 1920 začala výroba stavebnice pod názvem Inventor."}, {"q": "Co zásadního se u stavebnice změnilo v roce 1925?", "opts": ["Přešlo se výhradně na dřevo", "Zmizely všechny kovové části", "Dílky se začaly spojovat šroubky a matičkami", "Začala se prodávat jen jako vláček"], "correct": 2, "explain": "V roce 1925 se objevilo pravidelné děrování a spojování dílků šroubky a matičkami."}, {"q": "Ve kterém roce začala výroba stavebnice pod názvem Merkur?", "opts": ["1930", "1925", "1938", "1946"], "correct": 0, "explain": "Pod názvem Merkur se stavebnice začala vyrábět v roce 1930."}, {"q": "Ve kterém městě je s Merkurem dodnes spojena výroba i muzeum?", "opts": ["Semily", "Mnichovice", "Nové Veselí", "Police nad Metují"], "correct": 3, "explain": "Merkur je tradičně spojen s Policí nad Metují, kde je i muzeum stavebnice."}, {"q": "K čemu použil Otto Wichterle v roce 1961 díly stavebnice Merkur?", "opts": ["K prvnímu českému tranzistorovému rádiu", "K prototypu zařízení na výrobu měkkých kontaktních čoček", "K modelu motoru pro Škodu 1000 MB", "K domácímu projektoru"], "correct": 1, "explain": "Wichterle použil díly Merkuru při stavbě prototypu zařízení pro výrobu měkkých kontaktních čoček."}, {"q": "Kdo vytvořil původní prototyp Rubikovy kostky?", "opts": ["László Bíró", "John von Neumann", "Ernő Rubik", "George Soros"], "correct": 2, "explain": "Prototyp kostky vytvořil v roce 1974 maďarský profesor architektury Ernő Rubik."}, {"q": "Ve kterém roce se hlavolam začal celosvětově prodávat pod názvem Rubik's Cube?", "opts": ["1980", "1975", "1977", "1982"], "correct": 0, "explain": "V roce 1980 byl hlavolam uveden na světový trh pod názvem Rubik's Cube."}, {"q": "Kde se v roce 1982 konalo první mistrovství světa ve skládání Rubikovy kostky?", "opts": ["V Praze", "Ve Vídni", "V Londýně", "V Budapešti"], "correct": 3, "explain": "První mistrovství světa se konalo v roce 1982 v Budapešti."}, {"q": "Ve kterém roce začala výroba plechových hraček, z níž vyrostl dnešní KOVAP?", "opts": ["1938", "1946", "1953", "1960"], "correct": 1, "explain": "Výroba plechových hraček, na kterou KOVAP navazuje, začala v Semilech v roce 1946."}, {"q": "Jaká byla historicky první hračka firmy, z níž vznikl KOVAP?", "opts": ["Traktor Zetor", "Plechová beruška", "Parní válec", "Nákladní Tatra"], "correct": 2, "explain": "První hračkou byl plechový parní válec."}, {"q": "Která známá hračka KOVAP má podle výrobce tři rychlosti vpřed a také zpátečku?", "opts": ["Traktor Zetor", "Parní válec", "Tatra 815", "Plechová beruška"], "correct": 0, "explain": "Legendární plechový Traktor Zetor má mechanický strojek se třemi rychlostmi vpřed a zpátečkou."}, {"q": "K čemu byla céčka podle Národního muzea původně vyráběna?", "opts": ["Jako počítadla do školy", "Jako součást stavebnice", "Jako žetony do automatů", "Jako dílky interiérových závěsů"], "correct": 3, "explain": "Céčka byla původně dílky interiérových závěsů, které šlo spojovat do řetězů."}];
+let i=0,score=0,locked=false;
+const q=document.getElementById('question'),answers=document.getElementById('answers'),
+feedback=document.getElementById('feedback'),next=document.getElementById('next'),
+counter=document.getElementById('counter'),scoreEl=document.getElementById('score'),
+bar=document.getElementById('bar'),play=document.getElementById('play'),result=document.getElementById('result');
+
+function render(){
+ locked=false;
+ const item=questions[i];
+ counter.textContent=`Otázka ${i+1} z ${questions.length}`;
+ scoreEl.textContent=`Skóre ${score}`;
+ bar.style.width=`${(i/questions.length)*100}%`;
+ q.textContent=item.q;
+ answers.innerHTML='';
+ feedback.className='feedback';
+ feedback.innerHTML='';
+ next.className='next';
+ item.opts.forEach((opt,idx)=>{
+   const b=document.createElement('button');
+   b.type='button'; b.className='answer'; b.textContent=opt;
+   b.addEventListener('click',()=>choose(idx,b));
+   answers.appendChild(b);
+ });
+}
+function choose(choice,button){
+ if(locked)return;
+ locked=true;
+ const item=questions[i];
+ const buttons=[...answers.querySelectorAll('.answer')];
+ buttons.forEach(b=>b.disabled=true);
+ buttons[item.correct].classList.add('correct');
+ if(choice===item.correct){
+   score++;
+   feedback.innerHTML=`<strong>Správně.</strong>${item.explain}`;
+ }else{
+   button.classList.add('wrong');
+   feedback.innerHTML=`<strong>Tentokrát ne.</strong>Správná odpověď je <b>${item.opts[item.correct]}</b>. ${item.explain}`;
+ }
+ scoreEl.textContent=`Skóre ${score}`;
+ feedback.className='feedback show';
+ next.textContent=i===questions.length-1?'Zobrazit výsledek →':'Další otázka →';
+ next.className='next show';
+}
+next.addEventListener('click',()=>{if(i<questions.length-1){i++;render();}else finish();});
+function finish(){
+ bar.style.width='100%';
+ play.style.display='none';
+ result.className='result show';
+ document.getElementById('bigscore').textContent=`${score}/${questions.length}`;
+ let t='';
+ if(score===15)t='Perfektní. Tohle už je skoro katalog socialistického hračkářství v hlavě.';
+ else if(score>=12)t='Výborný výkon. Igráček, Merkur ani céčka vás rozhodně nezaskočily.';
+ else if(score>=8)t='Solidní výsledek. Hlavní legendy sedí, ale pár historických detailů uteklo.';
+ else t='Bylo to těžší, než vypadalo. Druhý pokus může dopadnout výrazně lépe.';
+ document.getElementById('resulttext').textContent=t;
+}
+document.getElementById('retry').addEventListener('click',()=>{
+ i=0;score=0;locked=false;result.className='result';play.style.display='block';render();
+});
+render();
+</script>
+</body>
+</html>
