@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kvíz: česká politika 90. let</title>
+<style>
+:root{
+ --card:#fff;--ink:#16181d;--muted:#666b74;--line:#dce0e6;
+ --navy:#183550;--accent:#6a7fd1;--soft:#f6f8fb;
+ --ok:#126b44;--okbg:#eaf7f0;--bad:#a52f2f;--badbg:#fff0f0
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:transparent;font-family:Arial,"Segoe UI",sans-serif;color:var(--ink)}
+body{padding:10px}
+.quiz{width:min(700px,100%);margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.hero{padding:26px 28px 20px;background:linear-gradient(180deg,#fff,#f8f9fc);border-bottom:1px solid var(--line)}
+.kicker{font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.09em;color:var(--accent);margin-bottom:8px}
+h1{font-size:30px;line-height:1.1;margin:0 0 10px;color:var(--navy)}
+.sub{font-size:16px;line-height:1.5;color:var(--muted);margin:0}
+.meta{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:20px;font-size:14px;font-weight:800}
+.score{padding:8px 12px;border-radius:999px;background:#eef1f7;border:1px solid var(--line)}
+.progress{height:8px;background:#e9ecf1}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,#425caa,#8296df);transition:width .25s}
+.main{padding:28px}
+.q{font-size:22px;line-height:1.32;font-weight:850;margin:0 0 20px}
+.answers{display:grid;gap:12px}
+.answer{width:100%;min-height:56px;text-align:left;padding:16px 17px;border-radius:14px;border:2px solid var(--line);background:#fff;color:var(--ink);font-size:16px;line-height:1.35;font-weight:750;cursor:pointer}
+.answer:hover:not(:disabled){border-color:#b9c1cf;background:#fbfcfe}
+.answer:focus-visible{outline:4px solid rgba(106,127,209,.22);outline-offset:2px}
+.answer.correct{border-color:#86c4a2;background:var(--okbg);color:#0b5d39}
+.answer.wrong{border-color:#d6a1a1;background:var(--badbg);color:#8c2828}
+.answer:disabled{cursor:default}
+.feedback{display:none;margin-top:18px;padding:16px;border:1px solid var(--line);border-radius:14px;background:#f8f9fb;font-size:15px;line-height:1.5}
+.feedback.show{display:block}
+.feedback strong{display:block;margin-bottom:4px}
+.next{display:none;margin-top:18px;width:100%;min-height:52px;border:0;border-radius:14px;background:var(--navy);color:#fff;font-size:16px;font-weight:850;cursor:pointer}
+.next.show{display:block}
+.result{display:none;text-align:center;padding:40px 28px}
+.result.show{display:block}
+.big{font-size:56px;font-weight:900;margin:10px 0;color:var(--navy)}
+.result h2{font-size:27px;margin:0 0 8px}
+.result p{font-size:16px;color:var(--muted);line-height:1.5;max-width:520px;margin:0 auto 22px}
+.retry{border:0;border-radius:14px;background:var(--navy);color:#fff;padding:14px 22px;font-size:16px;font-weight:850;cursor:pointer}
+.note{text-align:center;color:#797d85;font-size:12px;padding:0 18px 18px}
+@media(max-width:560px){
+ body{padding:6px}.quiz{border-radius:17px}.hero,.main{padding-left:18px;padding-right:18px}
+ h1{font-size:26px}.sub{font-size:15px}.q{font-size:20px}.answer{font-size:15px;padding:15px}
+}
+</style>
+</head>
+<body>
+<div class="quiz">
+<section id="play">
+  <div class="hero">
+    <div class="kicker">Historický kvíz • 15 otázek</div>
+    <h1>Jak dobře znáte českou politiku 90. let?</h1>
+    <p class="sub">Klaus, Zeman, Sládek, sarajevský atentát, Unie svobody i opoziční smlouva. Patnáct faktických otázek z divoké politické dekády.</p>
+    <div class="meta"><div id="counter">Otázka 1 z 15</div><div id="score" class="score">Skóre 0</div></div>
+  </div>
+  <div class="progress"><div id="bar"></div></div>
+  <main class="main">
+    <div id="question" class="q"></div>
+    <div id="answers" class="answers"></div>
+    <div id="feedback" class="feedback" aria-live="polite"></div>
+    <button id="next" class="next" type="button">Další otázka →</button>
+  </main>
+</section>
+<section id="result" class="result" aria-live="polite">
+  <div class="kicker">Hotovo</div>
+  <h2>Vaše skóre</h2>
+  <div id="bigscore" class="big">0/15</div>
+  <p id="resulttext"></p>
+  <button id="retry" class="retry" type="button">Zkusit znovu</button>
+</section>
+<div class="note">Kvíz testuje historická fakta, nikoli politické názory nebo preference.</div>
+</div>
+<script>
+const questions=[{"q": "Kdo byl předsedou vlády České republiky při jejím vzniku 1. ledna 1993?", "opts": ["Josef Tošovský", "Václav Klaus", "Miloš Zeman", "Petr Pithart"], "correct": 1, "explain": "Václav Klaus byl předsedou české vlády už od července 1992 a po vzniku samostatné České republiky ve funkci pokračoval."}, {"q": "Ve kterém roce se Miloš Zeman stal předsedou ČSSD?", "opts": ["1991", "1995", "1993", "1997"], "correct": 2, "explain": "Miloš Zeman byl zvolen předsedou ČSSD na hradeckém sjezdu v roce 1993."}, {"q": "Která strana získala ve volbách do Poslanecké sněmovny v roce 1996 nejvíce mandátů?", "opts": ["ODS", "ČSSD", "KSČM", "SPR-RSČ"], "correct": 0, "explain": "ODS získala 68 mandátů, ČSSD 61."}, {"q": "Kolik poslanců získala SPR-RSČ ve volbách do Poslanecké sněmovny v roce 1996?", "opts": ["8", "13", "22", "18"], "correct": 3, "explain": "Republikáni získali v roce 1996 celkem 18 mandátů."}, {"q": "Kdo byl předsedou SPR-RSČ a jednou z nejvýraznějších postav české politiky 90. let?", "opts": ["Jan Ruml", "Miroslav Sládek", "Josef Lux", "Jan Kalvoda"], "correct": 1, "explain": "Předsedou Sdružení pro republiku – Republikánské strany Československa byl Miroslav Sládek."}, {"q": "Jakou významnou parlamentní funkci zastával Miloš Zeman v letech 1996–1998?", "opts": ["Předseda Senátu", "Ministr financí", "Předseda Poslanecké sněmovny", "Předseda Ústavního soudu"], "correct": 2, "explain": "Miloš Zeman byl od 27. června 1996 předsedou Poslanecké sněmovny."}, {"q": "Kteří dva politici ODS vyzvali 28. listopadu 1997 Václava Klause k odstoupení v události známé jako „sarajevský atentát“?", "opts": ["Jan Ruml a Ivan Pilip", "Josef Lux a Jan Kalvoda", "Václav Klaus a Josef Zieleniec", "Miloš Zeman a Petra Buzková"], "correct": 0, "explain": "Jan Ruml a Ivan Pilip vystoupili 28. listopadu 1997 s výzvou, aby Václav Klaus odstoupil z čela ODS."}, {"q": "Kdy podala druhá vláda Václava Klause demisi?", "opts": ["1. ledna 1998", "20. června 1998", "9. července 1998", "30. listopadu 1997"], "correct": 3, "explain": "Demise Klausovy vlády je datována 30. listopadu 1997."}, {"q": "Kdo vedl českou vládu od ledna do července 1998 po pádu druhé Klausovy vlády?", "opts": ["Miloš Zeman", "Josef Tošovský", "Jan Ruml", "Josef Lux"], "correct": 1, "explain": "Přechodnou vládu od 2. ledna do 17. července 1998 vedl Josef Tošovský."}, {"q": "Z jaké strany se na začátku roku 1998 oddělila Unie svobody?", "opts": ["ODS", "ČSSD", "KDU-ČSL", "ODA"], "correct": 0, "explain": "Unie svobody vznikla odchodem části politiků z ODS."}, {"q": "Kdo se stal prvním předsedou Unie svobody?", "opts": ["Ivan Pilip", "Karel Kühnl", "Jan Ruml", "Petr Pithart"], "correct": 2, "explain": "Prvním předsedou Unie svobody se stal Jan Ruml."}, {"q": "Která strana vyhrála předčasné volby do Poslanecké sněmovny v roce 1998?", "opts": ["ODS", "KDU-ČSL", "Unie svobody", "ČSSD"], "correct": 3, "explain": "ČSSD získala v roce 1998 nejvíce hlasů a 74 mandátů."}, {"q": "Co se stalo se SPR-RSČ ve volbách do Poslanecké sněmovny v roce 1998?", "opts": ["Vyhrála volby", "Do Sněmovny se nedostala", "Získala 18 mandátů", "Získala 5 mandátů"], "correct": 1, "explain": "SPR-RSČ získala 3,90 % hlasů a pětiprocentní hranici pro vstup do Sněmovny nepřekročila."}, {"q": "Které dvě strany podepsaly v červenci 1998 takzvanou opoziční smlouvu?", "opts": ["ODS a ČSSD", "ČSSD a KDU-ČSL", "ODS a Unie svobody", "ČSSD a KSČM"], "correct": 0, "explain": "Opoziční smlouvu podepsali za ČSSD Miloš Zeman a za ODS Václav Klaus 9. července 1998."}, {"q": "Kdo byl vedle Václava Havla a Stanislava Fischera kandidátem v prezidentské volbě 20. ledna 1998?", "opts": ["Václav Klaus", "Miloš Zeman", "Miroslav Sládek", "Josef Tošovský"], "correct": 2, "explain": "Třetím kandidátem byl Miroslav Sládek; v prvním kole získal celkem 23 hlasů poslanců a senátorů."}];
+let i=0,score=0,locked=false;
+const q=document.getElementById('question'),answers=document.getElementById('answers'),
+feedback=document.getElementById('feedback'),next=document.getElementById('next'),
+counter=document.getElementById('counter'),scoreEl=document.getElementById('score'),
+bar=document.getElementById('bar'),play=document.getElementById('play'),result=document.getElementById('result');
+
+function render(){
+ locked=false;
+ const item=questions[i];
+ counter.textContent=`Otázka ${i+1} z ${questions.length}`;
+ scoreEl.textContent=`Skóre ${score}`;
+ bar.style.width=`${(i/questions.length)*100}%`;
+ q.textContent=item.q;
+ answers.innerHTML='';
+ feedback.className='feedback'; feedback.innerHTML=''; next.className='next';
+ item.opts.forEach((opt,idx)=>{
+   const b=document.createElement('button');
+   b.type='button'; b.className='answer'; b.textContent=opt;
+   b.addEventListener('click',()=>choose(idx,b));
+   answers.appendChild(b);
+ });
+}
+function choose(choice,button){
+ if(locked)return;
+ locked=true;
+ const item=questions[i];
+ const buttons=[...answers.querySelectorAll('.answer')];
+ buttons.forEach(b=>b.disabled=true);
+ buttons[item.correct].classList.add('correct');
+ if(choice===item.correct){
+   score++;
+   feedback.innerHTML=`<strong>Správně.</strong>${item.explain}`;
+ }else{
+   button.classList.add('wrong');
+   feedback.innerHTML=`<strong>Tentokrát ne.</strong>Správná odpověď je <b>${item.opts[item.correct]}</b>. ${item.explain}`;
+ }
+ scoreEl.textContent=`Skóre ${score}`;
+ feedback.className='feedback show';
+ next.textContent=i===questions.length-1?'Zobrazit výsledek →':'Další otázka →';
+ next.className='next show';
+}
+next.addEventListener('click',()=>{if(i<questions.length-1){i++;render();}else finish();});
+function finish(){
+ bar.style.width='100%'; play.style.display='none'; result.className='result show';
+ document.getElementById('bigscore').textContent=`${score}/${questions.length}`;
+ let t='';
+ if(score===15)t='Perfektní výsledek. Politické dění 90. let máte historicky velmi dobře zmapované.';
+ else if(score>=12)t='Výborný výkon. Většinu zásadních událostí a jmen 90. let znáte velmi dobře.';
+ else if(score>=8)t='Solidní výsledek. Hlavní události sedí, ale některé volební a personální detaily nachytaly.';
+ else t='Devadesátky byly politicky nabité. Druhý pokus může být o dost lepší.';
+ document.getElementById('resulttext').textContent=t;
+}
+document.getElementById('retry').addEventListener('click',()=>{i=0;score=0;locked=false;result.className='result';play.style.display='block';render();});
+render();
+</script>
+</body>
+</html>
