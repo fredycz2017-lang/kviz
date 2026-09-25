@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Velký sobotní vědomostní mix – 20 otázek, 10 oborů</title>
+<style>
+:root{
+  --bg:#f3f3f2;--navy:#21324a;--muted:#70757d;--accent:#9a5a0a;--soft:#f7f6f3;
+  --good:#16783a;--goodbg:#ecf8ef;--bad:#b42318;--badbg:#fff0ee
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#1f2024}
+body{padding:32px 14px}
+.shell{max-width:700px;margin:auto;background:#fff;border:1px solid #d7dbe1;border-radius:24px;overflow:hidden}
+.head{padding:28px 28px 20px}
+.kicker{font-size:13px;font-weight:900;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+h1{font-size:31px;line-height:1.05;color:var(--navy);margin:0 0 14px;font-weight:900}
+.lead{font-size:16px;line-height:1.5;color:var(--muted);margin:0 0 24px}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:15px;font-weight:800}
+.score{padding:9px 14px;border:1px solid #dcdfe4;background:var(--soft);border-radius:999px;white-space:nowrap}
+.bar{height:9px;background:#ebe9e6;border-top:1px solid #e2dfdb;border-bottom:1px solid #e2dfdb}
+.prog{height:100%;width:0;background:#b06b13;transition:.25s}
+.main{padding:28px}
+.category{display:inline-block;margin:0 0 11px;padding:7px 10px;border-radius:999px;background:#f3ede4;color:#87520e;font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+.question{font-size:23px;line-height:1.3;font-weight:900;margin:0 0 22px}
+.answers{display:grid;gap:12px}
+.answer{width:100%;text-align:left;border:2px solid #dde1e6;background:#fff;border-radius:14px;padding:16px 18px;font-size:16px;line-height:1.35;font-weight:700;cursor:pointer}
+.answer:hover:not(:disabled){border-color:#aeb7c2;background:#fbfbfc}
+.answer:disabled{cursor:default}
+.answer.correct{border-color:var(--good);background:var(--goodbg);color:#0e5c2a}
+.answer.wrong{border-color:var(--bad);background:var(--badbg);color:#8e1d15}
+.feedback{display:none;margin-top:18px;padding:15px 17px;border-radius:13px;background:#f7f7f7;border:1px solid #e0e2e6;font-size:15px;line-height:1.5;color:#3f444c}
+.feedback.show{display:block}
+.controls{display:none;justify-content:flex-end;margin-top:18px}
+.controls.show{display:flex}
+.next,.restart{border:0;border-radius:12px;background:var(--navy);color:#fff;padding:13px 20px;font-size:15px;font-weight:900;cursor:pointer}
+.result{display:none;text-align:center}
+.result.show{display:block}
+.rscore{font-size:54px;line-height:1;font-weight:900;color:var(--navy);margin:4px 0 10px}
+.rtitle{font-size:25px;font-weight:900;margin:0 0 10px}
+.rtext{font-size:16px;line-height:1.5;color:#5f6670;max-width:540px;margin:0 auto 22px}
+.breakdown{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin:20px 0 22px;text-align:left}
+.catrow{border:1px solid #e0e3e7;background:#f8f8f7;border-radius:12px;padding:10px 12px;font-size:13px;font-weight:800;display:flex;justify-content:space-between;gap:10px}
+.footer{padding:0 28px 24px;text-align:center;color:#8a8f97;font-size:12px;line-height:1.45}
+@media(max-width:520px){
+  body{padding:12px 8px}.shell{border-radius:18px}.head{padding:22px 20px 16px}
+  h1{font-size:27px}.lead{font-size:15px}.main{padding:22px 20px}
+  .question{font-size:21px}.answer{padding:14px 15px;font-size:15px}.footer{padding:0 20px 20px}
+  .breakdown{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<section class="head">
+<div class="kicker">SOBOTNÍ FLAGSHIP • 20 OTÁZEK • 10 OBORŮ</div>
+<h1>Velký sobotní vědomostní mix</h1>
+<p class="lead">Dvě otázky a změna světa. Literatura, technika, historie, tělo, Česko, příroda, čeština, sport, kultura a svět. Bez tematické výplně.</p>
+<div class="meta"><span id="counter">Otázka 1 z 20</span><span class="score">Skóre <span id="score">0</span></span></div>
+</section>
+<div class="bar"><div class="prog" id="prog"></div></div>
+<main class="main">
+<section id="quiz">
+<div class="category" id="category"></div>
+<h2 class="question" id="question"></h2>
+<div class="answers" id="answers"></div>
+<div class="feedback" id="feedback"></div>
+<div class="controls" id="controls"><button class="next" id="next">Další otázka</button></div>
+</section>
+<section class="result" id="result">
+<div class="rscore"><span id="final">0</span>/20</div>
+<h2 class="rtitle" id="rtitle"></h2>
+<p class="rtext" id="rtext"></p>
+<div class="breakdown" id="breakdown"></div>
+<button class="restart" id="restart">Zkusit znovu</button>
+</section>
+</main>
+<div class="footer">Každý obor má přesně dvě otázky. Po dvou otázkách se téma vždy mění.</div>
+</div>
+<script>
+const q=[{"cat": "Literatura", "q": "Jak se jmenuje hlavní hrdina Orwellova románu 1984?", "a": ["O'Brien", "Winston Smith", "Emmanuel Goldstein", "Tom Parsons"], "c": 1, "e": "Hlavním hrdinou románu 1984 je Winston Smith, pracovník Ministerstva pravdy."}, {"cat": "Literatura", "q": "Kdo podle Karla Čapka navrhl slovo „robot“, které se proslavilo díky hře R.U.R.?", "a": ["Josef Čapek", "Jaroslav Hašek", "Vítězslav Nezval", "Franz Kafka"], "c": 0, "e": "Karel Čapek opakovaně uváděl, že slovo robot navrhl jeho bratr Josef Čapek. V R.U.R. se pak výraz celosvětově rozšířil."}, {"cat": "Technika", "q": "Kolik bitů má jedna adresa IPv4?", "a": ["16", "64", "32", "128"], "c": 2, "e": "IPv4 používá 32bitové adresy, obvykle zapisované jako čtyři desetinné oktety, například 192.0.2.1."}, {"cat": "Technika", "q": "Na jakém geometrickém principu je založen základ výpočtu polohy v GPS?", "a": ["Triangulaci úhlů", "Trilateraci vzdáleností", "Magnetické deklinaci", "Barometrickém měření výšky"], "c": 1, "e": "GPS určuje polohu pomocí trilaterace: přijímač vyhodnocuje vzdálenosti od satelitů z doby letu rádiových signálů."}, {"cat": "Historie", "q": "V kterém roce byla poprvé vydána Magna Carta?", "a": ["1066", "1215", "1348", "1492"], "c": 1, "e": "První Magna Carta byla vydána v roce 1215. Král Jan její podmínky přijal v Runnymede."}, {"cat": "Historie", "q": "Která sopka pohřbila Pompeje při slavné erupci v roce 79 n. l.?", "a": ["Etna", "Stromboli", "Vesuv", "Santorini"], "c": 2, "e": "Pompeje ležely pod Vesuvem a erupce roku 79 n. l. město zasypala sopečným materiálem."}, {"cat": "Lidské tělo", "q": "Jak se jmenuje nejmenší kost lidského těla?", "a": ["Čéška", "Třmínek", "Loketní kost", "Jazylka"], "c": 1, "e": "Nejmenší kostí lidského těla je třmínek neboli stapes ve středním uchu. Je dlouhý jen několik milimetrů."}, {"cat": "Lidské tělo", "q": "Které buňky ve slinivce břišní vytvářejí inzulin?", "a": ["Alfa buňky", "Červené krvinky", "Beta buňky", "Hepatocyty"], "c": 2, "e": "Inzulin produkují beta buňky v Langerhansových ostrůvcích slinivky břišní."}, {"cat": "Česko", "q": "Která hora je nejvyšším bodem České republiky?", "a": ["Praděd", "Sněžka", "Králický Sněžník", "Lysá hora"], "c": 1, "e": "Nejvyšším bodem Česka je Sněžka v Krkonoších, vysoká přibližně 1 603 metrů."}, {"cat": "Česko", "q": "Která řeka je nejdelší řekou na území Česka?", "a": ["Labe", "Morava", "Ohře", "Vltava"], "c": 3, "e": "Vltava je nejdelší českou řekou. Měří přibližně 430 kilometrů a u Mělníka se vlévá do Labe."}, {"cat": "Příroda", "q": "Který živočich je největším známým zvířetem, které kdy na Zemi žilo?", "a": ["Plejtvák obrovský", "Slon africký", "Megalodon", "Argentinosaurus"], "c": 0, "e": "Plejtvák obrovský je největší známý živočich v historii Země. Největší jedinci výrazně překonávají hmotnost dnešních suchozemských zvířat."}, {"cat": "Příroda", "q": "Proč se nám většina listů rostlin jeví jako zelená?", "a": ["Chlorofyl nejvíce vyzařuje zelené světlo", "Chlorofyl zelené světlo převážně odráží, zatímco jiné části spektra více pohlcuje", "Listy zelenou barvu získávají jen z vody", "Zelenou vytváří kyslík vznikající při fotosyntéze"], "c": 1, "e": "Chlorofyl pohlcuje hlavně modré a červené světlo, zatímco zelené vlnové délky více odráží. Proto listy vnímáme jako zelené."}, {"cat": "Čeština", "q": "Který tvar je ve spisovné češtině správný ve větě „Co ___ na mém místě udělal?“", "a": ["by jsi", "bys", "by si", "bysi"], "c": 1, "e": "Ve 2. osobě jednotného čísla je spisovný kondicionálový tvar bys. Podoba „by jsi“ je nespisovná."}, {"cat": "Čeština", "q": "Která věta správně používá spojení „jako by“?", "a": ["Tvářil se, jakoby se nic nestalo.", "Tvářil se, jako by se nic nestalo.", "Tvářil se, jakoby nic se nestalo.", "Tvářil se, jako-by se nic nestalo."], "c": 1, "e": "Při hypotetickém přirovnání se „jako by“ píše zvlášť: „Tvářil se, jako by se nic nestalo.“"}, {"cat": "Sport", "q": "Jaká je oficiální délka klasického maratonu?", "a": ["40,000 km", "41,195 km", "42,195 km", "42,500 km"], "c": 2, "e": "Standardní maraton měří přesně 42,195 kilometru."}, {"cat": "Sport", "q": "Kolik hráčů jednoho týmu je při běžné hře v ledním hokeji současně na ledě, pokud počítáme i brankáře?", "a": ["5", "6", "7", "8"], "c": 1, "e": "Za standardní situace hraje pět bruslařů a jeden brankář, tedy šest hráčů jednoho týmu."}, {"cat": "Kultura", "q": "Kdo složil symfonickou báseň Vltava?", "a": ["Antonín Dvořák", "Leoš Janáček", "Bedřich Smetana", "Bohuslav Martinů"], "c": 2, "e": "Vltava je symfonická báseň Bedřicha Smetany a jedna ze šesti částí cyklu Má vlast."}, {"cat": "Kultura", "q": "Který malíř vytvořil slavný obraz Guernica?", "a": ["Salvador Dalí", "Pablo Picasso", "Joan Miró", "Henri Matisse"], "c": 1, "e": "Guernicu namaloval Pablo Picasso v roce 1937 jako reakci na bombardování baskického města Guernica během španělské občanské války."}, {"cat": "Svět", "q": "Který průliv odděluje evropskou a asijskou část Turecka a spojuje Černé moře s Marmarským mořem?", "a": ["Dardanely", "Gibraltar", "Bospor", "Beringův průliv"], "c": 2, "e": "Bospor protíná Istanbul, odděluje evropskou a asijskou část Turecka a spojuje Černé moře s Marmarským mořem."}, {"cat": "Svět", "q": "Které jezero je nejhlubší na světě?", "a": ["Tanganika", "Bajkal", "Kaspické moře", "Hořejší jezero"], "c": 1, "e": "Bajkal na Sibiři je nejhlubší jezero světa; jeho maximální hloubka přesahuje 1 600 metrů."}];
+let i=0,s=0,lock=false;
+const catScores={};
+[...new Set(q.map(x=>x.cat))].forEach(c=>catScores[c]=0);
+
+const counter=document.getElementById('counter'),score=document.getElementById('score'),prog=document.getElementById('prog'),
+category=document.getElementById('category'),question=document.getElementById('question'),answers=document.getElementById('answers'),
+feedback=document.getElementById('feedback'),controls=document.getElementById('controls'),next=document.getElementById('next'),
+quiz=document.getElementById('quiz'),result=document.getElementById('result');
+
+function render(){
+  lock=false; const x=q[i];
+  counter.textContent=`Otázka ${i+1} z ${q.length}`;
+  score.textContent=s;
+  prog.style.width=`${i/q.length*100}%`;
+  category.textContent=`Obor: ${x.cat}`;
+  question.textContent=x.q;
+  answers.innerHTML='';feedback.className='feedback';feedback.innerHTML='';controls.className='controls';
+  x.a.forEach((t,n)=>{
+    const b=document.createElement('button');
+    b.className='answer';b.textContent=t;b.onclick=()=>pick(n);answers.appendChild(b);
+  });
+}
+function pick(n){
+  if(lock)return;lock=true;const x=q[i],bs=[...answers.querySelectorAll('.answer')];
+  bs.forEach((b,k)=>{b.disabled=true;if(k===x.c)b.classList.add('correct')});
+  if(n===x.c){
+    s++;catScores[x.cat]++;score.textContent=s;
+    feedback.innerHTML=`<strong>Správně.</strong> ${x.e}`;
+  }else{
+    bs[n].classList.add('wrong');
+    feedback.innerHTML=`<strong>Tentokrát ne.</strong> ${x.e}`;
+  }
+  feedback.classList.add('show');controls.classList.add('show');
+  prog.style.width=`${(i+1)/q.length*100}%`;
+  next.textContent=i===q.length-1?'Zobrazit výsledek':'Další otázka';
+}
+function finish(){
+  quiz.style.display='none';result.classList.add('show');counter.textContent='Hotovo';prog.style.width='100%';
+  document.getElementById('final').textContent=s;
+  let t,p;
+  if(s>=18){t='Mistr všeobecného přehledu';p='Napříč deseti obory jste skoro nenechali slabé místo. Podívejte se níž, jestli některá dvojice přece jen ubrala bod.'}
+  else if(s>=14){t='Velmi silný mix';p='V deseti různých světech jste drželi tempo velmi dobře. Rozpad podle oborů ukáže, kde byly mezery.'}
+  else if(s>=10){t='Přehled drží';p='Polovina a víc v tak širokém mixu znamená slušný základ. Nejzajímavější je teď srovnání jednotlivých oborů.'}
+  else{t='Deset oborů umí bolet';p='Tady se nebylo kde schovat: po dvou otázkách se prostředí změnilo. Výpis dole ukáže, kde se skóre zlomilo.'}
+  document.getElementById('rtitle').textContent=t;document.getElementById('rtext').textContent=p;
+  const box=document.getElementById('breakdown');box.innerHTML='';
+  Object.entries(catScores).forEach(([cat,val])=>{
+    const d=document.createElement('div');d.className='catrow';
+    d.innerHTML=`<span>${cat}</span><strong>${val}/2</strong>`;
+    box.appendChild(d);
+  });
+}
+next.onclick=()=>{if(i<q.length-1){i++;render()}else finish()};
+document.getElementById('restart').onclick=()=>{
+  i=0;s=0;Object.keys(catScores).forEach(k=>catScores[k]=0);
+  quiz.style.display='';result.classList.remove('show');render();
+};
+render();
+</script>
+</body>
+</html>
