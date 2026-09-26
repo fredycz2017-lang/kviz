@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jak dobře znáte Priory v Česku?</title>
+<style>
+:root{--bg:#f3f3f2;--navy:#21324a;--muted:#70757d;--accent:#9a5a0a;--good:#16783a;--goodbg:#ecf8ef;--bad:#b42318;--badbg:#fff0ee}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#1f2024}body{padding:32px 14px}
+.shell{max-width:700px;margin:auto;background:#fff;border:1px solid #d7dbe1;border-radius:24px;overflow:hidden}.head{padding:28px 28px 20px}
+.kicker{font-size:13px;font-weight:900;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+h1{font-size:31px;line-height:1.05;color:var(--navy);margin:0 0 14px;font-weight:900}.lead{font-size:16px;line-height:1.5;color:var(--muted);margin:0 0 24px}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:15px;font-weight:800}.score{padding:9px 14px;border:1px solid #dcdfe4;background:#f7f6f3;border-radius:999px}
+.bar{height:9px;background:#ebe9e6;border-top:1px solid #e2dfdb;border-bottom:1px solid #e2dfdb}.prog{height:100%;width:0;background:#b06b13;transition:.25s}
+.main{padding:28px}.tag{display:inline-block;margin:0 0 11px;padding:7px 10px;border-radius:999px;background:#f3ede4;color:#87520e;font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+.question{font-size:23px;line-height:1.3;font-weight:900;margin:0 0 22px}.answers{display:grid;gap:12px}
+.answer{width:100%;text-align:left;border:2px solid #dde1e6;background:#fff;border-radius:14px;padding:16px 18px;font-size:16px;line-height:1.35;font-weight:700;cursor:pointer}
+.answer:hover:not(:disabled){border-color:#aeb7c2;background:#fbfbfc}.answer:disabled{cursor:default}.answer.correct{border-color:var(--good);background:var(--goodbg);color:#0e5c2a}.answer.wrong{border-color:var(--bad);background:var(--badbg);color:#8e1d15}
+.feedback{display:none;margin-top:18px;padding:15px 17px;border-radius:13px;background:#f7f7f7;border:1px solid #e0e2e6;font-size:15px;line-height:1.5;color:#3f444c}.feedback.show{display:block}
+.controls{display:none;justify-content:flex-end;margin-top:18px}.controls.show{display:flex}.next,.restart{border:0;border-radius:12px;background:var(--navy);color:#fff;padding:13px 20px;font-size:15px;font-weight:900;cursor:pointer}
+.result{display:none;text-align:center}.result.show{display:block}.rscore{font-size:54px;line-height:1;font-weight:900;color:var(--navy);margin:4px 0 10px}.rtitle{font-size:25px;font-weight:900;margin:0 0 10px}.rtext{font-size:16px;line-height:1.5;color:#5f6670;max-width:540px;margin:0 auto 22px}
+.footer{padding:0 28px 24px;text-align:center;color:#8a8f97;font-size:12px;line-height:1.45}
+@media(max-width:520px){body{padding:12px 8px}.shell{border-radius:18px}.head{padding:22px 20px 16px}h1{font-size:27px}.lead{font-size:15px}.main{padding:22px 20px}.question{font-size:21px}.answer{padding:14px 15px;font-size:15px}.footer{padding:0 20px 20px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<section class="head">
+<div class="kicker">BONUS RETRO • PRIOR V ČESKU • 10 OTÁZEK</div>
+<h1>Jak dobře znáte české Priory?</h1>
+<p class="lead">Jihlava, Budějovice, Plzeň, Pardubice i dnešní síť. Poznáte, kde Prior pořád funguje a co se stalo s jeho nejznámějšími domy?</p>
+<div class="meta"><span id="counter">Otázka 1 z 10</span><span class="score">Skóre <span id="score">0</span></span></div>
+</section>
+<div class="bar"><div class="prog" id="prog"></div></div>
+<main class="main">
+<section id="quiz"><div class="tag" id="tag"></div><h2 class="question" id="question"></h2><div class="answers" id="answers"></div><div class="feedback" id="feedback"></div><div class="controls" id="controls"><button class="next" id="next">Další otázka</button></div></section>
+<section class="result" id="result"><div class="rscore"><span id="final">0</span>/10</div><h2 class="rtitle" id="rtitle"></h2><p class="rtext" id="rtext"></p><button class="restart" id="restart">Zkusit znovu</button></section>
+</main>
+<div class="footer">Kvíz kombinuje současnou síť PRIOR ČESKÁ REPUBLIKA s historií známých obchodních domů.</div>
+</div>
+<script>
+const q=[{"tag": "Prior dnes", "q": "Kolik prodejen uvádí v roce 2026 síť PRIOR ČESKÁ REPUBLIKA na svém oficiálním webu?", "a": ["8", "10", "12", "14"], "c": 2, "e": "Oficiální web PRIOR ČESKÁ REPUBLIKA uvádí dvanáct prodejen po celé České republice."}, {"tag": "Mapa Prioru", "q": "Ve kterém z těchto měst dnes najdete prodejnu sítě PRIOR ČESKÁ REPUBLIKA?", "a": ["Pardubice", "Dačice", "Plzeň", "Brno"], "c": 1, "e": "Dačice patří mezi současných dvanáct prodejen sítě PRIOR ČESKÁ REPUBLIKA."}, {"tag": "Co už neplatí", "q": "Které z těchto měst už na aktuálním seznamu prodejen PRIOR ČESKÁ REPUBLIKA není?", "a": ["Třinec", "Jihlava", "Most", "Cheb"], "c": 2, "e": "Most už mezi aktuálními dvanácti prodejnami není; starší sortimentní stránky ho uvádějí jako zavřenou pobočku."}, {"tag": "Centrála", "q": "Ve kterém městě sídlí společnost PRIOR ČESKÁ REPUBLIKA s.r.o.?", "a": ["České Budějovice", "Praha", "Ostrava", "Jihlava"], "c": 0, "e": "Sídlo společnosti je na Lannově třídě v Českých Budějovicích."}, {"tag": "České Budějovice", "q": "Kdo navrhl známý obchodní dům Prior na Lannově třídě v Českých Budějovicích?", "a": ["Růžena Žertová", "František Lydie Gahura", "Antonín Běhal", "Karel Prager"], "c": 2, "e": "Českobudějovický Prior navrhl architekt Antonín Běhal."}, {"tag": "České Budějovice", "q": "V kterém roce se českobudějovický Prior otevřel prvním zákazníkům?", "a": ["1968", "1974", "1979", "1983"], "c": 2, "e": "Prior v Českých Budějovicích byl otevřen 3. května 1979."}, {"tag": "Jihlava", "q": "Co stálo na místě dnešního Prioru na Masarykově náměstí v Jihlavě před asanací?", "a": ["Blok historických domů zvaný Krecl", "Městské lázně", "Barokní divadlo", "Železniční nádraží"], "c": 0, "e": "Na místě Prioru stál historický blok domů označovaný jako Krecl."}, {"tag": "Plzeň", "q": "Plzeňský Prior otevřel v roce 1968. Co dnes podle současných informací sídlí v jeho budově?", "a": ["IKEA", "Lidl", "Kaufland", "Obchodní dům Kotva"], "c": 1, "e": "Někdejší plzeňský Prior na Americké třídě dnes využívá mimo jiné supermarket Lidl."}, {"tag": "Pardubice", "q": "Čím byla inspirována výrazná osmiúhelníková okna někdejšího pardubického Prioru?", "a": ["Železničními koly", "Medovými plástvemi a pardubickým perníkem", "Městskými hradbami", "Chemickými vzorci"], "c": 1, "e": "Osmiúhelníková okna připomínají medové plástve a odkazují na tradiční pardubický perník."}, {"tag": "Zlín", "q": "Zlínský Obchodní dům, který místní dlouho znali také jako Prior, navrhl který architekt?", "a": ["Josef Gočár", "František Lydie Gahura", "Karel Hubáček", "Vladimír Karfík"], "c": 1, "e": "Obchodní dům ve Zlíně navrhl František Lydie Gahura; budova vznikla už v roce 1931."}];
+let i=0,s=0,lock=false;
+const counter=document.getElementById('counter'),score=document.getElementById('score'),prog=document.getElementById('prog'),tag=document.getElementById('tag'),question=document.getElementById('question'),answers=document.getElementById('answers'),feedback=document.getElementById('feedback'),controls=document.getElementById('controls'),next=document.getElementById('next'),quiz=document.getElementById('quiz'),result=document.getElementById('result');
+function render(){lock=false;const x=q[i];counter.textContent=`Otázka ${i+1} z ${q.length}`;score.textContent=s;prog.style.width=`${i/q.length*100}%`;tag.textContent=x.tag;question.textContent=x.q;answers.innerHTML='';feedback.className='feedback';feedback.innerHTML='';controls.className='controls';x.a.forEach((t,n)=>{const b=document.createElement('button');b.className='answer';b.textContent=t;b.onclick=()=>pick(n);answers.appendChild(b)})}
+function pick(n){if(lock)return;lock=true;const x=q[i],bs=[...answers.querySelectorAll('.answer')];bs.forEach((b,k)=>{b.disabled=true;if(k===x.c)b.classList.add('correct')});if(n===x.c){s++;score.textContent=s;feedback.innerHTML=`<strong>Správně.</strong> ${x.e}`}else{bs[n].classList.add('wrong');feedback.innerHTML=`<strong>Tentokrát ne.</strong> ${x.e}`}feedback.classList.add('show');controls.classList.add('show');prog.style.width=`${(i+1)/q.length*100}%`;next.textContent=i===q.length-1?'Zobrazit výsledek':'Další otázka'}
+function finish(){quiz.style.display='none';result.classList.add('show');counter.textContent='Hotovo';prog.style.width='100%';document.getElementById('final').textContent=s;let t,p;if(s===10){t='Priorolog bez chyby';p='Plný počet. Znáte nejen ceduli PRIOR, ale i města, architekturu a současnou síť.'}else if(s>=8){t='Velmi silná priorová paměť';p='Jedna dvě stavby vás zaskočily, jinak máte české Priory zmapované velmi dobře.'}else if(s>=5){t='Logo znáte, mapa už je těžší';p='Základ drží. Současná síť a osudy jednotlivých domů ale umí být překvapivě zamotané.'}else{t='Prior je větší labyrint, než vypadá';p='Není to jen jeden řetězec a pár betonových domů. Po deseti odpovědích už máte mapu výrazně jasnější.'}document.getElementById('rtitle').textContent=t;document.getElementById('rtext').textContent=p}
+next.onclick=()=>{if(i<q.length-1){i++;render()}else finish()};document.getElementById('restart').onclick=()=>{i=0;s=0;quiz.style.display='';result.classList.remove('show');render()};render();
+</script>
+</body>
+</html>
