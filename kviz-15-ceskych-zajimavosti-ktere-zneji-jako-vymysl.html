@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>15 českých zajímavostí, které znějí jako výmysl</title>
+<style>
+:root{
+  --bg:#f2f2f1;--card:#fff;--navy:#21324a;--text:#1f2024;--muted:#6f757d;
+  --accent:#9a5a0a;--accentsoft:#f5eee5;--line:#d9dde3;
+  --good:#16783a;--goodbg:#ecf8ef;--bad:#b42318;--badbg:#fff0ee;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--text)}
+body{padding:32px 14px}
+.shell{max-width:700px;margin:0 auto;background:var(--card);border:1px solid #d6dbe1;border-radius:24px;overflow:hidden;box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.head{padding:29px 29px 21px}
+.kicker{font-size:13px;font-weight:900;letter-spacing:.09em;color:var(--accent);text-transform:uppercase;margin-bottom:9px}
+h1{font-size:32px;line-height:1.06;color:var(--navy);margin:0 0 14px;font-weight:900}
+.lead{font-size:16px;line-height:1.52;color:var(--muted);margin:0 0 24px}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:15px;font-weight:800}
+.score{padding:9px 14px;border:1px solid #dcdfe4;background:#f7f6f3;border-radius:999px;white-space:nowrap}
+.progress-wrap{height:9px;background:#ebe9e6;border-top:1px solid #e2dfdb;border-bottom:1px solid #e2dfdb}
+.progress{height:100%;width:0;background:#b06b13;transition:width .25s ease}
+.main{padding:29px}
+.tag{display:inline-block;margin:0 0 11px;padding:7px 10px;border-radius:999px;background:var(--accentsoft);color:#87520e;font-size:12px;font-weight:900;letter-spacing:.065em;text-transform:uppercase}
+.question{font-size:23px;line-height:1.32;font-weight:900;margin:0 0 22px;color:#1d2025}
+.answers{display:grid;gap:12px}
+.answer{width:100%;text-align:left;border:2px solid #dce1e6;background:#fff;border-radius:14px;padding:16px 18px;font-size:16px;line-height:1.38;font-weight:700;color:#222;cursor:pointer;transition:border-color .15s,background .15s,transform .05s}
+.answer:hover:not(:disabled){border-color:#aeb7c2;background:#fbfbfc}
+.answer:active:not(:disabled){transform:scale(.996)}
+.answer:disabled{cursor:default}
+.answer.correct{border-color:var(--good);background:var(--goodbg);color:#0e5c2a}
+.answer.wrong{border-color:var(--bad);background:var(--badbg);color:#8e1d15}
+.feedback{display:none;margin-top:18px;padding:16px 17px;border-radius:13px;background:#f7f7f7;border:1px solid #e0e2e6;font-size:15px;line-height:1.52;color:#3f444c}
+.feedback.show{display:block}
+.controls{display:none;justify-content:flex-end;margin-top:18px}
+.controls.show{display:flex}
+.next,.restart{border:0;border-radius:12px;background:var(--navy);color:#fff;padding:13px 20px;font-size:15px;font-weight:900;cursor:pointer}
+.next:hover,.restart:hover{filter:brightness(1.08)}
+.result{display:none;text-align:center}
+.result.show{display:block}
+.rscore{font-size:56px;line-height:1;font-weight:900;color:var(--navy);margin:3px 0 10px}
+.rtitle{font-size:25px;line-height:1.2;font-weight:900;margin:0 0 10px}
+.rtext{font-size:16px;line-height:1.52;color:#5f6670;max-width:550px;margin:0 auto 22px}
+.badge{display:inline-block;margin-bottom:15px;padding:7px 11px;border-radius:999px;background:var(--accentsoft);color:#87520e;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
+.footer{padding:0 28px 24px;text-align:center;color:#8a8f97;font-size:12px;line-height:1.45}
+@media(max-width:520px){
+ body{padding:12px 8px}
+ .shell{border-radius:18px}
+ .head{padding:22px 20px 16px}
+ h1{font-size:27px}
+ .lead{font-size:15px}
+ .main{padding:22px 20px}
+ .question{font-size:21px}
+ .answer{padding:14px 15px;font-size:15px}
+ .footer{padding:0 20px 20px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<section class="head">
+  <div class="kicker">NEDĚLNÍ FLAGSHIP • 15 OTÁZEK</div>
+  <h1>Česko, které zní jako výmysl</h1>
+  <p class="lead">Kostel na kolejích, kancelář ve výtahu, krokodýl vydávaný za draka nebo jeskyně bez nalezeného dna. Patnáct faktů, které jsou skutečné.</p>
+  <div class="meta"><span id="counter">Otázka 1 z 15</span><span class="score">Skóre <span id="score">0</span></span></div>
+</section>
+<div class="progress-wrap"><div class="progress" id="progress"></div></div>
+<main class="main">
+<section id="quiz">
+  <div class="tag" id="tag"></div>
+  <h2 class="question" id="question"></h2>
+  <div class="answers" id="answers"></div>
+  <div class="feedback" id="feedback"></div>
+  <div class="controls" id="controls"><button class="next" id="next">Další otázka</button></div>
+</section>
+<section class="result" id="result">
+  <div class="badge">Výsledek nedělního flagshipu</div>
+  <div class="rscore"><span id="final">0</span>/15</div>
+  <h2 class="rtitle" id="rtitle"></h2>
+  <p class="rtext" id="rtext"></p>
+  <button class="restart" id="restart">Zkusit znovu</button>
+</section>
+</main>
+<div class="footer">Kvíz kombinuje ověřené přírodní rekordy, architekturu, techniku a české kuriozity.</div>
+</div>
+<script>
+const q=[{"tag": "Podzemí", "q": "Které české místo je podle Správy jeskyní ČR nejhlubší známou zatopenou jeskyní světa, přičemž její dno stále nebylo nalezeno?", "a": ["Macocha", "Hranická propast", "Punkevní jeskyně", "Bozkovské dolomitové jeskyně"], "c": 1, "e": "Hranická propast má dosud poznanou celkovou hloubku 519,5 m. Dno ale stále nebylo zjištěno, takže skutečná hloubka může být větší."}, {"tag": "Stavba na cestách", "q": "Kostel Nanebevzetí Panny Marie v Mostě byl v roce 1975 kvůli těžbě skutečně přesunut. Jak daleko cestoval?", "a": ["Přibližně 84 metrů", "Přibližně 340 metrů", "Přibližně 841 metrů", "Přibližně 1,8 kilometru"], "c": 2, "e": "Kostel urazil 841,1 metru. Dvanáctitisícitunová stavba se pohybovala rychlostí jen zhruba 1,2 až 3,2 cm za minutu."}, {"tag": "Baťův mrakodrap", "q": "Baťova pojízdná kancelář ve zlínské budově č. 21 nebyla jen výtah se stolem. Co v ní skutečně bylo?", "a": ["Krb a knihovna", "Sprcha a kuchyňka", "Trezor a postel", "Klimatizace a umyvadlo"], "c": 3, "e": "Výtah-kancelář měla půdorys 6 × 6 metrů, byla klimatizovaná a měla vlastní umyvadlo."}, {"tag": "Brněnská legenda", "q": "Slavný „brněnský drak“ ze Staré radnice je ve skutečnosti co?", "a": ["Preparovaný krokodýl", "Vycpaný varan", "Dřevěná barokní socha", "Kostra obřího jesetera"], "c": 0, "e": "Brněnský drak je preparovaný krokodýl. Město Brno dnes uvádí, že jde o více než pětimetrového krokodýla nilského."}, {"tag": "Český Krumlov", "q": "Tradice medvědů na krumlovském zámku souvisí s tím, že Rožmberkové propagovali příbuznost s kterým italským rodem?", "a": ["Medici", "Orsini", "Sforza", "Visconti"], "c": 1, "e": "Rožmberkové spojovali svůj rod s italskými Orsini. Jméno Orsini odkazuje k medvědům a chov medvědů je na zámku doložen už od 16. století."}, {"tag": "Světový rekord", "q": "Pražský hrad je podle Guinnessovy knihy rekordů největším souvislým hradním komplexem na světě. Přibližně jakou má rozlohu?", "a": ["17 000 m²", "35 000 m²", "Téměř 70 000 m²", "Přes 200 000 m²"], "c": 2, "e": "Areál Pražského hradu zabírá téměř 70 000 m²."}, {"tag": "Pražský orloj", "q": "Staroměstský orloj umí podle Prague City Tourism ukazovat několik různých systémů času. Kolik jich zobrazuje?", "a": ["Dva", "Tři", "Pět", "Čtyři"], "c": 3, "e": "Orloj ukazuje čtyři druhy času: hvězdný, staročeský, babylónský a středoevropský."}, {"tag": "Počasí", "q": "Od kterého roku probíhá v pražském Klementinu nepřerušená řada každodenních meteorologických měření?", "a": ["1698", "1775", "1842", "1918"], "c": 1, "e": "Nepřerušená řada denních meteorologických měření začala 1. ledna 1775 zásluhou Antonína Strnada."}, {"tag": "Přírodní rekord", "q": "Kolik měří Pančavský vodopád, nejvyšší vodopád v Česku?", "a": ["92 metrů", "121 metrů", "148 metrů", "203 metrů"], "c": 2, "e": "Pančavský vodopád v Krkonoších měří 148 metrů a padá v několika kaskádách do Labského dolu."}, {"tag": "Petřín", "q": "Budova dnešního Zrcadlového bludiště na Petříně původně vznikla k úplně jinému účelu. Co to bylo?", "a": ["Pavilon Klubu českých turistů na výstavě 1891", "Celnice u městských hradeb", "Provizorní kaple pro korunovaci", "Stanice první pražské lanovky"], "c": 0, "e": "Stavba vznikla jako pavilon Klubu českých turistů pro Jubilejní zemskou výstavu roku 1891. Na Petřín byla přesunuta až následně."}, {"tag": "Pražská architektura", "q": "Čím byl Hanavský pavilon z roku 1891 v Praze stavebně výjimečný?", "a": ["Byl první pražskou budovou z prefabrikovaného betonu", "Byl první budovou s litinovou konstrukcí v Praze", "Byl první budovou s plochou střechou v Čechách", "Byl první pražskou budovou s výtahem"], "c": 1, "e": "Hanavský pavilon byl první budovou s litinovou konstrukcí v Praze. Původně stál na Jubilejní zemské výstavě."}, {"tag": "Doprava", "q": "Kdo pro pražskou Jubilejní výstavu roku 1891 vybudoval první elektrickou dráhu v Rakousku-Uhersku z Letné do Stromovky?", "a": ["Josef Ressel", "Emil Kolben", "František Křižík", "Václav Klement"], "c": 2, "e": "Elektrickou dráhu postavil František Křižík. Vedla z Letné do Stromovky a vznikla kvůli dopravě na výstaviště."}, {"tag": "Podzemní voda", "q": "Ve kterých českých jeskyních najdete největší podzemní jezero v Čechách?", "a": ["Koněpruské jeskyně", "Javoříčské jeskyně", "Sloupsko-šošůvské jeskyně", "Bozkovské dolomitové jeskyně"], "c": 3, "e": "Bozkovské dolomitové jeskyně ukrývají v Jezerním dómu největší podzemní jezero v Čechách."}, {"tag": "Kostnice", "q": "Přibližně kolika lidí se týkají ostatky spojené se sedleckou kostnicí u Kutné Hory?", "a": ["Asi 4 000", "Asi 12 000", "Asi 40 000", "Více než 200 000"], "c": 2, "e": "Sedlecká kostnice je spojena s ostatky zhruba 40 000 lidí. Z kostí vznikla mimo jiné slavná výzdoba, lustr, kříže a erb."}, {"tag": "Ještěd", "q": "Při vývoji speciálního laminátového pláště Ještědu bylo potřeba vyrobit několikametrové plastové tyče. Kdo je byl ochoten vyrobit?", "a": ["Výrobce lyží", "Továrna na rybářské pruty", "Letecká továrna", "Výrobce tramvají"], "c": 1, "e": "Podle Visit Liberec se dlouhých plastových tyčí ujala továrna na rybářské pruty – a kvůli jejich délce musela dokonce prorazit otvor do vlastní budovy."}];
+let i=0,s=0,lock=false;
+const counter=document.getElementById('counter');
+const score=document.getElementById('score');
+const progress=document.getElementById('progress');
+const tag=document.getElementById('tag');
+const question=document.getElementById('question');
+const answers=document.getElementById('answers');
+const feedback=document.getElementById('feedback');
+const controls=document.getElementById('controls');
+const next=document.getElementById('next');
+const quiz=document.getElementById('quiz');
+const result=document.getElementById('result');
+
+function render(){
+  lock=false;
+  const x=q[i];
+  counter.textContent=`Otázka ${i+1} z ${q.length}`;
+  score.textContent=s;
+  progress.style.width=`${i/q.length*100}%`;
+  tag.textContent=x.tag;
+  question.textContent=x.q;
+  answers.innerHTML='';
+  feedback.className='feedback';
+  feedback.innerHTML='';
+  controls.className='controls';
+
+  x.a.forEach((text,n)=>{
+    const b=document.createElement('button');
+    b.className='answer';
+    b.textContent=text;
+    b.addEventListener('click',()=>pick(n));
+    answers.appendChild(b);
+  });
+}
+
+function pick(n){
+  if(lock)return;
+  lock=true;
+  const x=q[i];
+  const buttons=[...answers.querySelectorAll('.answer')];
+  buttons.forEach((b,k)=>{
+    b.disabled=true;
+    if(k===x.c)b.classList.add('correct');
+  });
+
+  if(n===x.c){
+    s++;
+    score.textContent=s;
+    feedback.innerHTML=`<strong>Správně.</strong> ${x.e}`;
+  } else {
+    buttons[n].classList.add('wrong');
+    feedback.innerHTML=`<strong>Tentokrát ne.</strong> ${x.e}`;
+  }
+
+  feedback.classList.add('show');
+  controls.classList.add('show');
+  progress.style.width=`${(i+1)/q.length*100}%`;
+  next.textContent=i===q.length-1?'Zobrazit výsledek':'Další otázka';
+}
+
+function finish(){
+  quiz.style.display='none';
+  result.classList.add('show');
+  counter.textContent='Hotovo';
+  progress.style.width='100%';
+  document.getElementById('final').textContent=s;
+
+  let title,text;
+  if(s===15){
+    title='Česko vás jen tak nepřekvapí';
+    text='Plný počet v kvízu postaveném hlavně na kuriozitách a méně známých faktech je opravdu silný výkon.';
+  } else if(s>=12){
+    title='Výborný přehled i mimo učebnice';
+    text='Většina bizarně znějících českých faktů vám sedla. Jen pár míst dokázalo působit až příliš nepravděpodobně.';
+  } else if(s>=8){
+    title='Česko znáte, ale pořád umí překvapit';
+    text='Více než polovina je velmi slušná. Tenhle kvíz schválně míří mimo klasické otázky na kraje, řeky a panovníky.';
+  } else if(s>=4){
+    title='Tohle v učebnici většinou nebylo';
+    text='Několik kuriozit jste trefili, zbytek ale zní spíš jako hospodská legenda než ověřený fakt — a právě v tom je jejich kouzlo.';
+  } else {
+    title='Česko znělo tentokrát jako sci-fi';
+    text='Kostel cestující po kolejích nebo klimatizovaná kancelář ve výtahu nejsou zrovna běžné školní učivo. Teď už ale víte, že jsou skutečné.';
+  }
+  document.getElementById('rtitle').textContent=title;
+  document.getElementById('rtext').textContent=text;
+}
+
+next.addEventListener('click',()=>{
+  if(i<q.length-1){i++;render();} else finish();
+});
+
+document.getElementById('restart').addEventListener('click',()=>{
+  i=0;s=0;
+  quiz.style.display='';
+  result.classList.remove('show');
+  render();
+});
+render();
+</script>
+</body>
+</html>
