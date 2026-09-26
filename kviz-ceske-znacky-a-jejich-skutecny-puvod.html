@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Víte, odkud jsou? 10 českých značek a jejich skutečný původ</title>
+<style>
+:root{--bg:#f3f3f2;--navy:#21324a;--muted:#70757d;--accent:#9a5a0a;--soft:#f7f6f3;--good:#16783a;--goodbg:#ecf8ef;--bad:#b42318;--badbg:#fff0ee}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#1f2024}body{padding:32px 14px}
+.shell{max-width:700px;margin:auto;background:#fff;border:1px solid #d7dbe1;border-radius:24px;overflow:hidden}.head{padding:28px 28px 20px}
+.kicker{font-size:13px;font-weight:900;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+h1{font-size:31px;line-height:1.05;color:var(--navy);margin:0 0 14px;font-weight:900}.lead{font-size:16px;line-height:1.5;color:var(--muted);margin:0 0 24px}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:15px;font-weight:800}.score{padding:9px 14px;border:1px solid #dcdfe4;background:var(--soft);border-radius:999px}
+.bar{height:9px;background:#ebe9e6;border-top:1px solid #e2dfdb;border-bottom:1px solid #e2dfdb}.prog{height:100%;width:0;background:#b06b13;transition:.25s}
+.main{padding:28px}.tag{display:inline-block;margin:0 0 11px;padding:7px 10px;border-radius:999px;background:#f3ede4;color:#87520e;font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+.question{font-size:23px;line-height:1.3;font-weight:900;margin:0 0 22px}.answers{display:grid;gap:12px}.answer{width:100%;text-align:left;border:2px solid #dde1e6;background:#fff;border-radius:14px;padding:16px 18px;font-size:16px;line-height:1.35;font-weight:700;cursor:pointer}
+.answer:hover:not(:disabled){border-color:#aeb7c2;background:#fbfbfc}.answer:disabled{cursor:default}.answer.correct{border-color:var(--good);background:var(--goodbg);color:#0e5c2a}.answer.wrong{border-color:var(--bad);background:var(--badbg);color:#8e1d15}
+.feedback{display:none;margin-top:18px;padding:15px 17px;border-radius:13px;background:#f7f7f7;border:1px solid #e0e2e6;font-size:15px;line-height:1.5;color:#3f444c}.feedback.show{display:block}
+.controls{display:none;justify-content:flex-end;margin-top:18px}.controls.show{display:flex}.next,.restart{border:0;border-radius:12px;background:var(--navy);color:#fff;padding:13px 20px;font-size:15px;font-weight:900;cursor:pointer}
+.result{display:none;text-align:center}.result.show{display:block}.rscore{font-size:54px;line-height:1;font-weight:900;color:var(--navy);margin:4px 0 10px}.rtitle{font-size:25px;font-weight:900;margin:0 0 10px}.rtext{font-size:16px;line-height:1.5;color:#5f6670;max-width:540px;margin:0 auto 22px}
+.footer{padding:0 28px 24px;text-align:center;color:#8a8f97;font-size:12px;line-height:1.45}
+@media(max-width:520px){body{padding:12px 8px}.shell{border-radius:18px}.head{padding:22px 20px 16px}h1{font-size:27px}.lead{font-size:15px}.main{padding:22px 20px}.question{font-size:21px}.answer{padding:14px 15px;font-size:15px}.footer{padding:0 20px 20px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<section class="head">
+<div class="kicker">ČESKÉ ZNAČKY • 10 OTÁZEK</div>
+<h1>Víte, odkud opravdu pocházejí?</h1>
+<p class="lead">Baťa, Škoda, Petrof, Prim nebo Moser. Loga zná skoro každý — ale dokážete správně určit město, kde jejich příběh začal?</p>
+<div class="meta"><span id="counter">Otázka 1 z 10</span><span class="score">Skóre <span id="score">0</span></span></div>
+</section>
+<div class="bar"><div class="prog" id="prog"></div></div>
+<main class="main">
+<section id="quiz"><div class="tag" id="tag"></div><h2 class="question" id="question"></h2><div class="answers" id="answers"></div><div class="feedback" id="feedback"></div><div class="controls" id="controls"><button class="next" id="next">Další značka</button></div></section>
+<section class="result" id="result"><div class="rscore"><span id="final">0</span>/10</div><h2 class="rtitle" id="rtitle"></h2><p class="rtext" id="rtext"></p><button class="restart" id="restart">Zkusit znovu</button></section>
+</main>
+<div class="footer">Kvíz pracuje s historickým místem vzniku firmy, výroby nebo značky podle přesného znění otázky.</div>
+</div>
+<script>
+const q=[{"tag": "Obuv", "q": "Ve kterém městě vznikla v roce 1894 firma Baťa?", "a": ["Zlín", "Pardubice", "Prostějov", "Brno"], "c": 0, "e": "Baťu založili sourozenci Antonín, Anna a Tomáš Baťovi ve Zlíně roku 1894."}, {"tag": "Automobily", "q": "Ve kterém městě založili Václav Laurin a Václav Klement roku 1895 dílnu, z níž vyrostly kořeny dnešní Škody Auto?", "a": ["Mladá Boleslav", "Kopřivnice", "Plzeň", "Praha"], "c": 0, "e": "Laurin a Klement založili svou dílnu na výrobu jízdních kol v Mladé Boleslavi v roce 1895."}, {"tag": "Hudební nástroje", "q": "S kterým městem je od založení roku 1864 spojen výrobce klavírů PETROF?", "a": ["Hradec Králové", "Liberec", "Olomouc", "České Budějovice"], "c": 0, "e": "Antonín Petrof postavil svůj první koncertní klavír v Hradci Králové roku 1864 a tím položil základ firmy PETROF."}, {"tag": "Sportovní obuv", "q": "Z názvu kterého města vychází značka BOTAS?", "a": ["Skuteč", "Zlín", "Vsetín", "Svitavy"], "c": 0, "e": "Předchůdce značky, podnik Botana, vznikl ve Skutči. Název BOTAS se vykládá mimo jiné jako BOTA Skuteč."}, {"tag": "Domácí spotřebiče", "q": "Ve kterém městě začal roku 1943 příběh značky ETA?", "a": ["Hlinsko", "Jablonec nad Nisou", "Tábor", "Kolín"], "c": 0, "e": "Základy pozdější značky ETA položila roku 1943 společnost ESA v Hlinsku. Ochranná známka ETA byla zaregistrována v roce 1960."}, {"tag": "České sklo", "q": "Kde si Ludwig Moser roku 1857 otevřel svou ryteckou dílnu a obchod se sklem?", "a": ["Karlovy Vary", "Nový Bor", "Harrachov", "Jablonec nad Nisou"], "c": 0, "e": "Ludwig Moser otevřel svou dílnu v Karlových Varech roku 1857. Odtud vyrostla světoznámá sklárna Moser."}, {"tag": "Hodinky", "q": "Ve kterém městě se rozběhl závod, který vyvinul první československé náramkové hodinky a později proslavil značku PRIM?", "a": ["Nové Město nad Metují", "Šternberk", "Liberec", "Frýdek-Místek"], "c": 0, "e": "Vývoj a výroba československých náramkových hodinek se rozběhly v závodě Chronotechny v Novém Městě nad Metují."}, {"tag": "Pivo", "q": "Ve kterém městě byl roku 1895 založen Český akciový pivovar, z něhož vyrostl Budějovický Budvar?", "a": ["České Budějovice", "Plzeň", "Žatec", "Třeboň"], "c": 0, "e": "Český akciový pivovar vznikl roku 1895 v Českých Budějovicích a vařil tam pivo na místě, kde Budvar působí dodnes."}, {"tag": "Automobily", "q": "S kterým městem jsou od 19. století spojené kořeny automobilky Tatra?", "a": ["Kopřivnice", "Mladá Boleslav", "Jihlava", "Přerov"], "c": 0, "e": "Kořeny Tatry jsou spojené s Kopřivnicí, kde se historie firmy začala psát už v 19. století."}, {"tag": "Chyták na závěr", "q": "Která z těchto známých „českých“ značek ve skutečnosti nezačínala na území dnešního Česka?", "a": ["KOH-I-NOOR HARDTMUTH", "Baťa", "PETROF", "Moser"], "c": 0, "e": "KOH-I-NOOR HARDTMUTH založil Joseph Hardtmuth ve Vídni roku 1790. Výroba se do Českých Budějovic přesunula až v roce 1848."}];let i=0,s=0,lock=false;
+const counter=document.getElementById('counter'),score=document.getElementById('score'),prog=document.getElementById('prog'),tag=document.getElementById('tag'),question=document.getElementById('question'),answers=document.getElementById('answers'),feedback=document.getElementById('feedback'),controls=document.getElementById('controls'),next=document.getElementById('next'),quiz=document.getElementById('quiz'),result=document.getElementById('result');
+function render(){lock=false;const x=q[i];counter.textContent=`Otázka ${i+1} z ${q.length}`;score.textContent=s;prog.style.width=`${i/q.length*100}%`;tag.textContent=x.tag;question.textContent=x.q;answers.innerHTML='';feedback.className='feedback';feedback.innerHTML='';controls.className='controls';x.a.forEach((t,n)=>{const b=document.createElement('button');b.className='answer';b.textContent=t;b.onclick=()=>pick(n);answers.appendChild(b)})}
+function pick(n){if(lock)return;lock=true;const x=q[i],bs=[...answers.querySelectorAll('.answer')];bs.forEach((b,k)=>{b.disabled=true;if(k===x.c)b.classList.add('correct')});if(n===x.c){s++;score.textContent=s;feedback.innerHTML=`<strong>Správně.</strong> ${x.e}`}else{bs[n].classList.add('wrong');feedback.innerHTML=`<strong>Tentokrát ne.</strong> ${x.e}`}feedback.classList.add('show');controls.classList.add('show');prog.style.width=`${(i+1)/q.length*100}%`;next.textContent=i===q.length-1?'Zobrazit výsledek':'Další značka'}
+function finish(){quiz.style.display='none';result.classList.add('show');counter.textContent='Hotovo';prog.style.width='100%';document.getElementById('final').textContent=s;let t,p;if(s===10){t='České značky máte zmapované';p='Plný počet. Nejen loga, ale i města a skutečné historické kořeny sedí.'}else if(s>=8){t='Velmi silný značkový přehled';p='Jedna nebo dvě historie vás zaskočily, jinak máte původ českých značek pevně v hlavě.'}else if(s>=5){t='Loga ano, rodné listy už hůř';p='Většinu značek znáte, ale jejich skutečné město původu dokáže překvapit.'}else{t='České značky cestují víc, než vypadají';p='Po tomhle kvízu už si Baťu, Prim, Botas nebo Moser spojíte nejen s výrobkem, ale i s konkrétním místem.'}document.getElementById('rtitle').textContent=t;document.getElementById('rtext').textContent=p}
+next.onclick=()=>{if(i<q.length-1){i++;render()}else finish()};document.getElementById('restart').onclick=()=>{i=0;s=0;quiz.style.display='';result.classList.remove('show');render()};render();
+</script>
+</body>
+</html>
