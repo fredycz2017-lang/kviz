@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Model zastavení a úspory času</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffffff;
+    color: #172033;
+  }
+  .wrap {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .card {
+    border: 1px solid #d7dee8;
+    border-radius: 14px;
+    padding: 18px;
+    background: #fff;
+    box-shadow: 0 4px 18px rgba(23, 32, 51, 0.06);
+    margin-bottom: 18px;
+  }
+  .eyebrow {
+    display: inline-block;
+    margin-bottom: 8px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: #eaf2ff;
+    color: #245b9f;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+  }
+  h2 {
+    margin: 0 0 12px;
+    font-size: 22px;
+    line-height: 1.25;
+    color: #245b9f;
+  }
+  .lead {
+    margin: 0 0 14px;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  .highlight {
+    font-weight: 700;
+    color: #123f76;
+  }
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 12px 0 14px;
+  }
+  table {
+    width: 100%;
+    min-width: 560px;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #cfd6df;
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 15px;
+  }
+  th {
+    background: #dfeaf7;
+    color: #172033;
+    font-weight: 700;
+    text-align: left;
+    padding: 10px 12px;
+    border-right: 1px solid #cfd6df;
+  }
+  th:last-child { border-right: 0; }
+  td {
+    padding: 9px 12px;
+    border-top: 1px solid #d9dee6;
+    border-right: 1px solid #d9dee6;
+    vertical-align: top;
+  }
+  td:last-child { border-right: 0; }
+  tbody tr:nth-child(even) td { background: #f8fafc; }
+  .green th { background: #dfeeda; }
+  .note {
+    margin: 10px 0 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #4b5563;
+    font-style: italic;
+  }
+  .callout {
+    margin-top: 14px;
+    padding: 13px 14px;
+    border-left: 4px solid #245b9f;
+    background: #f5f8fc;
+    border-radius: 8px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  @media (max-width: 480px) {
+    body { padding: 10px; }
+    .card { padding: 14px; border-radius: 10px; }
+    h2 { font-size: 20px; }
+    .lead, .callout { font-size: 15px; }
+    table { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <section class="card">
+    <div class="eyebrow">Modelový výpočet</div>
+    <h2>Výsledek: deset zastavení dělá ve středním scénáři 3 minuty a 20 sekund</h2>
+
+    <div class="table-wrap">
+      <table aria-label="Výpočet vynechaných zastavení">
+        <thead>
+          <tr>
+            <th>Vynechaných zastavení</th>
+            <th>15 s / zastávka</th>
+            <th>20 s / zastávka</th>
+            <th>25 s / zastávka</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>5 zastavení</td>
+            <td>1:15</td>
+            <td>1:40</td>
+            <td>2:05</td>
+          </tr>
+          <tr>
+            <td>10 zastavení</td>
+            <td>2:30</td>
+            <td>3:20</td>
+            <td>4:10</td>
+          </tr>
+          <tr>
+            <td>15 zastavení</td>
+            <td>3:45</td>
+            <td>5:00</td>
+            <td>6:15</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="lead">
+      Ve středním scénáři tedy pět nepotřebných zastavení znamená asi
+      <span class="highlight">1 minutu a 40 sekund</span>, deset zastavení
+      <span class="highlight">3 minuty a 20 sekund</span> a patnáct zastavení přibližně
+      <span class="highlight">pět minut</span>. To už není kosmetika. Na trase, kde jízdní doba běžně kolísá kvůli semaforům a provozu,
+      může podobná rezerva rozhodovat o tom, zda autobus přijede na přestup těsně před ním, nebo těsně po něm.
+    </p>
+
+    <div class="callout">
+      <strong>A zároveň je fér zdůraznit druhou stranu:</strong> v ranní špičce na vytížené městské lince může být počet
+      skutečně prázdných zastávek malý. Pět minut není slibované zrychlení každé jízdy. Je to výsledek scénáře,
+      ve kterém by se opravdu našlo patnáct zastávek bez jediného nástupu či výstupu.
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="eyebrow">Provozní měřítko</div>
+    <h2>Na jednom spoji minuta, v celém provozu už jsou to hodiny</h2>
+
+    <p class="lead">
+      Zajímavější začne být matematika ve chvíli, kdy se na problém nedívám očima jednoho cestujícího.
+      Pokud by hypotetická linka měla během dne 50 jízd a na každé z nich systém „na znamení“ ušetřil průměrně jen dvě minuty,
+      jde o 100 minut kumulovaného provozního času. Při třech minutách by to bylo 150 minut, tedy dvě a půl hodiny.
+    </p>
+
+    <div class="table-wrap">
+      <table class="green" aria-label="Modelová úspora na jedné jízdě a součet při padesáti jízdách">
+        <thead>
+          <tr>
+            <th>Modelová úspora na jedné jízdě</th>
+            <th>Součet při 50 jízdách</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1 minuta</td>
+            <td>50 minut</td>
+          </tr>
+          <tr>
+            <td>2 minuty</td>
+            <td>100 minut = 1 h 40 min</td>
+          </tr>
+          <tr>
+            <td>3 minuty</td>
+            <td>150 minut = 2 h 30 min</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="note">
+      Ani tato tabulka nepopisuje skutečný denní výkon linky 139. Je to jen převod měřítka:
+      několik desítek sekund, které cestující skoro nevnímá, se při desítkách spojů dokáže poskládat do času,
+      se kterým už dopravní systém pracovat může.
+    </p>
+  </section>
+
+</div>
+</body>
+</html>
