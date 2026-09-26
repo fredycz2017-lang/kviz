@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Co bylo dřív? 10 soubojů českých dějin</title>
+<style>
+:root{--bg:#f3f3f2;--navy:#21324a;--muted:#70757d;--accent:#9a5a0a;--soft:#f7f6f3;--good:#16783a;--goodbg:#ecf8ef;--bad:#b42318;--badbg:#fff0ee}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#1f2024}
+body{padding:32px 14px}
+.shell{max-width:700px;margin:auto;background:#fff;border:1px solid #d7dbe1;border-radius:24px;overflow:hidden}
+.head{padding:28px 28px 20px}
+.kicker{font-size:13px;font-weight:900;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+h1{font-size:31px;line-height:1.05;color:var(--navy);margin:0 0 14px;font-weight:900}
+.lead{font-size:16px;line-height:1.5;color:var(--muted);margin:0 0 24px}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:15px;font-weight:800}
+.score{padding:9px 14px;border:1px solid #dcdfe4;background:var(--soft);border-radius:999px}
+.bar{height:9px;background:#ebe9e6;border-top:1px solid #e2dfdb;border-bottom:1px solid #e2dfdb}
+.prog{height:100%;width:0;background:#b06b13;transition:.25s}
+.main{padding:28px}
+.tag{display:inline-block;margin:0 0 11px;padding:7px 10px;border-radius:999px;background:#f3ede4;color:#87520e;font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+.question{font-size:25px;line-height:1.25;font-weight:900;margin:0 0 20px}
+.duel{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch}
+.choice{position:relative;width:100%;min-height:150px;border:2px solid #dfe3e8;border-radius:17px;background:#fff;padding:18px 16px 16px;text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between}
+.choice:hover:not(:disabled){border-color:#aeb7c2;background:#fbfbfc}
+.choice:disabled{cursor:default}
+.choice.correct{border-color:var(--good);background:var(--goodbg);color:#0e5c2a}
+.choice.wrong{border-color:var(--bad);background:var(--badbg);color:#8e1d15}
+.choice-label{font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#8b9097;margin-bottom:12px}
+.choice-title{font-size:18px;line-height:1.25;font-weight:900}
+.year{display:none;margin-top:15px;font-size:26px;line-height:1;font-weight:900}
+.revealed .year{display:block}
+.vs{text-align:center;font-size:12px;font-weight:900;color:#9a5a0a;letter-spacing:.12em;margin:10px 0 12px}
+.feedback{display:none;margin-top:18px;padding:15px 17px;border-radius:13px;background:#f7f7f7;border:1px solid #e0e2e6;font-size:15px;line-height:1.5;color:#3f444c}
+.feedback.show{display:block}
+.controls{display:none;justify-content:flex-end;margin-top:18px}
+.controls.show{display:flex}
+.next,.restart{border:0;border-radius:12px;background:var(--navy);color:#fff;padding:13px 20px;font-size:15px;font-weight:900;cursor:pointer}
+.result{display:none;text-align:center}
+.result.show{display:block}
+.rscore{font-size:54px;line-height:1;font-weight:900;color:var(--navy);margin:4px 0 10px}
+.rtitle{font-size:25px;font-weight:900;margin:0 0 10px}
+.rtext{font-size:16px;line-height:1.5;color:#5f6670;max-width:540px;margin:0 auto 22px}
+.footer{padding:0 28px 24px;text-align:center;color:#8a8f97;font-size:12px;line-height:1.45}
+@media(max-width:520px){
+ body{padding:12px 8px}.shell{border-radius:18px}.head{padding:22px 20px 16px}h1{font-size:27px}.main{padding:22px 20px}.question{font-size:22px}.duel{grid-template-columns:1fr}.choice{min-height:120px}.vs{margin:4px 0}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<section class="head">
+<div class="kicker">CO BYLO DŘÍV? • 10 SOUBOJŮ</div>
+<h1>Dvě české události. Která přišla jako první?</h1>
+<p class="lead">Historie, technika i kultura proti sobě. Vyberte starší událost — a až potom se odkryjí oba roky.</p>
+<div class="meta"><span id="counter">Souboj 1 z 10</span><span class="score">Skóre <span id="score">0</span></span></div>
+</section>
+<div class="bar"><div class="prog" id="prog"></div></div>
+<main class="main">
+<section id="quiz">
+<div class="tag" id="tag"></div>
+<h2 class="question" id="question">Co bylo dřív?</h2>
+<div class="duel" id="duel">
+<button class="choice" id="left">
+  <div><div class="choice-label">Událost A</div><div class="choice-title" id="leftTitle"></div></div>
+  <div class="year" id="leftYear"></div>
+</button>
+<div class="vs">VS.</div>
+<button class="choice" id="right">
+  <div><div class="choice-label">Událost B</div><div class="choice-title" id="rightTitle"></div></div>
+  <div class="year" id="rightYear"></div>
+</button>
+</div>
+<div class="feedback" id="feedback"></div>
+<div class="controls" id="controls"><button class="next" id="next">Další souboj</button></div>
+</section>
+<section class="result" id="result">
+<div class="rscore"><span id="final">0</span>/10</div>
+<h2 class="rtitle" id="rtitle"></h2>
+<p class="rtext" id="rtext"></p>
+<button class="restart" id="restart">Zkusit znovu</button>
+</section>
+</main>
+<div class="footer">V každém kole jsou jen dvě události. Roky se zobrazí až po odpovědi.</div>
+</div>
+<script>
+const q=[{"cat": "Středověk", "q": "Co bylo dřív?", "left": "Položení základů Karlova mostu", "right": "Založení Univerzity Karlovy", "correct": "right", "left_year": "1357", "right_year": "1348", "e": "Univerzitu Karlovu založil Karel IV. roku 1348. Základní kámen Karlova mostu byl položen 9. července 1357."}, {"cat": "Instituce", "q": "Co bylo dřív?", "left": "První otevření Národního divadla", "right": "Založení Národního muzea", "correct": "right", "left_year": "1881", "right_year": "1818", "e": "Národní muzeum vzniklo roku 1818. Národní divadlo se poprvé otevřelo až 11. června 1881."}, {"cat": "Praha", "q": "Co bylo dřív?", "left": "Otevření Petřínské rozhledny", "right": "První otevření Národního divadla", "correct": "right", "left_year": "1891", "right_year": "1881", "e": "Národní divadlo se poprvé otevřelo v roce 1881. Petřínská rozhledna byla slavnostně otevřena 20. srpna 1891."}, {"cat": "Média a volný čas", "q": "Co bylo dřív?", "left": "Otevření Zoo Praha", "right": "Zahájení pravidelného rozhlasového vysílání v Československu", "correct": "right", "left_year": "1931", "right_year": "1923", "e": "Pravidelné rozhlasové vysílání začalo 18. května 1923. Zoo Praha se veřejnosti otevřela 28. září 1931."}, {"cat": "Média", "q": "Co bylo dřív?", "left": "Zahájení televizního vysílání v Československu", "right": "Otevření Zoo Praha", "correct": "right", "left_year": "1953", "right_year": "1931", "e": "Pražská zoo otevřela v roce 1931. Veřejné televizní vysílání v Československu začalo 1. května 1953."}, {"cat": "Kultura", "q": "Co bylo dřív?", "left": "Vznik Laterny magiky pro Expo 58", "right": "Zahájení televizního vysílání v Československu", "correct": "right", "left_year": "1958", "right_year": "1953", "e": "Československá televize začala vysílat v roce 1953. Laterna magika vznikla pro světovou výstavu Expo 58 v Bruselu."}, {"cat": "Technika", "q": "Co bylo dřív?", "left": "Debut Škody 1000 MB", "right": "Vznik Laterny magiky", "correct": "right", "left_year": "1964", "right_year": "1958", "e": "Laterna magika se představila roku 1958. Škoda 1000 MB debutovala v roce 1964."}, {"cat": "Televize vs. auto", "q": "Co bylo dřív?", "left": "První vysílání Večerníčku", "right": "Debut Škody 1000 MB", "correct": "right", "left_year": "1965", "right_year": "1964", "e": "Škoda 1000 MB debutovala v roce 1964. První Večerníček byl odvysílán 2. ledna 1965."}, {"cat": "Sedmdesátá léta", "q": "Co bylo dřív?", "left": "Přesun kostela Nanebevzetí Panny Marie v Mostě", "right": "Zahájení provozu pražského metra", "correct": "right", "left_year": "1975", "right_year": "1974", "e": "Pravidelný provoz pražského metra začal 9. května 1974. Přesun mosteckého kostela proběhl v roce 1975."}, {"cat": "Doprava", "q": "Co bylo dřív?", "left": "Světová premiéra Škody Favorit", "right": "Zahájení provozu pražského metra", "correct": "right", "left_year": "1987", "right_year": "1974", "e": "Pražské metro zahájilo provoz v roce 1974. Škoda Favorit měla světovou premiéru na brněnském veletrhu v roce 1987."}];
+let i=0,s=0,lock=false;
+const counter=document.getElementById('counter'),score=document.getElementById('score'),prog=document.getElementById('prog'),tag=document.getElementById('tag'),question=document.getElementById('question'),left=document.getElementById('left'),right=document.getElementById('right'),leftTitle=document.getElementById('leftTitle'),rightTitle=document.getElementById('rightTitle'),leftYear=document.getElementById('leftYear'),rightYear=document.getElementById('rightYear'),feedback=document.getElementById('feedback'),controls=document.getElementById('controls'),next=document.getElementById('next'),quiz=document.getElementById('quiz'),result=document.getElementById('result'),duel=document.getElementById('duel');
+
+function render(){
+ lock=false;const x=q[i];
+ counter.textContent=`Souboj ${i+1} z ${q.length}`;score.textContent=s;prog.style.width=`${i/q.length*100}%`;
+ tag.textContent=x.cat;question.textContent=x.q;leftTitle.textContent=x.left;rightTitle.textContent=x.right;leftYear.textContent=x.left_year;rightYear.textContent=x.right_year;
+ left.className='choice';right.className='choice';left.disabled=false;right.disabled=false;duel.classList.remove('revealed');feedback.className='feedback';feedback.innerHTML='';controls.className='controls';
+}
+function pick(side){
+ if(lock)return;lock=true;const x=q[i];left.disabled=true;right.disabled=true;duel.classList.add('revealed');
+ const chosen=side==='left'?left:right;const correct=x.correct==='left'?left:right;
+ correct.classList.add('correct');
+ if(side===x.correct){s++;score.textContent=s;feedback.innerHTML=`<strong>Správně.</strong> ${x.e}`;}
+ else{chosen.classList.add('wrong');feedback.innerHTML=`<strong>Tentokrát ne.</strong> ${x.e}`;}
+ feedback.classList.add('show');controls.classList.add('show');prog.style.width=`${(i+1)/q.length*100}%`;
+ next.textContent=i===q.length-1?'Zobrazit výsledek':'Další souboj';
+}
+left.onclick=()=>pick('left');right.onclick=()=>pick('right');
+function finish(){
+ quiz.style.display='none';result.classList.add('show');counter.textContent='Hotovo';prog.style.width='100%';document.getElementById('final').textContent=s;
+ let t,p;
+ if(s===10){t='Časovou osu máte v hlavě';p='Plný počet. Od Karla IV. až po Favorit jste se nenechali převrátit ani jednou.';}
+ else if(s>=8){t='Velmi silná historická orientace';p='Jedna nebo dvě dvojice vás zmátly, jinak jste české dějiny, techniku a kulturu seřadili velmi přesně.';}
+ else if(s>=5){t='Půlka časové osy sedí';p='U vzdálených období to šlo, ale blízké roky už dokázaly pořadí pěkně zamotat.';}
+ else{t='Roky se v hlavě přeházely';p='Tenhle formát schválně používá události, které si člověk pamatuje, ale jejich vzájemné pořadí už bývá horší.';}
+ document.getElementById('rtitle').textContent=t;document.getElementById('rtext').textContent=p;
+}
+next.onclick=()=>{if(i<q.length-1){i++;render();}else finish();};
+document.getElementById('restart').onclick=()=>{i=0;s=0;quiz.style.display='';result.classList.remove('show');render();};
+render();
+</script>
+</body>
+</html>
