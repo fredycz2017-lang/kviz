@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jak do sebe zapadá hřebenová deska a eskalátorový stupeň</title>
+<style>
+:root{
+  --ink:#152235;
+  --muted:#627084;
+  --blue:#245b9f;
+  --blue-soft:#eaf2fb;
+  --orange:#e78324;
+  --orange-soft:#fff3e6;
+  --line:#d7e0ea;
+  --soft:#f6f9fc;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  padding:18px;
+  background:#fff;
+  color:var(--ink);
+  font-family:Arial,Helvetica,sans-serif;
+}
+.wrap{max-width:700px;margin:0 auto}
+.hero{
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 8px 28px rgba(23,45,72,.08);
+}
+.head{
+  padding:19px 20px 14px;
+  background:linear-gradient(135deg,#f8fbff 0%,#fff 58%,#fff8f0 100%);
+  border-bottom:1px solid #e4eaf0;
+}
+.kicker{
+  display:inline-block;
+  margin-bottom:7px;
+  padding:5px 9px;
+  border-radius:999px;
+  background:#e9f1fb;
+  color:var(--blue);
+  font-size:11px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+h1{
+  margin:0;
+  font-size:23px;
+  line-height:1.2;
+  color:#203a5d;
+}
+.lead{
+  margin:7px 0 0;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.48;
+}
+.diagram{
+  padding:14px 14px 8px;
+  background:#fcfdff;
+}
+svg{display:block;width:100%;height:auto}
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:0 18px 18px;
+}
+.box{
+  border:1px solid #e0e6ed;
+  background:#fbfcfe;
+  border-radius:12px;
+  padding:12px 13px;
+}
+.box b{
+  display:block;
+  margin-bottom:5px;
+  color:#203a5d;
+  font-size:13px;
+}
+.box span{
+  color:#5a687a;
+  font-size:12.5px;
+  line-height:1.44;
+}
+.key{
+  margin:0 18px 18px;
+  padding:13px 14px;
+  border-left:4px solid var(--orange);
+  border-radius:10px;
+  background:var(--orange-soft);
+  color:#4e3926;
+  font-size:13px;
+  line-height:1.5;
+}
+.note{
+  margin:0 18px 18px;
+  padding:12px 14px;
+  border-left:4px solid var(--blue);
+  border-radius:10px;
+  background:#f5f8fc;
+  color:#31455e;
+  font-size:13px;
+  line-height:1.48;
+}
+.source{
+  margin:0;
+  padding:0 18px 18px;
+  color:#6d7887;
+  font-size:12px;
+  line-height:1.45;
+  font-style:italic;
+}
+@media(max-width:600px){
+  body{padding:10px}
+  .head{padding:16px 15px 12px}
+  h1{font-size:20px}
+  .diagram{padding:10px 8px 6px}
+  .grid{grid-template-columns:1fr;padding:0 13px 14px}
+  .key,.note{margin:0 13px 14px}
+  .source{padding:0 13px 14px}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section class="hero">
+    <header class="head">
+      <div class="kicker">Princip přechodu eskalátoru</div>
+      <h1>Jak do sebe zapadá hřebenová deska a pohyblivý stupeň</h1>
+      <p class="lead">Zjednodušené autorské schéma ukazuje přechodovou zónu, ve které zuby hřebenové desky zapadají do drážek pohyblivého stupně.</p>
+    </header>
+
+    <div class="diagram">
+      <svg viewBox="0 0 720 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t d">
+        <title id="t">Princip hřebenové desky eskalátoru</title>
+        <desc id="d">Pohyblivý stupeň s podélnými drážkami dojíždí k pevné hřebenové desce. Její zuby se zasunují do drážek stupně.</desc>
+        <defs>
+          <linearGradient id="stepG" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="#f8fafc"/>
+            <stop offset="1" stop-color="#eef3f8"/>
+          </linearGradient>
+          <linearGradient id="plateG" x1="0" x2="1">
+            <stop offset="0" stop-color="#fff7ed"/>
+            <stop offset="1" stop-color="#ffe8cc"/>
+          </linearGradient>
+          <marker id="arrBlue" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 Z" fill="#245b9f"/>
+          </marker>
+          <marker id="arrOrange" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+            <path d="M0,0 L9,4.5 L0,9 Z" fill="#e78324"/>
+          </marker>
+          <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#22364d" flood-opacity=".12"/>
+          </filter>
+        </defs>
+
+        <!-- label chips -->
+        <g font-family="Arial,Helvetica,sans-serif">
+          <rect x="54" y="18" width="230" height="48" rx="10" fill="#eef5fc" stroke="#cadced"/>
+          <circle cx="76" cy="42" r="11" fill="#245b9f"/>
+          <text x="76" y="46" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">1</text>
+          <text x="95" y="38" fill="#203a5d" font-size="13" font-weight="700">Pohyblivý stupeň</text>
+          <text x="95" y="54" fill="#627084" font-size="11.5">podélná žebra a drážky</text>
+
+          <rect x="438" y="18" width="230" height="48" rx="10" fill="#fff3e6" stroke="#f0cfaa"/>
+          <circle cx="460" cy="42" r="11" fill="#e78324"/>
+          <text x="460" y="46" fill="#fff" font-size="12" text-anchor="middle" font-weight="700">2</text>
+          <text x="479" y="38" fill="#67431f" font-size="13" font-weight="700">Pevná hřebenová deska</text>
+          <text x="479" y="54" fill="#7b654f" font-size="11.5">zuby zapadají do drážek</text>
+        </g>
+
+        <!-- movement arrow -->
+        <line x1="92" y1="95" x2="295" y2="95" stroke="#245b9f" stroke-width="3" marker-end="url(#arrBlue)"/>
+        <text x="192" y="86" font-family="Arial" font-size="12" fill="#245b9f" text-anchor="middle" font-weight="700">směr pohybu stupně</text>
+
+        <!-- moving step -->
+        <g filter="url(#shadow)">
+          <path d="M70 138 H407 V244 H70 Z" fill="url(#stepG)" stroke="#2d3947" stroke-width="2.4"/>
+          <path d="M70 138 H407" stroke="#172033" stroke-width="4"/>
+        </g>
+
+        <!-- grooves -->
+        <g stroke="#4675aa" stroke-width="3">
+          <line x1="102" y1="138" x2="102" y2="210"/>
+          <line x1="134" y1="138" x2="134" y2="210"/>
+          <line x1="166" y1="138" x2="166" y2="210"/>
+          <line x1="198" y1="138" x2="198" y2="210"/>
+          <line x1="230" y1="138" x2="230" y2="210"/>
+          <line x1="262" y1="138" x2="262" y2="210"/>
+          <line x1="294" y1="138" x2="294" y2="210"/>
+          <line x1="326" y1="138" x2="326" y2="210"/>
+          <line x1="358" y1="138" x2="358" y2="210"/>
+          <line x1="390" y1="138" x2="390" y2="210"/>
+        </g>
+
+        <!-- comb plate -->
+        <g filter="url(#shadow)">
+          <path d="M416 138 H661 V178 H416 Z" fill="url(#plateG)" stroke="#9f611d" stroke-width="2.2"/>
+          <line x1="416" y1="138" x2="661" y2="138" stroke="#e78324" stroke-width="4"/>
+        </g>
+
+        <!-- teeth -->
+        <g fill="none" stroke="#e78324" stroke-width="5" stroke-linecap="round">
+          <path d="M430 141 L398 192"/>
+          <path d="M462 141 L430 192"/>
+          <path d="M494 141 L462 192"/>
+          <path d="M526 141 L494 192"/>
+          <path d="M558 141 L526 192"/>
+          <path d="M590 141 L558 192"/>
+          <path d="M622 141 L590 192"/>
+          <path d="M654 141 L622 192"/>
+        </g>
+
+        <!-- transition zone -->
+        <rect x="382" y="124" width="82" height="92" rx="10" fill="#e78324" opacity=".08" stroke="#e78324" stroke-width="2" stroke-dasharray="6 5"/>
+        <line x1="423" y1="220" x2="423" y2="242" stroke="#e78324" stroke-width="2" marker-end="url(#arrOrange)"/>
+
+        <!-- clear zone label below, no overlap -->
+        <rect x="356" y="248" width="134" height="28" rx="14" fill="#fff3e6" stroke="#f0cfaa"/>
+        <text x="423" y="266" font-family="Arial" font-size="12" text-anchor="middle" fill="#8a541d" font-weight="700">zóna zasunutí</text>
+      </svg>
+    </div>
+
+    <div class="grid">
+      <div class="box">
+        <b>1. Stupeň přijíždí</b>
+        <span>Drážkovaná horní plocha stupně se pohybuje směrem k pevné podlaze a přechodové hraně.</span>
+      </div>
+      <div class="box">
+        <b>2. Zuby se zasunou</b>
+        <span>Hřebenová deska je tvarovaná tak, aby její zuby pokračovaly do mezer mezi žebry stupně.</span>
+      </div>
+      <div class="box">
+        <b>3. Vznikne plynulý přechod</b>
+        <span>Pohybující se schod mizí pod pevnou částí a nástupní hrana zůstává bezpečně překlenutá.</span>
+      </div>
+      <div class="box">
+        <b>4. Co schéma zdůrazňuje</b>
+        <span>Klíčové je, že zuby míří do drážek, nikoli na vrcholky žeber. Právě tím vzniká správné zapadnutí.</span>
+      </div>
+    </div>
+
+    <div class="key">
+      <strong>Klíčový princip:</strong> zuby hřebene se při dojezdu trefují mezi podélná žebra stupně, ne na jejich vrchol. Proto je v diagramu zvýrazněná právě přechodová zóna.
+    </div>
+
+    <div class="note">
+      <strong>Poznámka:</strong> jde o názorné autorské schéma principu, nikoli o výrobní výkres. Rozměry, počet žeber i přesná geometrie jsou záměrně zjednodušené.
+    </div>
+
+    <p class="source">Vlastní schéma principu podle dodaného náčrtu: zuby hřebenové desky se při dojezdu stupně zasouvají mezi jeho podélná žebra.</p>
+  </section>
+</main>
+</body>
+</html>
