@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Čtyři kategorie, jeden překvapivý poměr</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffffff;
+    color: #172033;
+  }
+  .wrap {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .card {
+    background: #ffffff;
+    border: 1px solid #d8e0e8;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 4px 18px rgba(20, 44, 72, .06);
+  }
+  h2 {
+    margin: 0 0 12px;
+    color: #2d5f9f;
+    font-size: 22px;
+    line-height: 1.2;
+  }
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 0 14px;
+  }
+  table {
+    width: 100%;
+    min-width: 610px;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #ccd5df;
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 15px;
+  }
+  thead th {
+    background: #1f3d63;
+    color: #fff;
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 700;
+    border-right: 1px solid rgba(255,255,255,.2);
+  }
+  thead th:last-child { border-right: 0; }
+  tbody td {
+    padding: 9px 12px;
+    border-top: 1px solid #d9dfe6;
+    border-right: 1px solid #d9dfe6;
+    vertical-align: top;
+  }
+  tbody td:last-child { border-right: 0; }
+  tbody tr:nth-child(even) td { background: #f6f8fa; }
+  .key-row td {
+    background: #eef4fb !important;
+    font-weight: 700;
+  }
+  p {
+    margin: 12px 0 0;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .callout {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-left: 4px solid #2d5f9f;
+    background: #f5f8fc;
+    border-radius: 8px;
+  }
+  @media (max-width: 480px) {
+    body { padding: 10px; }
+    .card { padding: 14px; border-radius: 10px; }
+    h2 { font-size: 20px; }
+    table { font-size: 14px; min-width: 560px; }
+    thead th, tbody td { padding: 8px; }
+    p { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h2>Čtyři kategorie, jeden překvapivý poměr</h2>
+
+      <div class="table-wrap">
+        <table aria-label="Délka a podíl kategorií silniční sítě">
+          <thead>
+            <tr>
+              <th>Kategorie</th>
+              <th>Délka</th>
+              <th>Podíl</th>
+              <th>Poměr vůči dálnicím</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Dálnice</td>
+              <td>1 551 km</td>
+              <td>2,8 %</td>
+              <td>1,0×</td>
+            </tr>
+            <tr>
+              <td>Silnice I. třídy</td>
+              <td>5 700 km</td>
+              <td>10,2 %</td>
+              <td>3,7×</td>
+            </tr>
+            <tr>
+              <td>Silnice II. třídy</td>
+              <td>14 548 km</td>
+              <td>26,0 %</td>
+              <td>9,4×</td>
+            </tr>
+            <tr class="key-row">
+              <td>Silnice III. třídy</td>
+              <td>34 222 km</td>
+              <td>61,1 %</td>
+              <td>22,1×</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Dvě nižší silniční třídy dohromady měří <strong>48 770 kilometrů</strong>.
+        To je přibližně <strong>87 procent celé sledované sítě</strong>.
+        Silnice I. třídy a dálnice, tedy komunikace, které si člověk nejčastěji představí pod pojmem
+        „hlavní tah“, tvoří podle délky dohromady jen zhruba třináct procent.
+      </p>
+
+      <div class="callout">
+        <p style="margin:0">
+          <strong>Délka sama o sobě samozřejmě neříká nic o intenzitě dopravy.</strong>
+          Jeden kilometr městské nebo příměstské dálnice může denně využít násobně více aut než desítky kilometrů malé venkovské komunikace.
+          Tento přehled proto nesrovnává význam jednotlivých kategorií, ale pouze jejich fyzický rozsah v síti.
+        </p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
