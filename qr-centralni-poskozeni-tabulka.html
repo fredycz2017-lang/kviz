@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QR kód – odolnost proti centrálnímu poškození</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:18px;font-family:Arial,Helvetica,sans-serif;background:#fff;color:#172033}
+.wrap{max-width:700px;margin:0 auto}
+.card{border:1px solid #d8e0e8;border-radius:14px;padding:18px;background:#fff;box-shadow:0 4px 18px rgba(20,44,72,.06)}
+h2{margin:0 0 12px;color:#2d5f9f;font-size:22px;line-height:1.25}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:14px}
+table{width:100%;min-width:620px;border-collapse:separate;border-spacing:0;border:1px solid #ccd5df;border-radius:10px;overflow:hidden;font-size:15px}
+thead th{background:#1f3d63;color:#fff;text-align:left;padding:10px 12px;font-weight:700;border-right:1px solid rgba(255,255,255,.18)}
+thead th:last-child{border-right:0}
+tbody td{padding:9px 12px;border-top:1px solid #d9dfe6;border-right:1px solid #d9dfe6;vertical-align:top}
+tbody td:last-child{border-right:0}
+tbody tr:nth-child(even) td{background:#f7f9fb}
+tbody tr.break-l td{background:#fff7ed}
+tbody tr.break-h td{background:#fef2f2}
+p{margin:12px 0 0;font-size:15px;line-height:1.52}
+.callout{margin-top:14px;padding:13px 14px;border-left:4px solid #2d5f9f;background:#f5f8fc;border-radius:8px}
+.callout strong{color:#204f88}
+@media(max-width:480px){
+ body{padding:10px}.card{padding:14px;border-radius:10px}h2{font-size:20px}
+ table{font-size:14px;min-width:570px}thead th,tbody td{padding:8px}p{font-size:14px}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+<section class="card">
+  <h2>Nejslabší L skončilo při 7,3 % plochy. H přežilo ještě 14,3 %</h2>
+  <div class="table-wrap">
+    <table aria-label="Odolnost QR kódu proti centrálnímu zakrytí">
+      <thead>
+        <tr>
+          <th>Bílý blok</th>
+          <th>Plocha symbolu</th>
+          <th>L</th>
+          <th>M</th>
+          <th>Q</th>
+          <th>H</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>4 × 4</td><td>1,2 %</td><td>ANO</td><td>ANO</td><td>ANO</td><td>ANO</td></tr>
+        <tr><td>6 × 6</td><td>2,6 %</td><td>ANO</td><td>ANO</td><td>ANO</td><td>ANO</td></tr>
+        <tr><td>8 × 8</td><td>4,7 %</td><td>ANO</td><td>ANO</td><td>ANO</td><td>ANO</td></tr>
+        <tr class="break-l"><td>10 × 10</td><td>7,3 %</td><td>NE</td><td>ANO</td><td>ANO</td><td>ANO</td></tr>
+        <tr><td>12 × 12</td><td>10,5 %</td><td>NE</td><td>NE</td><td>ANO</td><td>ANO</td></tr>
+        <tr><td>14 × 14</td><td>14,3 %</td><td>NE</td><td>NE</td><td>NE</td><td>ANO</td></tr>
+        <tr class="break-h"><td>16 × 16</td><td>18,7 %</td><td>NE</td><td>NE</td><td>NE</td><td>NE</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Výsledky byly až podezřele učebnicové. Level L přežil centrální čtverec 8 × 8 modulů,
+    ale na 10 × 10 už skončil. M přežil 10 × 10, Q dvanáct a H čtrnáct.
+  </p>
+  <p>
+    Čtverec 14 × 14 modulů představoval přibližně <strong>14,3 procenta geometrické plochy</strong>
+    samotného symbolu. Varianta H ho ještě přečetla. Při 16 × 16 modulech, tedy zhruba
+    18,7 procenta plochy, selhala už i ona.
+  </p>
+  <div class="callout">
+    <strong>To není rozpor s oficiálními hodnotami DENSO.</strong>
+    Jejich 7, 15, 25 a 30 procent popisuje schopnost obnovovat chybné kódové jednotky
+    v rámci korekčního systému, nikoli záruku pro libovolný souvislý bílý čtverec o stejné geometrické ploše.
+    Rozložení dat, struktura symbolu a místo poškození hrají velkou roli.
+  </div>
+</section>
+</main>
+</body>
+</html>
