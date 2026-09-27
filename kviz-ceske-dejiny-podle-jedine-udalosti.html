@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Poznáte české dějiny podle jediné události?</title>
+<style>
+:root{
+ --bg:#f2f2f0;--card:#fff;--navy:#21324a;--text:#202328;--muted:#6f757d;
+ --accent:#9a5a0a;--accentsoft:#f5eee4;--good:#16783a;--goodbg:#ecf8ef;
+ --bad:#b42318;--badbg:#fff0ee;--line:#d9dde3;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--text)}
+body{padding:32px 14px}
+.shell{max-width:700px;margin:auto;background:var(--card);border:1px solid #d6dbe1;border-radius:24px;overflow:hidden;box-shadow:0 10px 30px rgba(32,48,70,.05)}
+.head{padding:29px 29px 21px}
+.kicker{font-size:13px;font-weight:900;letter-spacing:.09em;color:var(--accent);text-transform:uppercase;margin-bottom:9px}
+h1{font-size:32px;line-height:1.06;color:var(--navy);margin:0 0 14px;font-weight:900}
+.lead{font-size:16px;line-height:1.52;color:var(--muted);margin:0 0 24px}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:15px;font-weight:800}
+.score{padding:9px 14px;border:1px solid #dcdfe4;background:#f7f6f3;border-radius:999px;white-space:nowrap}
+.bar{height:9px;background:#ebe9e6}.prog{height:100%;width:0;background:#b06b13;transition:.25s}
+.timeline{display:flex;gap:4px;padding:14px 28px 0}
+.tick{flex:1;height:5px;background:#e6e7e8;border-radius:99px}
+.tick.done{background:#9a5a0a}
+.main{padding:25px 29px 29px}
+.era{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.tag{display:inline-block;padding:7px 10px;border-radius:999px;background:var(--accentsoft);color:#87520e;font-size:12px;font-weight:900;letter-spacing:.065em;text-transform:uppercase}
+.reveal-year{font-size:12px;font-weight:900;color:#fff;background:var(--navy);padding:7px 10px;border-radius:999px;opacity:0;transition:.2s}
+.reveal-year.show{opacity:1}
+.question{font-size:23px;line-height:1.32;font-weight:900;margin:0 0 22px}
+.answers{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.answer{width:100%;text-align:center;border:2px solid #dce1e6;background:#fff;border-radius:14px;padding:17px 14px;font-size:19px;line-height:1.2;font-weight:900;cursor:pointer;transition:.15s}
+.answer:hover:not(:disabled){border-color:#aeb7c2;background:#fbfbfc}
+.answer:disabled{cursor:default}
+.answer.correct{border-color:var(--good);background:var(--goodbg);color:#0e5c2a}
+.answer.wrong{border-color:var(--bad);background:var(--badbg);color:#8e1d15}
+.feedback{display:none;margin-top:18px;padding:16px 17px;border-radius:13px;background:#f7f7f7;border:1px solid #e0e2e6;font-size:15px;line-height:1.52;color:#3f444c}
+.feedback.show{display:block}
+.controls{display:none;justify-content:flex-end;margin-top:18px}.controls.show{display:flex}
+.next,.restart{border:0;border-radius:12px;background:var(--navy);color:#fff;padding:13px 20px;font-size:15px;font-weight:900;cursor:pointer}
+.result{display:none;text-align:center}.result.show{display:block}
+.badge{display:inline-block;margin-bottom:15px;padding:8px 12px;border-radius:999px;background:var(--accentsoft);color:#87520e;font-size:12px;font-weight:900;text-transform:uppercase}
+.rscore{font-size:56px;font-weight:900;color:var(--navy);margin:3px 0 10px}
+.rtitle{font-size:25px;font-weight:900;margin:0 0 10px}
+.rtext{font-size:16px;line-height:1.52;color:#5f6670;max-width:550px;margin:0 auto 22px}
+.footer{padding:0 28px 24px;text-align:center;color:#8a8f97;font-size:12px;line-height:1.45}
+@media(max-width:520px){
+ body{padding:12px 8px}.shell{border-radius:18px}.head{padding:22px 20px 16px}
+ h1{font-size:27px}.lead{font-size:15px}.timeline{padding:11px 18px 0;gap:3px}
+ .main{padding:22px 20px}.question{font-size:21px}.answers{grid-template-columns:1fr 1fr}
+ .answer{padding:14px 10px;font-size:18px}.footer{padding:0 20px 20px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<section class="head">
+ <div class="kicker">28. ZÁŘÍ • ČESKÉ DĚJINY • 15 MILNÍKŮ</div>
+ <h1>Jedna událost. Dokážete trefit její rok?</h1>
+ <p class="lead">Od Zlaté buly sicilské přes Bílou horu a vznik Československa až po rok 1993. Patnáct událostí tvoří jednu velkou českou časovou osu.</p>
+ <div class="meta"><span id="counter">Milník 1 z 15</span><span class="score">Skóre <span id="score">0</span></span></div>
+</section>
+<div class="bar"><div class="prog" id="prog"></div></div>
+<div class="timeline" id="timeline"></div>
+<main class="main">
+<section id="quiz">
+ <div class="era"><div class="tag" id="tag"></div><div class="reveal-year" id="revealYear"></div></div>
+ <h2 class="question" id="question"></h2>
+ <div class="answers" id="answers"></div>
+ <div class="feedback" id="feedback"></div>
+ <div class="controls" id="controls"><button class="next" id="next">Další milník</button></div>
+</section>
+<section class="result" id="result">
+ <div class="badge">Česká časová osa</div>
+ <div class="rscore"><span id="final">0</span>/15</div>
+ <h2 class="rtitle" id="rtitle"></h2>
+ <p class="rtext" id="rtext"></p>
+ <button class="restart" id="restart">Projít časovou osu znovu</button>
+</section>
+</main>
+<div class="footer">Každé kolo obsahuje jednu konkrétní historickou událost a čtyři možné roky.</div>
+</div>
+<script>
+const q=[{"era": "PŘEMYSLOVCI", "year": "1212", "q": "Přemysl Otakar I. získal Zlatou bulu sicilskou, která výrazně posílila postavení českého státu. Do kterého roku tato událost patří?", "a": ["1198", "1212", "1230", "1253"], "c": 1, "e": "Zlatá bula sicilská byla vydána roku 1212 a upevnila dědičný královský titul českých panovníků i postavení českého státu v říši."}, {"era": "LUCEMBURKOVÉ", "year": "1348", "q": "Karel IV. založil v Praze univerzitu, dnešní Univerzitu Karlovu. Který rok hledáme?", "a": ["1310", "1348", "1357", "1378"], "c": 1, "e": "Univerzita Karlova byla založena 7. dubna 1348. Patří k nejstarším univerzitám ve střední Evropě."}, {"era": "HUSITSTVÍ", "year": "1415", "q": "Mistr Jan Hus byl v Kostnici upálen jako kacíř. Který rok tato událost patří na časovou osu?", "a": ["1402", "1415", "1419", "1434"], "c": 1, "e": "Jan Hus byl upálen v Kostnici 6. července 1415."}, {"era": "HABSBURKOVÉ", "year": "1526", "q": "Po smrti Ludvíka Jagellonského v bitvě u Moháče byl českým králem zvolen Ferdinand I. Habsburský. Ve kterém roce?", "a": ["1490", "1526", "1547", "1564"], "c": 1, "e": "Po bitvě u Moháče roku 1526 nastoupil na český trůn Ferdinand I. a začala dlouhá éra habsburské vlády."}, {"era": "STAVOVSKÉ POVSTÁNÍ", "year": "1618", "q": "Z oken Pražského hradu byli vyhozeni královští místodržící. Třetí pražská defenestrace zahájila stavovské povstání. Který rok?", "a": ["1609", "1618", "1620", "1648"], "c": 1, "e": "Třetí pražská defenestrace proběhla 23. května 1618 a stala se bezprostředním impulzem českého stavovského povstání."}, {"era": "BÍLÁ HORA", "year": "1620", "q": "Stavovské vojsko utrpělo porážku v bitvě na Bílé hoře. Který rok je správný?", "a": ["1618", "1620", "1621", "1648"], "c": 1, "e": "Bitva na Bílé hoře se odehrála 8. listopadu 1620 a skončila porážkou českých stavů."}, {"era": "JOSEF II.", "year": "1781", "q": "Josef II. vydal patent, kterým bylo zrušeno nevolnictví. Do kterého roku ho zařadíte?", "a": ["1740", "1765", "1781", "1790"], "c": 2, "e": "Patent o zrušení nevolnictví vydal Josef II. roku 1781. Poddanství jako celek ale zaniklo až v revolučním roce 1848."}, {"era": "NÁRODNÍ OBROZENÍ", "year": "1868", "q": "Na dnešním místě Národního divadla byly slavnostně položeny základní kameny. Který rok hledáme?", "a": ["1848", "1862", "1868", "1881"], "c": 2, "e": "Slavnostní položení základních kamenů Národního divadla proběhlo 16. května 1868 a mělo charakter velké národní manifestace."}, {"era": "ČESKOSLOVENSKO", "year": "1918", "q": "V Praze byl vyhlášen samostatný československý stát. Do kterého roku tato událost patří?", "a": ["1914", "1918", "1920", "1928"], "c": 1, "e": "Samostatné Československo bylo vyhlášeno 28. října 1918."}, {"era": "MNICHOV", "year": "1938", "q": "Německo, Itálie, Francie a Velká Británie podepsaly Mnichovskou dohodu o odstoupení československého pohraničí. Který rok?", "a": ["1935", "1938", "1939", "1940"], "c": 1, "e": "Mnichovská dohoda byla podepsána v noci z 29. na 30. září 1938."}, {"era": "PROTEKTORÁT", "year": "1942", "q": "Českoslovenští parašutisté provedli v Praze útok na Reinharda Heydricha v rámci operace Anthropoid. Který rok?", "a": ["1939", "1941", "1942", "1945"], "c": 2, "e": "Útok na Reinharda Heydricha proběhl 27. května 1942."}, {"era": "ÚNOROVÝ PŘEVRAT", "year": "1948", "q": "Komunistická strana po únorové vládní krizi převzala rozhodující moc v Československu. Který rok?", "a": ["1945", "1946", "1948", "1950"], "c": 2, "e": "Politický převrat v Československu proběhl v únoru 1948."}, {"era": "PRAŽSKÉ JARO", "year": "1968", "q": "Vojska pěti států Varšavské smlouvy vtrhla do Československa a ukončila hlavní fázi Pražského jara. Který rok?", "a": ["1956", "1968", "1969", "1977"], "c": 1, "e": "Invaze začala v noci z 20. na 21. srpna 1968."}, {"era": "SAMETOVÁ REVOLUCE", "year": "1989", "q": "Policejní zásah proti studentské demonstraci na Národní třídě odstartoval události sametové revoluce. Který rok?", "a": ["1969", "1977", "1989", "1990"], "c": 2, "e": "Demonstrace na Národní třídě proběhla 17. listopadu 1989 a stala se klíčovým impulzem sametové revoluce."}, {"era": "ČESKÁ REPUBLIKA", "year": "1993", "q": "Česká republika vznikla jako samostatný stát po zániku československé federace. Který rok uzavírá naši časovou osu?", "a": ["1989", "1990", "1992", "1993"], "c": 3, "e": "Samostatná Česká republika vznikla 1. ledna 1993."}];
+let i=0,s=0,lock=false;
+const counter=document.getElementById('counter'),score=document.getElementById('score'),prog=document.getElementById('prog'),
+tag=document.getElementById('tag'),revealYear=document.getElementById('revealYear'),question=document.getElementById('question'),
+answers=document.getElementById('answers'),feedback=document.getElementById('feedback'),controls=document.getElementById('controls'),
+next=document.getElementById('next'),quiz=document.getElementById('quiz'),result=document.getElementById('result'),timeline=document.getElementById('timeline');
+
+for(let n=0;n<q.length;n++){let t=document.createElement('div');t.className='tick';timeline.appendChild(t);}
+const ticks=[...document.querySelectorAll('.tick')];
+
+function render(){
+ lock=false;const x=q[i];
+ counter.textContent=`Milník ${i+1} z ${q.length}`;score.textContent=s;prog.style.width=`${i/q.length*100}%`;
+ tag.textContent=x.era;revealYear.textContent=x.year;revealYear.className='reveal-year';
+ question.textContent=x.q;answers.innerHTML='';feedback.className='feedback';feedback.innerHTML='';controls.className='controls';
+ ticks.forEach((t,n)=>t.classList.toggle('done',n<i));
+ x.a.forEach((txt,n)=>{const b=document.createElement('button');b.className='answer';b.textContent=txt;b.onclick=()=>pick(n);answers.appendChild(b);});
+}
+function pick(n){
+ if(lock)return;lock=true;const x=q[i],bs=[...answers.querySelectorAll('.answer')];
+ bs.forEach((b,k)=>{b.disabled=true;if(k===x.c)b.classList.add('correct')});
+ if(n===x.c){s++;score.textContent=s;feedback.innerHTML=`<strong>Správně.</strong> ${x.e}`;}
+ else{bs[n].classList.add('wrong');feedback.innerHTML=`<strong>Tentokrát ne.</strong> ${x.e}`;}
+ revealYear.classList.add('show');feedback.classList.add('show');controls.classList.add('show');ticks[i].classList.add('done');
+ prog.style.width=`${(i+1)/q.length*100}%`;next.textContent=i===q.length-1?'Zobrazit výsledek':'Další milník';
+}
+function finish(){
+ quiz.style.display='none';result.classList.add('show');counter.textContent='Časová osa dokončena';prog.style.width='100%';ticks.forEach(t=>t.classList.add('done'));document.getElementById('final').textContent=s;
+ let t,p;
+ if(s===15){t='České dějiny máte srovnané do roku';p='Plný počet od roku 1212 až do vzniku České republiky. Tady už nejde jen o obecný přehled, ale o opravdu přesnou časovou osu.';}
+ else if(s>=12){t='Výborná historická orientace';p='Většina milníků sedla přesně. Jen několik blízkých letopočtů vás dokázalo rozhodit.';}
+ else if(s>=8){t='Časová osa drží';p='Hlavní události znáte, ale přesné roky u některých období už chtěly víc než jen obecnou historickou paměť.';}
+ else if(s>=4){t='Události znáte, roky už méně';p='Příběh českých dějin v hlavě je, jen některé milníky se na časové ose posunuly.';}
+ else{t='Dějiny se tentokrát promíchaly';p='Od středověku do roku 1993 je to dlouhá cesta. Po vysvětleních už máte patnáct pevných bodů, o které se dá opřít.';}
+ document.getElementById('rtitle').textContent=t;document.getElementById('rtext').textContent=p;
+}
+next.onclick=()=>{if(i<q.length-1){i++;render()}else finish()};
+document.getElementById('restart').onclick=()=>{i=0;s=0;quiz.style.display='';result.classList.remove('show');render()};
+render();
+</script>
+</body>
+</html>
