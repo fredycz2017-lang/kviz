@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Typ E, Typ F / Schuko a CEE 7/7 zástrčka</title>
+<style>
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffffff;
+    color: #172033;
+  }
+
+  .wrap {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: #ffffff;
+    border: 1px solid #d8e0e8;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 4px 18px rgba(20, 44, 72, 0.06);
+  }
+
+  h2 {
+    margin: 0 0 12px;
+    color: #2d5f9f;
+    font-size: 22px;
+    line-height: 1.25;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    width: 100%;
+    min-width: 650px;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #ccd5df;
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 15px;
+  }
+
+  thead th {
+    background: #1f3d63;
+    color: #ffffff;
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 700;
+    border-right: 1px solid rgba(255,255,255,0.18);
+  }
+
+  thead th:last-child {
+    border-right: 0;
+  }
+
+  tbody td {
+    padding: 10px 12px;
+    border-top: 1px solid #d9dfe6;
+    border-right: 1px solid #d9dfe6;
+    vertical-align: top;
+    line-height: 1.35;
+  }
+
+  tbody td:last-child {
+    border-right: 0;
+  }
+
+  tbody tr:nth-child(even) td {
+    background: #f7f9fb;
+  }
+
+  tbody td:first-child {
+    font-weight: 700;
+    width: 25%;
+    background: #fbfcfd;
+  }
+
+  @media (max-width: 480px) {
+    body {
+      padding: 10px;
+    }
+
+    .card {
+      padding: 14px;
+      border-radius: 10px;
+    }
+
+    h2 {
+      font-size: 20px;
+    }
+
+    table {
+      font-size: 14px;
+      min-width: 600px;
+    }
+
+    thead th,
+    tbody td {
+      padding: 8px;
+    }
+  }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h2>Srovnání zásuvek a zástrček</h2>
+
+      <div class="table-wrap">
+        <table aria-label="Srovnání Typu E, Typu F Schuko a CEE 7/7 zástrčky">
+          <thead>
+            <tr>
+              <th>Vlastnost</th>
+              <th>Typ E</th>
+              <th>Typ F / Schuko</th>
+              <th>CEE 7/7 zástrčka</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Ochranný kontakt</td>
+              <td>Kolík v zásuvce</td>
+              <td>Boční kontakty v zásuvce</td>
+              <td>Otvor + boční kontakty</td>
+            </tr>
+            <tr>
+              <td>Typické použití</td>
+              <td>Česko, Francie, Belgie, Polsko, Slovensko</td>
+              <td>Německo, Rakousko, Nizozemsko a další</td>
+              <td>Moderní spotřebiče pro oba systémy</td>
+            </tr>
+            <tr>
+              <td>Orientace uzemněné zástrčky</td>
+              <td>Daná kolíkem</td>
+              <td>Lze otočit</td>
+              <td>V E daná, ve F otočitelná</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
