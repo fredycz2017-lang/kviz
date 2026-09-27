@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kvíz: Poznáte letiště podle IATA kódu?</title>
+<style>
+:root{--bg:#101114;--card:#191b20;--soft:#252832;--text:#f6f6f6;--muted:#bfc4cf;--accent:#f0a11a;--ok:#36b978;--bad:#e95f62}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#0d0f12,#15171c);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.wrap{max-width:900px;margin:auto;padding:24px 16px 48px}.hero{border:1px solid #30343d;background:linear-gradient(135deg,#1c1e24,#111216);border-radius:24px;padding:28px}
+.badge{display:inline-block;background:rgba(240,161,26,.14);color:#ffc45e;padding:6px 10px;border-radius:999px;font-weight:800;font-size:13px}h1{font-size:clamp(29px,5vw,48px);line-height:1.06;margin:14px 0 10px}
+.lead{color:var(--muted);font-size:17px;line-height:1.6;margin:0}.question{position:relative;margin-top:18px;border:1px solid #30343d;background:var(--card);border-radius:20px;padding:22px}
+.code{display:inline-grid;place-items:center;min-width:72px;height:44px;padding:0 12px;border-radius:12px;background:#0f1115;border:1px solid #454a55;color:#ffd184;font-size:22px;font-weight:900;letter-spacing:.08em;margin-bottom:12px}
+.question h2{font-size:20px;line-height:1.35;margin:0 0 16px}.options{display:grid;gap:10px}.option{display:flex;gap:12px;padding:13px 14px;border:1px solid #3a3e48;border-radius:14px;background:#13151a;cursor:pointer;transition:.15s}
+.option:hover{border-color:#707784;transform:translateY(-1px)}.option input{margin-top:3px;accent-color:var(--accent)}.option.correct{border-color:var(--ok);background:rgba(54,185,120,.12)}.option.wrong{border-color:var(--bad);background:rgba(233,95,98,.12)}
+.explanation{display:none;margin-top:14px;padding:12px 14px;border-left:3px solid var(--accent);background:#111317;border-radius:12px;color:#d7dae2;line-height:1.55}.actions{position:sticky;bottom:12px;margin-top:22px;padding:14px;border-radius:18px;background:rgba(16,17,20,.92);backdrop-filter:blur(10px);border:1px solid #30343d;display:flex;gap:12px;flex-wrap:wrap}
+button{border:0;border-radius:12px;padding:13px 18px;font-weight:900;cursor:pointer;font-size:15px}#check{background:var(--accent);color:#17120a}#reset{background:#2b2e36;color:white}#result{display:none;margin-top:18px;border:1px solid #3b3f49;background:#1b1d23;border-radius:18px;padding:22px;font-size:18px;line-height:1.6}#result strong{color:#ffd184;font-size:25px}
+.sources{margin-top:28px;padding:20px;background:#14161b;border-radius:18px;border:1px solid #30343d;color:#bfc4cf}.sources a{color:#ffd184}.note{font-size:13px;color:#979eaa}@media(max-width:620px){.hero,.question{padding:18px;border-radius:16px}.actions{position:static}}
+</style></head><body><main class="wrap"><header class="hero"><span class="badge">KVÍZ • LETECTVÍ / CESTOVÁNÍ</span><h1>PRG, LHR, CDG, DXB: Poznáte letiště podle IATA kódu?</h1><p class="lead">Deset třípísmenných kódů, deset světových letišť. U každé otázky jsou čtyři možnosti a právě jedna správná.</p></header>
+<section class="question" data-answer="0">
+      <div class="code">PRG</div>
+      <h2>1. Kterému letišti patří kód PRG?</h2>
+      <div class="options"><label class="option"><input type="radio" name="q1" value="0"><span>Letiště Václava Havla Praha</span></label><label class="option"><input type="radio" name="q1" value="1"><span>Letiště Porto</span></label><label class="option"><input type="radio" name="q1" value="2"><span>Letiště Riga</span></label><label class="option"><input type="radio" name="q1" value="3"><span>Letiště Palma de Mallorca</span></label></div>
+      <div class="explanation">PRG je třípísmenný IATA kód pro Prahu / Letiště Václava Havla Praha.</div>
+    </section><section class="question" data-answer="1">
+      <div class="code">LHR</div>
+      <h2>2. Kterému letišti patří kód LHR?</h2>
+      <div class="options"><label class="option"><input type="radio" name="q2" value="0"><span>London Gatwick</span></label><label class="option"><input type="radio" name="q2" value="1"><span>London Heathrow</span></label><label class="option"><input type="radio" name="q2" value="2"><span>London Luton</span></label><label class="option"><input type="radio" name="q2" value="3"><span>London Stansted</span></label></div>
+      <div class="explanation">LHR označuje londýnské letiště Heathrow.</div>
+    </section><section class="question" data-answer="2">
+      <div class="code">CDG</div>
+      <h2>3. Kterému letišti patří kód CDG?</h2>
+      <div class="options"><label class="option"><input type="radio" name="q3" value="0"><span>Paris Orly</span></label><label class="option"><input type="radio" name="q3" value="1"><span>Paris Beauvais</span></label><label class="option"><input type="radio" name="q3" value="2"><span>Paris Charles de Gaulle</span></label><label class="option"><input type="radio" name="q3" value="3"><span>Lyon Saint-Exupéry</span></label></div>
+      <div class="explanation">CDG je IATA kód letiště Paris Charles de Gaulle.</div>
+    </section><section class="question" data-answer="1">
+      <div class="code">DXB</div>
+      <h2>4. Kterému letišti patří kód DXB?</h2>
+      <div class="options"><label class="option"><input type="radio" name="q4" value="0"><span>Doha Hamad</span></label><label class="option"><input type="radio" name="q4" value="1"><span>Dubai International</span></label><label class="option"><input type="radio" name="q4" value="2"><span>Abu Dhabi Zayed International</span></label><label class="option"><input type="radio" name="q4" value="3"><span>Dubai World Central</span></label></div>
+      <div class="explanation">DXB patří Dubai International. Druhé velké dubajské letiště Dubai World Central používá kód DWC.</div>
+    </section><section class="question" data-answer="2">
+      <div class="code">JFK</div>
+      <h2>5. Kterému letišti patří kód JFK?</h2>
+      <div class="options"><label class="option"><input type="radio" name="q5" value="0"><span>New York LaGuardia</span></label><label class="option"><input type="radio" name="q5" value="1"><span>Newark Liberty</span></label><label class="option"><input type="radio" name="q5" value="2"><span>John F. Kennedy International</span></label><label class="option"><input type="radio" name="q5" value="3"><span>Washington Dulles</span></label></div>
+      <div class="explanation">JFK je kód newyorského letiště John F. Kennedy International.</div>
+    </section><section class="question" data-answer="1">
+      <div class="code">LAX</div>
+      <h2>6. Kterému letišti patří kód LAX?</h2>
+      <div class="options"><label class="option"><input type="radio" name="q6" value="0"><span>Las Vegas Harry Reid</span></label><label class="option"><input type="radio" name="q6" value="1"><span>Los Angeles International</span></label><label class="option"><input type="radio" name="q6" value="2"><span>San Francisco International</span></label><label class="option"><input type="radio" name="q6" value="3"><span>San Diego International</span></label></div>
+      <div class="explanation">LAX označuje Los Angeles International Airport.</div>
+    </section><section class="question" data-answer="0">
+      <div class="code">FRA</div>
+      <h2>7. Kterému letišti patří kód FRA?</h2>
+      <div class="options"><label class="option"><input type="radio" name="q7" value="0"><span>Frankfurt Airport</span></label><label class="option"><input type="radio" name="q7" value="1"><span>Friedrichshafen Airport</span></label><label class="option"><input type="radio" name="q7" value="2"><span>Hamburg Airport</span></label><label class="option"><input type="radio" name="q7" value="3"><span>Munich Airport</span></label></div>
+      <div class="explanation">FRA je IATA kód letiště Frankfurt.</div>
+    </section><section class="question" data-answer="1">
+      <div class="code">AMS</div>
+      <h2>8. Kterému letišti patří kód AMS?</h2>
+      <div class="options"><label class="option"><input type="radio" name="q8" value="0"><span>Brussels Airport</span></label><label class="option"><input type="radio" name="q8" value="1"><span>Amsterdam Schiphol</span></label><label class="option"><input type="radio" name="q8" value="2"><span>Rotterdam The Hague</span></label><label class="option"><input type="radio" name="q8" value="3"><span>Eindhoven Airport</span></label></div>
+      <div class="explanation">AMS označuje Amsterdam Airport Schiphol.</div>
+    </section><section class="question" data-answer="0">
+      <div class="code">SIN</div>
+      <h2>9. Kterému letišti patří kód SIN?</h2>
+      <div class="options"><label class="option"><input type="radio" name="q9" value="0"><span>Singapore Changi</span></label><label class="option"><input type="radio" name="q9" value="1"><span>Seoul Incheon</span></label><label class="option"><input type="radio" name="q9" value="2"><span>Shanghai Pudong</span></label><label class="option"><input type="radio" name="q9" value="3"><span>Taipei Taoyuan</span></label></div>
+      <div class="explanation">SIN je IATA kód singapurského letiště Changi.</div>
+    </section><section class="question" data-answer="2">
+      <div class="code">HND</div>
+      <h2>10. Kterému letišti patří kód HND?</h2>
+      <div class="options"><label class="option"><input type="radio" name="q10" value="0"><span>Tokyo Narita</span></label><label class="option"><input type="radio" name="q10" value="1"><span>Osaka Kansai</span></label><label class="option"><input type="radio" name="q10" value="2"><span>Tokyo Haneda</span></label><label class="option"><input type="radio" name="q10" value="3"><span>Nagoya Chubu</span></label></div>
+      <div class="explanation">HND označuje Tokyo International Airport, běžně známé jako Haneda.</div>
+    </section>
+<div class="actions"><button id="check">Vyhodnotit kvíz</button><button id="reset">Zkusit znovu</button></div><div id="result" aria-live="polite"></div>
+<div class="sources"><strong>Zdroj odpovědí:</strong> oficiální vyhledávač kódů IATA. <a href="https://www.iata.org/en/publications/directories/code-search/" target="_blank" rel="noopener">Otevřít IATA Code Search</a><p class="note">IATA uvádí, že její vyhledávač je oficiálním zdrojem přidělených kódů letišť a leteckých společností.</p></div>
+</main><script>
+const qs=[...document.querySelectorAll('.question')],res=document.getElementById('result');
+document.getElementById('check').onclick=()=>{let score=0,answered=0;qs.forEach(q=>{const a=+q.dataset.answer,p=q.querySelector('input:checked'),ls=[...q.querySelectorAll('.option')];ls.forEach(x=>x.classList.remove('correct','wrong'));ls[a].classList.add('correct');if(p){answered++;const v=+p.value;if(v===a)score++;else ls[v].classList.add('wrong')}q.querySelector('.explanation').style.display='block'});let msg=score<=3?'Kódy letišť jsou zkratková džungle. Aspoň teď máte všech deset vysvětlených.':score<=6?'Solidní cestovatelský přehled. Některé zkratky ale ještě dokázaly nachytat.':score<=8?'Velmi dobré. V letištních kódech se orientujete nadprůměrně.':'Výborně. Letištní tabule by vás jen tak nerozhodila.';res.innerHTML=`<strong>${score}/10</strong><br>${msg}${answered<10?`<br><small>Vyplněno: ${answered} z 10.</small>`:''}`;res.style.display='block';res.scrollIntoView({behavior:'smooth',block:'center'})};
+document.getElementById('reset').onclick=()=>{document.querySelectorAll('input[type=radio]').forEach(i=>i.checked=false);document.querySelectorAll('.option').forEach(x=>x.classList.remove('correct','wrong'));document.querySelectorAll('.explanation').forEach(x=>x.style.display='none');res.style.display='none';window.scrollTo({top:0,behavior:'smooth'})};
+</script></body></html>
