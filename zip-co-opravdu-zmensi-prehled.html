@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Co ZIP opravdu zmenší</title>
+<style>
+:root{
+  --ink:#172033; --muted:#627084; --line:#d8e0e8; --bg:#ffffff; --soft:#f6f9fc;
+  --blue:#2d5f9f; --blue-soft:#eaf2fb; --green:#2f8f5b; --green-soft:#e9f7ef;
+  --orange:#d97a1e; --orange-soft:#fff4e8; --red:#c94a4a; --red-soft:#fdeeee;
+}
+*{box-sizing:border-box}
+body{margin:0;padding:18px;background:#fff;color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+.wrap{max-width:700px;margin:0 auto}
+.card{background:var(--bg);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 8px 28px rgba(23,45,72,.08)}
+.head{padding:18px 20px 16px;background:linear-gradient(135deg,#f8fbff 0%, #ffffff 58%, #f8fbff 100%);border-bottom:1px solid #e4eaf0}
+.kicker{display:inline-block;margin-bottom:8px;padding:5px 9px;border-radius:999px;background:var(--blue-soft);color:var(--blue);font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+h1{margin:0;font-size:24px;line-height:1.18;color:#203a5d}
+.lead{margin:8px 0 0;font-size:14px;line-height:1.5;color:var(--muted)}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:16px 18px 8px}
+.stat{border:1px solid #e0e6ed;border-radius:14px;padding:14px 14px 12px;background:#fbfcfe}
+.stat .label{font-size:12px;color:var(--muted);margin-bottom:6px;display:block}
+.stat .value{display:block;font-size:24px;font-weight:800;line-height:1.05;color:#203a5d}
+.stat .sub{display:block;margin-top:6px;font-size:12px;color:var(--muted);line-height:1.35}
+.rows{padding:8px 18px 12px}
+.row{border:1px solid #e0e6ed;border-radius:15px;background:#fff;padding:14px;margin-bottom:12px}
+.row:last-child{margin-bottom:0}
+.topline{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:10px}
+.name{font-size:18px;font-weight:700;color:#203a5d}
+.desc{margin-top:3px;font-size:13px;color:var(--muted);line-height:1.35}
+.pill{flex:0 0 auto;padding:7px 10px;border-radius:999px;font-size:13px;font-weight:700;white-space:nowrap}
+.pill.good{background:var(--green-soft);color:var(--green)}
+.pill.mid{background:var(--orange-soft);color:var(--orange)}
+.pill.bad{background:var(--red-soft);color:var(--red)}
+.barbox{width:100%;height:18px;background:#eef3f8;border-radius:999px;overflow:hidden;position:relative}
+.fill{height:100%;border-radius:999px}
+.fill.text{width:99.81%;background:linear-gradient(90deg,#2d5f9f,#4b86d0)}
+.fill.jpeg{width:0.74%;min-width:8px;background:linear-gradient(90deg,#d97a1e,#f0a34f)}
+.fill.video{width:0;background:linear-gradient(90deg,#c94a4a,#df6b6b)}
+.marker{margin-top:8px;font-size:12px;color:var(--muted);line-height:1.35}
+.table-wrap{padding:0 18px 16px;overflow-x:auto}
+table{width:100%;min-width:560px;border-collapse:separate;border-spacing:0;border:1px solid #d8e0e8;border-radius:14px;overflow:hidden;font-size:14px}
+thead th{background:#1f3d63;color:#fff;text-align:left;padding:10px 12px;font-weight:700;border-right:1px solid rgba(255,255,255,.15)}
+thead th:last-child{border-right:0}
+tbody td{padding:10px 12px;border-top:1px solid #e1e7ee;border-right:1px solid #e1e7ee;vertical-align:top}
+tbody td:last-child{border-right:0}
+tbody tr:nth-child(even) td{background:#fafbfd}
+tbody tr.highlight td{background:#edf4fc}
+.note{margin:0 18px 12px;padding:13px 14px;border-left:4px solid var(--blue);border-radius:10px;background:#f5f8fc;font-size:13px;line-height:1.5;color:#33475f}
+.source{margin:0;padding:0 18px 18px;color:#6d7887;font-size:12px;line-height:1.45;font-style:italic}
+@media (max-width:600px){
+  body{padding:10px}
+  .head{padding:16px 15px 13px}
+  h1{font-size:21px}
+  .summary{grid-template-columns:1fr;padding:14px 13px 6px}
+  .rows{padding:8px 13px 10px}
+  .table-wrap{padding:0 13px 14px}
+  .note{margin:0 13px 12px}
+  .source{padding:0 13px 14px}
+  .topline{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+<section class="card">
+<header class="head">
+  <div class="kicker">ZIP / DEFLATE level 6</div>
+  <h1>Co ZIP opravdu zmenší? Text ano. JPEG a H.264 prakticky vůbec.</h1>
+  <p class="lead">
+    Původní sloupcový graf jsem převedl do přehlednějšího vizuálu. Níže je jasně vidět,
+    kolik procent z původní velikosti dokázal ZIP u jednotlivých typů dat ubrat.
+  </p>
+</header>
+
+<div class="summary">
+  <div class="stat">
+    <span class="label">Největší efekt</span>
+    <span class="value">99,81 %</span>
+    <span class="sub">textová data – ZIP z nich odstranil skoro všechen nadbytečný prostor</span>
+  </div>
+  <div class="stat">
+    <span class="label">Malý efekt</span>
+    <span class="value">0,74 %</span>
+    <span class="sub">JPEG fotky – další komprese už skoro nemá co vzít</span>
+  </div>
+  <div class="stat">
+    <span class="label">Žádný přínos</span>
+    <span class="value">-0,03 %</span>
+    <span class="sub">H.264 video – po zabalení bylo dokonce nepatrně větší</span>
+  </div>
+</div>
+
+<div class="rows">
+  <div class="row">
+    <div class="topline">
+      <div>
+        <div class="name">Text</div>
+        <div class="desc">Typicky velmi dobře komprimovatelný obsah s vysokou mírou opakování.</div>
+      </div>
+      <div class="pill good">úspora 99,81 %</div>
+    </div>
+    <div class="barbox"><div class="fill text"></div></div>
+    <div class="marker">Prakticky maximální efekt: ZIP si s běžným textem poradí excelentně.</div>
+  </div>
+
+  <div class="row">
+    <div class="topline">
+      <div>
+        <div class="name">JPEG fotky</div>
+        <div class="desc">Ztrátově komprimovaný obrazový formát, který už je sám o sobě optimalizovaný.</div>
+      </div>
+      <div class="pill mid">úspora 0,74 %</div>
+    </div>
+    <div class="barbox"><div class="fill jpeg"></div></div>
+    <div class="marker">Jen symbolické zmenšení: další ZIP komprese přidala téměř nulový efekt.</div>
+  </div>
+
+  <div class="row">
+    <div class="topline">
+      <div>
+        <div class="name">H.264 video</div>
+        <div class="desc">Moderně komprimované video, u kterého bývá další archivace spíš kosmetická nebo kontraproduktivní.</div>
+      </div>
+      <div class="pill bad">změna -0,03 %</div>
+    </div>
+    <div class="barbox"></div>
+    <div class="marker">V praxi žádná úspora. Místo zmenšení vzniklo nepatrné zvětšení kvůli režii archivu.</div>
+  </div>
+</div>
+
+<div class="table-wrap">
+  <table aria-label="Shrnutí účinnosti ZIP komprese">
+    <thead>
+      <tr>
+        <th>Typ dat</th>
+        <th>Úspora proti vstupu</th>
+        <th>Praktický závěr</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="highlight">
+        <td><strong>Text</strong></td>
+        <td><strong>99,81 %</strong></td>
+        <td>ZIP dává velmi silný smysl.</td>
+      </tr>
+      <tr>
+        <td><strong>JPEG fotky</strong></td>
+        <td>0,74 %</td>
+        <td>Úspora je jen drobná, skoro zanedbatelná.</td>
+      </tr>
+      <tr>
+        <td><strong>H.264 video</strong></td>
+        <td>-0,03 %</td>
+        <td>Další balení nepomáhá, soubor může být i o chlup větší.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="note">
+  <strong>Co z toho plyne:</strong> ZIP je výborný pro textové a obecně „syrové“ datové soubory.
+  Naopak u už hotově komprimovaných formátů, jako je JPEG nebo H.264, už většinou není skoro co
+  zmenšovat. Proto rozdíl mezi textem a multimédii vychází tak dramaticky.
+</div>
+
+<p class="source">Vlastní měření: ZIP_DEFLATED, úroveň 6; procento udává změnu oproti původním datům.</p>
+</section>
+</main>
+</body>
+</html>
