@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CYBER TREZOR: 20 reálných digitálních pastí</title>
+<style>
+:root{
+  --bg:#05070a;--panel:#0b0f14;--panel2:#101720;--line:#25303d;--text:#eef4f8;--muted:#8c9aa7;
+  --amber:#ffad1f;--amber2:#ffcf6e;--green:#31d17c;--greenbg:#0f2a20;--red:#ff5d66;--redbg:#30171b;
+  --cyan:#51d7ff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:
+  radial-gradient(circle at 20% 0%,rgba(255,173,31,.08),transparent 30%),
+  linear-gradient(#05070a,#070a0f);font-family:Arial,Helvetica,sans-serif;color:var(--text)}
+body{padding:24px 10px}
+.shell{max-width:700px;margin:auto;background:rgba(11,15,20,.98);border:1px solid #26313d;border-radius:26px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 0 1px rgba(255,173,31,.04)}
+.topline{height:4px;background:linear-gradient(90deg,#6b4300,var(--amber),#ffe0a1,var(--amber),#6b4300)}
+.hero{padding:26px 27px 21px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-70px;top:-80px;width:220px;height:220px;border:1px solid rgba(255,173,31,.12);border-radius:50%;box-shadow:0 0 0 24px rgba(255,173,31,.025),0 0 0 48px rgba(255,173,31,.015);pointer-events:none}
+.sys{font-family:Consolas,monospace;font-size:11px;letter-spacing:.12em;color:var(--amber);font-weight:800;text-transform:uppercase;margin-bottom:9px}
+h1{font-size:32px;line-height:1.05;margin:0 0 13px;font-weight:950;color:#fff;max-width:560px}
+.lead{font-size:15.5px;line-height:1.5;color:#a9b5bf;margin:0 0 22px;max-width:610px}
+.hud{display:grid;grid-template-columns:1fr auto auto;gap:9px;align-items:center}
+.hudbox{border:1px solid var(--line);background:#0d131a;border-radius:12px;padding:9px 11px;font-size:12px;color:#aab6c0}
+.hudbox strong{display:block;color:#fff;font-size:15px;margin-top:3px}
+.clear-wrap{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin-top:2px}
+.clear-label{font:700 10px/1 Consolas,monospace;color:#82909b;letter-spacing:.08em;white-space:nowrap}
+.clearbar{height:7px;flex:1;background:#151d26;border:1px solid #25303d;border-radius:99px;overflow:hidden}
+.clearfill{height:100%;width:0;background:linear-gradient(90deg,#be7500,var(--amber),#ffe19b);transition:.25s}
+.zonebar{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:12px 18px 0;background:#080c11}
+.zone{padding:8px 3px;border-bottom:3px solid #202934;text-align:center;font-size:8px;font-weight:900;letter-spacing:.035em;text-transform:uppercase;color:#687580}
+.zone.active{color:var(--amber2);border-color:var(--amber)}
+.zone.done{color:#afbbc4;border-color:#586779}
+.progress{height:7px;background:#121922}.progress>div{height:100%;width:0;background:linear-gradient(90deg,#8b5700,var(--amber));transition:.25s}
+.main{padding:24px 26px 27px}
+.missionline{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:13px}
+.zonepill{padding:7px 10px;border-radius:999px;background:#211806;border:1px solid #513810;color:var(--amber2);font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+.mission{font:700 11px/1 Consolas,monospace;color:#7e8b97}
+.device{border:1px solid #283442;border-radius:18px;background:linear-gradient(180deg,#111923,#0b1118);padding:13px;margin-bottom:19px;box-shadow:inset 0 1px rgba(255,255,255,.03)}
+.device-top{display:flex;align-items:center;gap:7px;margin-bottom:10px;font:700 10px/1 Consolas,monospace;color:#768593;text-transform:uppercase;letter-spacing:.07em}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 11px rgba(255,173,31,.7)}
+.screen{border-radius:13px;background:#e9eef2;color:#16202a;padding:15px 16px;font-size:14.5px;line-height:1.45;white-space:pre-line;min-height:68px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.question{font-size:22px;line-height:1.3;font-weight:900;margin:0 0 18px;color:#fff}
+.answers{display:grid;gap:10px}
+.answer{border:1px solid #2a3542;background:#0e151d;color:#edf3f6;border-radius:13px;padding:14px 15px;text-align:left;font-size:14.5px;line-height:1.38;font-weight:700;cursor:pointer;transition:.15s}
+.answer:hover:not(:disabled){border-color:#697785;background:#121c26}
+.answer.correct{border-color:var(--green);background:var(--greenbg);color:#bff5d7}
+.answer.wrong{border-color:var(--red);background:var(--redbg);color:#ffd0d3}
+.answer:disabled{cursor:default}
+.feedback{display:none;margin-top:16px;border:1px solid #2b3744;background:#0d141c;border-radius:13px;padding:14px 15px;color:#aebac4;font-size:14px;line-height:1.5}
+.feedback.show{display:block}.feedback strong{color:#fff}
+.reward{display:none;margin-top:12px;border:1px solid #5d4518;background:linear-gradient(135deg,#1c1508,#11100d);border-radius:13px;padding:13px 14px}
+.reward.show{display:flex;align-items:center;gap:11px}.medal{font-size:28px}.reward b{display:block;color:var(--amber2);font-size:12px;letter-spacing:.06em;text-transform:uppercase}.reward span{font-size:13px;color:#aab5be}
+.controls{display:none;justify-content:flex-end;margin-top:16px}.controls.show{display:flex}
+.next,.restart{border:1px solid #6e501c;background:linear-gradient(180deg,#ffb52f,#d78c0b);color:#161007;border-radius:11px;padding:12px 18px;font-size:14px;font-weight:950;cursor:pointer;box-shadow:0 6px 18px rgba(255,173,31,.12)}
+.result{display:none;text-align:center}.result.show{display:block}
+.vault{width:94px;height:94px;margin:0 auto 14px;border-radius:50%;border:2px solid var(--amber);display:grid;place-items:center;box-shadow:0 0 0 8px rgba(255,173,31,.05),0 0 34px rgba(255,173,31,.16);font-size:40px}
+.rank{font:900 11px/1 Consolas,monospace;letter-spacing:.11em;text-transform:uppercase;color:var(--amber2);margin-bottom:10px}
+.rscore{font-size:55px;font-weight:950;color:#fff;line-height:1;margin-bottom:8px}
+.rtitle{font-size:24px;font-weight:950;margin:0 0 9px}.rtext{font-size:15px;line-height:1.5;color:#9eacb7;max-width:550px;margin:0 auto 19px}
+.badges{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:0 auto 20px}.badge{border:1px solid #26313d;background:#0d141b;border-radius:12px;padding:10px 5px;color:#5f6b75;min-height:70px;display:grid;place-items:center;font-size:9px;font-weight:900;text-transform:uppercase}
+.badge.unlocked{border-color:#6d501b;color:#ffd27a;background:#181207;box-shadow:inset 0 0 18px rgba(255,173,31,.045)}
+.badge em{display:block;font-style:normal;font-size:19px;margin-bottom:4px}
+.footer{padding:0 26px 23px;text-align:center;font-size:11px;line-height:1.45;color:#63717d}
+@media(max-width:520px){
+ body{padding:8px 6px}.shell{border-radius:18px}.hero{padding:21px 18px 17px}h1{font-size:27px}.lead{font-size:14.5px}.hud{grid-template-columns:1fr 1fr}.hudbox:first-child{grid-column:1/-1}.zonebar{padding:9px 9px 0}.zone{font-size:6.8px}.main{padding:20px 17px 23px}.question{font-size:20px}.screen{font-size:13.5px}.badges{grid-template-columns:repeat(2,1fr)}.badges .badge:last-child{grid-column:1/-1}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<div class="topline"></div>
+<section class="hero">
+  <div class="sys">BONUS S+++++++ // INCIDENT SIMULATOR</div>
+  <h1>CYBER TREZOR: Odemknete všech 5 bezpečnostních zón?</h1>
+  <p class="lead">Žádná teorie typu „co je phishing“. Dostanete SMS, hovor, bazarový chat, QR kód nebo žádost od známého. Vy rozhodnete, co udělat — a systém vám přidělí bezpečnostní hodnost.</p>
+  <div class="hud">
+    <div class="hudbox">Mise<strong><span id="counter">1</span>/20</strong></div>
+    <div class="hudbox">XP<strong><span id="xp">0</span>/2000</strong></div>
+    <div class="hudbox">Správně<strong><span id="score">0</span></strong></div>
+    <div class="clear-wrap"><span class="clear-label">SECURITY CLEARANCE</span><div class="clearbar"><div class="clearfill" id="clearfill"></div></div><span class="clear-label" id="clearpct">0%</span></div>
+  </div>
+</section>
+<div class="progress"><div id="progress"></div></div>
+<div class="zonebar">
+  <div class="zone">SMS<br>& E-MAIL</div>
+  <div class="zone">BANKA<br>& HOVOR</div>
+  <div class="zone">BAZAR<br>& PLATBY</div>
+  <div class="zone">QR<br>& WEB</div>
+  <div class="zone">AI<br>& ÚČTY</div>
+</div>
+<main class="main">
+<section id="quiz">
+  <div class="missionline"><div class="zonepill" id="zonepill"></div><div class="mission" id="mission"></div></div>
+  <div class="device"><div class="device-top"><span class="dot"></span><span id="channel"></span></div><div class="screen" id="scene"></div></div>
+  <h2 class="question" id="question"></h2>
+  <div class="answers" id="answers"></div>
+  <div class="feedback" id="feedback"></div>
+  <div class="reward" id="reward"><div class="medal">◆</div><div><b id="rewardTitle"></b><span id="rewardText"></span></div></div>
+  <div class="controls" id="controls"><button class="next" id="next">Další incident</button></div>
+</section>
+
+<section class="result" id="result">
+  <div class="vault">⌾</div>
+  <div class="rank" id="rank"></div>
+  <div class="rscore"><span id="final">0</span>/20</div>
+  <h2 class="rtitle" id="rtitle"></h2>
+  <p class="rtext" id="rtext"></p>
+  <div class="badges" id="badges"></div>
+  <button class="restart" id="restart">Spustit simulátor znovu</button>
+</section>
+</main>
+<div class="footer">Všechny zobrazené zprávy, adresy a scénáře jsou fiktivní. Doména .example je vyhrazená pro dokumentační příklady. Kvíz vychází z preventivních doporučení Policie ČR a NÚKIB.</div>
+</div>
+
+<script>
+const q=[{"zone": "SMS & E-MAIL", "channel": "SMS • DORUČENÍ", "scene": "Zásilku nelze doručit. Chybí číslo domu. Doplňte adresu a uhraďte 29 Kč: ceska-posta-doruceni.example", "q": "Co je nejbezpečnější další krok?", "a": ["Otevřít odkaz a uhradit 29 Kč", "Odpovědět na SMS a vyžádat si potvrzení", "Ověřit zásilku ručně v oficiální aplikaci nebo na webu dopravce", "Přeposlat SMS známému a počkat, zda mu funguje"], "c": 2, "e": "Podvodné SMS často vytvářejí tlak kolem zásilky a posílají odkaz. Bezpečnější je otevřít oficiální aplikaci nebo web ručně a stav zásilky ověřit mimo zprávu."}, {"zone": "SMS & E-MAIL", "channel": "SMS • BANKA", "scene": "Zpráva se na telefonu zobrazila ve vlákně, kde už dříve chodily skutečné SMS od vaší banky.", "q": "Je samotné umístění zprávy ve známém vlákně důkazem, že je pravá?", "a": ["Ano, telefon třetí stranu do stejného vlákna nepustí", "Ano, pokud se zobrazuje jméno banky", "Ne, identita odesílatele může být podvržena", "Ne, ale pouze u starších telefonů"], "c": 2, "e": "Policie upozorňuje na spoofing: útočník může napodobit telefonní číslo nebo identitu odesílatele. Zobrazené jméno ani vlákno proto nejsou samy o sobě důkazem."}, {"zone": "SMS & E-MAIL", "channel": "E-MAIL • PŘIHLÁŠENÍ", "scene": "Od: MojeBanka Bezpečnost <podpora@mojebanka-security.example>  |  Předmět: Okamžitě obnovte přístup k účtu", "q": "Který detail je při kontrole odesílatele nejdůležitější?", "a": ["Logo banky v podpisu", "Barva tlačítka v e-mailu", "Skutečná e-mailová adresa a doména odesílatele", "To, zda je v textu uvedeno vaše jméno"], "c": 2, "e": "Policie doporučuje kontrolovat skutečnou adresu a doménu. Logo, oslovení i vzhled lze snadno napodobit."}, {"zone": "SMS & E-MAIL", "channel": "E-MAIL • NÁTLAK", "scene": "„Pokud se do 20 minut nepřihlásíte přes přiložený odkaz, účet bude z bezpečnostních důvodů zablokován.“", "q": "Co je na této formulaci typickým varovným signálem?", "a": ["Použití budoucího času", "Časový tlak a hrozba následku", "To, že zpráva obsahuje číslo 20", "Samotné slovo účet"], "c": 1, "e": "Naléhavost je běžná manipulační technika. Cílem je přimět člověka k rychlé reakci bez ověření."}, {"zone": "BANKA & TELEFON", "channel": "HOVOR • „BEZPEČNÝ ÚČET“", "scene": "Volající tvrdí: „Váš účet byl napaden. Přesuňte všechny peníze na bezpečný účet, který vám teď nadiktuji.“", "q": "Jaký postup je správný?", "a": ["Převést jen polovinu a druhou nechat na účtu", "Převod provést, pokud volající zná vaše jméno", "Hovor ukončit a banku kontaktovat přes oficiální číslo či aplikaci", "Požádat volajícího, aby bezpečný účet poslal e-mailem"], "c": 2, "e": "Policie výslovně uvádí, že banka ani policie nepožadují převod peněz na „bezpečný účet“. Hovor ukončete a instituci kontaktujte nezávisle."}, {"zone": "BANKA & TELEFON", "channel": "HOVOR • CALLER ID", "scene": "Na displeji telefonu se skutečně zobrazuje oficiální infolinka vaší banky.", "q": "Co z toho lze bezpečně vyvodit?", "a": ["Volající je určitě zaměstnanec banky", "Číslo může být podvržené, samo o sobě nic nedokazuje", "Hovor je bezpečný, pokud trvá méně než pět minut", "Číslo lze podvrhnout jen ze zahraničí"], "c": 1, "e": "Při spoofingu může útočník napodobit i oficiální číslo banky nebo jiné instituce."}, {"zone": "BANKA & TELEFON", "channel": "HOVOR • VZDÁLENÝ PŘÍSTUP", "scene": "„Abych vám účet zabezpečil, nainstalujte si program pro vzdálenou správu a nadiktujte mi kód připojení.“", "q": "Co udělat?", "a": ["Nainstalovat program, ale nic neklikat", "Povolit přístup pouze na pět minut", "Odmítnout a hovor ukončit", "Povolit přístup, pokud se zobrazilo číslo banky"], "c": 2, "e": "Policie varuje před umožněním vzdáleného přístupu neznámé osobě. Takový přístup může dát útočníkovi kontrolu nad zařízením i citlivými údaji."}, {"zone": "BANKA & TELEFON", "channel": "HOVOR • AUTORIZAČNÍ KÓD", "scene": "Do telefonu přijde SMS s jednorázovým kódem. Volající říká, že ho potřebuje „pro zrušení podezřelé platby“.", "q": "Jak s kódem naložit?", "a": ["Nadiktovat ho, pokud volající zná poslední čtyři čísla účtu", "Nadiktovat pouze první polovinu", "Nikomu ho nesdělovat a nic cizího nepotvrzovat", "Poslat ho jen do oficiálního bankovního chatu"], "c": 2, "e": "Autorizační a ověřovací kódy se cizí osobě nesdělují. Policie tuto zásadu uvádí opakovaně u phishingu i vishingu."}, {"zone": "BAZAR & PLATBY", "channel": "MARKETPLACE • PRODEJ", "scene": "Kupující: „Zaplatil jsem. Pro převzetí peněz otevřete tento odkaz a zadejte číslo karty, platnost a CVV.“", "q": "Co je na požadavku zásadně špatně?", "a": ["Kupující by měl znát i PIN", "Pro přijetí běžného převodu nepotřebujete údaje z platební karty", "CVV je potřeba jen u částek nad 5 000 Kč", "Údaje z karty se zadávají pouze po 18. hodině"], "c": 1, "e": "Policie upozorňuje, že kupující při běžném převodu nepotřebuje citlivé údaje z karty. Pro zaslání peněz typicky stačí číslo účtu."}, {"zone": "BAZAR & PLATBY", "channel": "MARKETPLACE • KURÝR", "scene": "Kupující nabízí: „Kurýra zařídím já. Jen se přes odkaz přihlaste do internetového bankovnictví, abyste přijali platbu.“", "q": "Jak situaci vyhodnotit?", "a": ["Jako běžný postup kurýrních služeb", "Jako bezpečný postup, pokud má stránka logo dopravce", "Jako typický scénář inzertního phishingu", "Jako bezpečný postup pouze u dobírky"], "c": 2, "e": "Policie popisuje přesně tento model: falešný kupující, „kurýr“, podvržená platební brána a snaha získat bankovní či karetní údaje."}, {"zone": "BAZAR & PLATBY", "channel": "MARKETPLACE • KOMUNIKACE", "scene": "Kupující chce hned po první zprávě přesunout komunikaci mimo bazar a posílá platební odkaz v chatu jiné aplikace.", "q": "Jaký postup snižuje riziko?", "a": ["Zůstat pokud možno v komunikaci daného bazaru a neotvírat cizí platební odkazy", "Přejít jinam, protože externí chat je šifrovaný", "Otevřít odkaz v anonymním okně", "Požádat kupujícího, aby odkaz poslal ještě e-mailem"], "c": 0, "e": "Policie doporučuje komunikovat pokud možno přes samotný bazar a nevkládat údaje do přeposlaných platebních bran."}, {"zone": "BAZAR & PLATBY", "channel": "MARKETPLACE • NÁKUP", "scene": "Telefon je za polovinu běžné ceny. Prodejce odmítá osobní předání i dobírku a tlačí na okamžitou platbu, protože „další zájemce už čeká“.", "q": "Která kombinace je největší varování?", "a": ["Nízká cena sama o sobě", "Platba převodem sama o sobě", "Podezřele nízká cena + tlak na rychlost + odmítnutí bezpečnějšího předání", "To, že prodejce odpovídá večer"], "c": 2, "e": "Policie u bazarových podvodů upozorňuje právě na podezřele výhodnou cenu, časový tlak a vyhýbání se osobnímu předání či dobírce."}, {"zone": "QR & WEB", "channel": "QR • PARKOVÁNÍ", "scene": "Na parkovacím automatu je QR kód. Jeho samolepka ale vypadá, jako by byla nalepená přes jinou.", "q": "Co je nejlepší udělat před platbou?", "a": ["QR kód naskenovat a rozhodnout se až podle vzhledu webu", "Zkontrolovat fyzickou nálepku a raději použít oficiální aplikaci či ručně zadaný web", "Platbu provést jen kartou s nízkým limitem", "Vyfotit QR a naskenovat ho až doma"], "c": 1, "e": "U quishingu může být původní QR fyzicky přelepený. Bezpečnější je ověřit kód i cílovou adresu a citlivou akci otevřít přes oficiální cestu."}, {"zone": "QR & WEB", "channel": "WEB • HTTPS", "scene": "Po naskenování QR se otevře profesionálně vypadající stránka. V adresním řádku je HTTPS a ikona zámku.", "q": "Co HTTPS ve skutečnosti dokazuje?", "a": ["Že provozovatel webu je důvěryhodný", "Že web schválila banka", "Že spojení s danou stránkou je šifrované, nikoli že je stránka poctivá", "Že QR kód nemohl být podvržen"], "c": 2, "e": "HTTPS chrání spojení, ale není razítkem důvěryhodnosti provozovatele. Podvodná stránka může používat platný certifikát také."}, {"zone": "QR & WEB", "channel": "QR • BANKA", "scene": "QR kód v e-mailu vás přesměruje na přihlášení do banky a žádá uživatelské jméno, heslo a potvrzení v aplikaci.", "q": "Jak reagovat?", "a": ["Přihlásit se, pokud grafika odpovídá bance", "Přihlásit se jen bez potvrzení v aplikaci", "Stránku zavřít a banku otevřít ručně přes oficiální aplikaci nebo adresu", "Zkusit nejdřív zadat chybné heslo"], "c": 2, "e": "Quishing používá QR kód jen jako cestu na falešný web. U banky je nejbezpečnější citlivou službu otevřít ručně."}, {"zone": "QR & WEB", "channel": "QR • DEFINICE", "scene": "Na plakátu je QR kód, který po naskenování vede na podvrženou přihlašovací stránku.", "q": "Jak se této variantě phishingu říká?", "a": ["Smishing", "Vishing", "Quishing", "Spoofing"], "c": 2, "e": "Quishing je phishing využívající QR kód k přesměrování uživatele na podvodný obsah."}, {"zone": "AI & ÚČTY", "channel": "AI • HLAS BLÍZKÉHO", "scene": "Volá hlas vašeho příbuzného. Zní věrohodně a naléhavě žádá okamžitý převod peněz, protože „nemůže mluvit dlouho“.", "q": "Co je nejbezpečnější ověření?", "a": ["Poznat pravost podle intonace hlasu", "Položit jednu obecnou otázku", "Ukončit hovor a zavolat blízkému zpět na známé číslo nebo ověřit jiným nezávislým kanálem", "Poslat nejdřív malou částku"], "c": 2, "e": "Policie upozorňuje, že AI umí věrohodně napodobit hlas i obraz. Na vizuální či hlasové nedokonalosti nelze spoléhat; požadavek je potřeba ověřit nezávisle."}, {"zone": "AI & ÚČTY", "channel": "SOCIÁLNÍ SÍŤ • KAMARÁD", "scene": "Z účtu dobrého kamaráda přijde zpráva: „Rozbilo se mi auto, pošli mi prosím rychle 8 000 Kč. Nevolej, jsem na jednání.“", "q": "Co udělat před odesláním peněz?", "a": ["Porovnat styl psaní s minulými zprávami a pokud sedí, poslat", "Ověřit žádost jiným kanálem, ideálně telefonicky", "Poslat polovinu a zbytek později", "Požádat o fotografii občanského průkazu"], "c": 1, "e": "Napadený účet může psát věrohodně i z existující konverzace. Policie doporučuje žádost o peníze vždy ověřit jiným způsobem."}, {"zone": "AI & ÚČTY", "channel": "ÚČET • OVĚŘOVACÍ KÓD", "scene": "Bez vašeho přičinění přijde ověřovací kód pro přihlášení. O minutu později vám někdo napíše: „Promiň, kód jsem omylem poslal na tvoje číslo. Přepošleš mi ho?“", "q": "Jak reagovat?", "a": ["Kód přeposlat, pokud člověka znáte", "Kód nepředávat a zkontrolovat zabezpečení účtu", "Poslat jen poslední tři číslice", "Kód smazat a nic dalšího neřešit"], "c": 1, "e": "Ověřovací kód může být poslední překážkou při převzetí účtu. Nikomu ho neposílejte; zkontrolujte relace, heslo a dvoufázové ověření."}, {"zone": "AI & ÚČTY", "channel": "INCIDENT • UŽ JSTE KLIKLI", "scene": "Na podvodném webu jste zadali heslo. Peníze jste neposlali, ale už víte, že stránka byla falešná.", "q": "Který postup dává největší smysl jako bezprostřední reakce?", "a": ["Počkat, zda se něco stane, a heslo změnit až potom", "Změnit heslo přes oficiální službu, odhlásit neznámé relace a zapnout či zkontrolovat 2FA", "Smazat historii prohlížeče a tím incident ukončit", "Napsat podvodníkovi, že jste ho odhalili"], "c": 1, "e": "Policie doporučuje změnit hesla, zkontrolovat zabezpečení a aktivní relace, zapnout dvoufázové ověření a v případě finanční škody ihned kontaktovat banku i policii."}];
+const zoneNames=["SMS & E-MAIL","BANKA & TELEFON","BAZAR & PLATBY","QR & WEB","AI & ÚČTY"];
+const badgeNames=["Smishing Shield","Bank Vault","Bazaar Scout","QR Sentinel","AI Firewall"];
+const badgeIcons=["▤","▣","◇","▦","◉"];
+let i=0,s=0,lock=false,zoneScores=[0,0,0,0,0];
+
+const counter=document.getElementById('counter'),xp=document.getElementById('xp'),score=document.getElementById('score'),
+clearfill=document.getElementById('clearfill'),clearpct=document.getElementById('clearpct'),progress=document.getElementById('progress'),
+zones=[...document.querySelectorAll('.zone')],zonepill=document.getElementById('zonepill'),mission=document.getElementById('mission'),
+channel=document.getElementById('channel'),scene=document.getElementById('scene'),question=document.getElementById('question'),
+answers=document.getElementById('answers'),feedback=document.getElementById('feedback'),reward=document.getElementById('reward'),
+rewardTitle=document.getElementById('rewardTitle'),rewardText=document.getElementById('rewardText'),controls=document.getElementById('controls'),
+next=document.getElementById('next'),quiz=document.getElementById('quiz'),result=document.getElementById('result');
+
+function zi(idx){return Math.floor(idx/4)}
+function updateHUD(){
+  const pct=Math.round((s/q.length)*100);
+  counter.textContent=i+1; xp.textContent=s*100; score.textContent=s;
+  clearfill.style.width=pct+"%"; clearpct.textContent=pct+"%";
+  progress.style.width=((i/q.length)*100)+"%";
+  const z=zi(i);
+  zones.forEach((el,n)=>{el.classList.toggle('active',n===z);el.classList.toggle('done',n<z)});
+}
+function render(){
+  lock=false; const x=q[i]; updateHUD();
+  zonepill.textContent=x.zone; mission.textContent=`INCIDENT ${String(i+1).padStart(2,'0')} / 20`;
+  channel.textContent=x.channel; scene.textContent=x.scene; question.textContent=x.q;
+  answers.innerHTML=''; feedback.className='feedback'; feedback.innerHTML=''; reward.className='reward'; controls.className='controls';
+  x.a.forEach((t,n)=>{const b=document.createElement('button');b.className='answer';b.textContent=t;b.onclick=()=>pick(n);answers.appendChild(b)});
+}
+function pick(n){
+  if(lock)return; lock=true;
+  const x=q[i],z=zi(i),bs=[...answers.querySelectorAll('.answer')];
+  bs.forEach((b,k)=>{b.disabled=true;if(k===x.c)b.classList.add('correct')});
+  if(n===x.c){
+    s++; zoneScores[z]++; feedback.innerHTML=`<strong>Incident odražen.</strong> ${x.e}`;
+  }else{
+    bs[n].classList.add('wrong'); feedback.innerHTML=`<strong>Průnik do obrany.</strong> ${x.e}`;
+  }
+  feedback.classList.add('show');
+  const pct=Math.round((s/q.length)*100); xp.textContent=s*100;score.textContent=s;clearfill.style.width=pct+"%";clearpct.textContent=pct+"%";progress.style.width=((i+1)/q.length*100)+"%";
+  if((i+1)%4===0){
+    reward.classList.add('show');
+    if(zoneScores[z]===4){
+      rewardTitle.textContent="ODMĚNA ODEMČENA: "+badgeNames[z];
+      rewardText.textContent=" 4/4 v této zóně. Odznak přidán do bezpečnostního trezoru.";
+    }else{
+      rewardTitle.textContent="ZÓNA UZAVŘENA: "+zoneScores[z]+"/4";
+      rewardText.textContent=" Odznak zůstává zamčený. V dalším průchodu ho můžete získat čistým skóre.";
+    }
+  }
+  controls.classList.add('show');
+  next.textContent=i===q.length-1?'Otevřít bezpečnostní trezor':((i+1)%4===0?'Vstoupit do další zóny':'Další incident');
+}
+function finish(){
+  quiz.style.display='none'; result.classList.add('show'); progress.style.width='100%'; zones.forEach(z=>{z.classList.remove('active');z.classList.add('done')});
+  document.getElementById('final').textContent=s;
+  let rank,title,text;
+  if(s===20){rank='PLATINUM CLEARANCE // ZLATÝ FIREWALL';title='Trezor otevřen bez jediného průniku';text='20/20. Od zásilkové SMS přes falešného bankéře až po deepfake jste neztratili jediný bod. To je maximální bezpečnostní clearance.'}
+  else if(s>=17){rank='GOLD CLEARANCE // CYBER GUARDIAN';title='Obrana téměř bez trhlin';text='Moderní podvody umějí vypadat velmi věrohodně. Vy jste ale většinu nátlakových triků a falešných platebních cest zastavili včas.'}
+  else if(s>=13){rank='SILVER CLEARANCE // THREAT HUNTER';title='Silná obrana, několik slabých míst';text='Základní instinkty fungují. Největší rezervy obvykle vznikají tam, kde podvod napodobí normální situaci: balík, banku nebo známého.'}
+  else if(s>=8){rank='BRONZE CLEARANCE // FIREWALL TRAINEE';title='Polovina útoků neprošla';text='Některé scénáře jste odhalili, jiné ukázaly, proč moderní podvody fungují. Po vysvětleních už máte konkrétní postupy, ne jen obecné varování.'}
+  else{rank='RESTRICTED // SECURITY TRAINING REQUIRED';title='Trezor zůstal částečně otevřený';text='Tenhle simulátor je schválně přísný: podvodná zpráva nemusí být plná chyb. Důležitější je ověřit kanál, nenechat se tlačit a nikdy nepředávat kódy či přístupy.'}
+  document.getElementById('rank').textContent=rank;document.getElementById('rtitle').textContent=title;document.getElementById('rtext').textContent=text;
+  const b=document.getElementById('badges');b.innerHTML='';
+  badgeNames.forEach((name,n)=>{const d=document.createElement('div');d.className='badge'+(zoneScores[n]===4?' unlocked':'');d.innerHTML=`<div><em>${badgeIcons[n]}</em>${name}<br>${zoneScores[n]}/4</div>`;b.appendChild(d)});
+}
+next.onclick=()=>{if(i<q.length-1){i++;render()}else finish()};
+document.getElementById('restart').onclick=()=>{i=0;s=0;zoneScores=[0,0,0,0,0];quiz.style.display='';result.classList.remove('show');render()};
+render();
+</script>
+</body></html>
