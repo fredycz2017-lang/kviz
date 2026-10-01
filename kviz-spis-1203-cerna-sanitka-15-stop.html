@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SPIS 1203: Černá sanitka</title>
+<style>
+:root{
+ --black:#090909;--black2:#11100f;--paper:#d8ceb7;--paper2:#ece2ca;--ink:#1c1915;
+ --red:#9b211e;--red2:#e0524b;--muted:#8b8272;--line:#4a4338;--green:#335f44;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:
+ radial-gradient(circle at 50% -20%,rgba(150,30,25,.13),transparent 35%),
+ #050505;font-family:Arial,Helvetica,sans-serif;color:#eee}
+body{padding:18px 7px}
+.shell{max-width:700px;margin:auto;background:#0b0b0b;border:1px solid #2c2925;border-radius:20px;overflow:hidden;box-shadow:0 35px 90px rgba(0,0,0,.75);position:relative}
+.scan{position:absolute;inset:0;pointer-events:none;opacity:.08;background:repeating-linear-gradient(180deg,transparent 0 3px,rgba(255,255,255,.2) 4px);mix-blend-mode:screen}
+.topline{height:4px;background:linear-gradient(90deg,#2a0706,var(--red2),#edb6a7,var(--red2),#2a0706)}
+.hero{padding:25px 25px 18px;position:relative;background:
+ linear-gradient(135deg,rgba(255,255,255,.025),transparent 40%),
+ #0d0c0b}
+.hero:after{content:"1203";position:absolute;right:19px;top:6px;font:900 76px 'Courier New',monospace;color:rgba(255,255,255,.035);transform:rotate(-5deg)}
+.classified{display:inline-block;border:2px solid var(--red2);color:#ff8e87;padding:5px 8px;font:900 10px 'Courier New',monospace;letter-spacing:.12em;transform:rotate(-1.5deg);margin-bottom:10px}
+h1{font:900 31px/1.03 Georgia,serif;margin:0 0 11px;color:#f2ece0;max-width:570px}
+.lead{font-size:14.5px;line-height:1.5;color:#b9afa0;margin:0 0 18px;max-width:610px}
+.meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+.meta div{border:1px solid #332e28;background:#11100e;border-radius:8px;padding:8px 9px;font:700 9px 'Courier New',monospace;color:#7f776c;text-transform:uppercase;letter-spacing:.04em}
+.meta b{display:block;color:#fff;font-size:15px;margin-top:3px}
+.progress{height:7px;background:#171411;border-top:1px solid #26211c;border-bottom:1px solid #26211c}
+.progress div{height:100%;width:0;background:linear-gradient(90deg,#5c1512,var(--red2));transition:.25s}
+.folders{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:10px 9px 0;background:#090909}
+.folder{padding:8px 2px;border-bottom:3px solid #29241f;text-align:center;font:900 6.8px 'Courier New',monospace;color:#615b53;text-transform:uppercase}
+.folder.active{color:#ff817a;border-color:var(--red2)}
+.folder.done{color:#aaa094;border-color:#6d6255}
+.main{padding:21px 22px 25px}
+.filehead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:11px}
+.folderpill{padding:6px 9px;border:1px solid #6f1f1c;background:#1b0c0b;color:#ff8a82;border-radius:4px;font:900 9px 'Courier New',monospace;letter-spacing:.06em}
+.ref{font:800 9px 'Courier New',monospace;color:#746b61}
+.evidence{background:
+ linear-gradient(rgba(255,255,255,.08),rgba(0,0,0,.025)),
+ var(--paper);color:var(--ink);border-radius:5px;padding:15px 15px 13px;margin-bottom:16px;box-shadow:0 6px 16px rgba(0,0,0,.25);position:relative;border:1px solid #9e927c}
+.evidence:before{content:"ARCHIVNÍ REKONSTRUKCE";position:absolute;right:9px;top:7px;color:rgba(120,22,18,.35);font:900 7px 'Courier New',monospace;letter-spacing:.07em}
+.scene{font:700 13.5px/1.5 'Courier New',monospace;padding-top:11px}
+.question{font:900 21px/1.3 Georgia,serif;margin:0 0 16px;color:#f1ece3}
+.answers{display:grid;gap:9px}
+.answer{background:#11100f;border:1px solid #3c3731;color:#eee6db;border-radius:8px;padding:13px 14px;text-align:left;font-size:14px;line-height:1.4;font-weight:700;cursor:pointer;transition:.15s}
+.answer:hover:not(:disabled){border-color:#7c6f61;background:#171513}
+.answer.correct{background:#102319;border-color:#3f7c56;color:#c7f0d3}
+.answer.wrong{background:#2a1110;border-color:#a83a35;color:#ffd1cc}
+.answer:disabled{cursor:default}
+.feedback{display:none;margin-top:14px;border-left:4px solid var(--red2);background:#12100e;padding:13px 14px;color:#bdb2a6;font-size:13.5px;line-height:1.5}
+.feedback.show{display:block}
+.stamp{display:none;position:absolute;right:18px;top:92px;border:3px double var(--red2);color:var(--red2);padding:7px 10px;font:900 14px 'Courier New',monospace;letter-spacing:.08em;transform:rotate(-9deg);z-index:5;background:rgba(8,8,8,.9);animation:slam .28s ease-out}
+.stamp.show{display:block}
+@keyframes slam{0%{transform:scale(2.5) rotate(-9deg);opacity:0}70%{transform:scale(.92) rotate(-9deg);opacity:1}100%{transform:scale(1) rotate(-9deg)}}
+.flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:1000}.flash.go{animation:flash .18s ease-out}@keyframes flash{0%{opacity:.35}100%{opacity:0}}
+.reward{display:none;margin-top:10px;border:1px solid #6d4b20;background:#1a1309;color:#f0c170;border-radius:7px;padding:10px 12px;font:800 10px 'Courier New',monospace;letter-spacing:.03em}
+.reward.show{display:block}
+.controls{display:none;justify-content:flex-end;margin-top:14px}.controls.show{display:flex}
+.next,.restart{border:1px solid #792a26;background:linear-gradient(#b93832,#7e1e1a);color:#fff;padding:11px 16px;border-radius:7px;font-weight:900;cursor:pointer}
+.result{display:none;text-align:center}.result.show{display:block}
+.caseclosed{width:92px;height:92px;margin:0 auto 12px;border:3px double var(--red2);color:var(--red2);border-radius:50%;display:grid;place-items:center;font:900 11px 'Courier New',monospace;transform:rotate(-6deg);box-shadow:0 0 35px rgba(224,82,75,.08)}
+.rank{font:900 9px 'Courier New',monospace;color:#b6a896;letter-spacing:.1em;text-transform:uppercase}
+.rscore{font-size:55px;font-weight:950;margin:6px 0;color:#eee7dd}
+.result h2{font:900 24px Georgia,serif;margin:0 0 8px}.result p{color:#a99f93;line-height:1.5;max-width:535px;margin:0 auto 18px;font-size:14px}
+.seals{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:18px}
+.seal{border:1px solid #322d27;background:#100f0d;border-radius:7px;padding:9px 4px;font:900 7px 'Courier New',monospace;color:#5f5851;text-transform:uppercase;min-height:54px;display:grid;place-items:center}
+.seal.open{border-color:#80302b;color:#ff857d;background:#1b0d0b}
+.foot{padding:0 21px 20px;text-align:center;color:#5f5952;font:10px/1.45 'Courier New',monospace}
+@media(max-width:520px){
+ body{padding:5px 3px}.shell{border-radius:14px}.hero{padding:20px 15px 16px}h1{font-size:26px}.meta{grid-template-columns:1fr 1fr}.meta div:first-child{grid-column:1/-1}.folders{padding:8px 4px 0}.folder{font-size:5.8px}.main{padding:18px 14px 21px}.question{font-size:19.5px}.answer{font-size:13.5px}.stamp{right:8px;top:80px}.seals{grid-template-columns:repeat(2,1fr)}.seals .seal:last-child{grid-column:1/-1}
+}
+</style>
+</head>
+<body>
+<div class="flash" id="flash"></div>
+<div class="shell">
+<div class="scan"></div><div class="topline"></div>
+<section class="hero">
+ <div class="classified">SPIS 1203 // REKONSTRUKCE // PLZEŇ 1988</div>
+ <h1>ČERNÁ SANITKA: Oddělíte archivní stopu od legendy?</h1>
+ <p class="lead">Ne další kvíz „co byla černá sanitka“. Tohle je rekonstrukce skutečného plzeňského spisu: hlášení, ohledání, druhá stopa, uzavření kauzy a anatomie pověsti.</p>
+ <div class="meta">
+   <div>Položka<b><span id="counter">1</span>/15</b></div>
+   <div>Důkazní skóre<b><span id="score">0</span></b></div>
+   <div>Uzavřené složky<b><span id="foldernum">0</span>/5</b></div>
+ </div>
+</section>
+<div class="progress"><div id="prog"></div></div>
+<div class="folders">
+ <div class="folder">HLÁŠENÍ</div><div class="folder">1203</div><div class="folder">REKONSTRUKCE</div><div class="folder">UZAVŘENÍ</div><div class="folder">LEGENDA</div>
+</div>
+
+<main class="main">
+<section id="quiz">
+ <div class="filehead"><div class="folderpill" id="folderpill"></div><div class="ref" id="ref"></div></div>
+ <div class="evidence"><div class="scene" id="scene"></div></div>
+ <h2 class="question" id="question"></h2>
+ <div class="answers" id="answers"></div>
+ <div class="feedback" id="feedback"></div>
+ <div class="reward" id="reward"></div>
+ <div class="controls" id="controls"><button class="next" id="next">Další list spisu</button></div>
+ <div class="stamp" id="stamp">OVĚŘENO</div>
+</section>
+
+<section class="result" id="result">
+ <div class="caseclosed">SPIS<br>UZAVŘEN</div>
+ <div class="rank" id="rank"></div>
+ <div class="rscore"><span id="final">0</span>/15</div>
+ <h2 id="rtitle"></h2>
+ <p id="rtext"></p>
+ <div class="seals" id="seals"></div>
+ <button class="restart" id="restart">Otevřít spis znovu</button>
+</section>
+</main>
+<div class="foot">Vizuál je stylizovaná archivní rekonstrukce, nikoli reprodukce skutečného policejního spisu. Fakta vycházejí z archivních záznamů popsaných Petrem Janečkem, z článku autora a z terénního výzkumu UK.</div>
+</div>
+
+<script>
+const q=[{"folder": "HLÁŠENÍ 24/11", "ref": "ZÁZNAM 01", "scene": "Plzeň • 24. listopadu 1988 • železniční oddělení Veřejné bezpečnosti", "q": "V kolik hodin přijalo oddělení oznámení od mladé dívky?", "a": ["20:30", "21:00", "21:30", "22:15"], "c": 2, "e": "Archivní záznam uvádí 21:30. Samotná událost měla začít přibližně o hodinu dříve."}, {"folder": "HLÁŠENÍ 24/11", "ref": "ZÁZNAM 02", "scene": "Oznamovatelka přichází na plzeňské hlavní nádraží a popisuje tmavé dodávkové vozidlo.", "q": "Kolik jí podle policejního záznamu bylo?", "a": ["15 let", "17 let", "19 let", "22 let"], "c": 2, "e": "Šlo o devatenáctiletou dívku."}, {"folder": "HLÁŠENÍ 24/11", "ref": "ZÁZNAM 03", "scene": "Dívka šla pěšky po vyšlapané cestě v poli.", "q": "Mezi kterými částmi Plzně se podle záznamu pohybovala?", "a": ["Bory → Slovany", "Zadní Škvrňany → Křimice", "Doubravka → Lobzy", "Košutka → Lochotín"], "c": 1, "e": "Záznam popisuje cestu ze zadních Škvrňan směrem do Křimic."}, {"folder": "VOZIDLO 1203", "ref": "DŮKAZ 04", "scene": "Ve výpovědi se objevuje konkrétní typ tmavého dodávkového auta.", "q": "Jaký model měla oznamovatelka uvést?", "a": ["Škoda 1203", "Tatra 613", "Avia A30", "Robur LO"], "c": 0, "e": "Ve spisu se objevuje tmavá Škoda 1203 — vůz, který legendě poskytl mimořádně uvěřitelnou kulisu."}, {"folder": "VOZIDLO 1203", "ref": "DŮKAZ 05", "scene": "Dívka se z cesty vrátila zpět a rozhodla se věc oznámit.", "q": "Jak se podle záznamu následně dostala k nádraží?", "a": ["Taxíkem", "Autobusem", "Tramvají", "Pěšky"], "c": 2, "e": "Vrátila se do Škvrňan a potom odjela tramvají na tehdejší Gottwaldovo nádraží."}, {"folder": "VOZIDLO 1203", "ref": "DŮKAZ 06", "scene": "Žurnální služba provedla ohledání místa v poli.", "q": "Který klíčový důkaz na místě NENAŠLA?", "a": ["Stopy chodců", "Stopy automobilů", "Stopy vozidla vybočujícího z cesty", "Poprašek sněhu"], "c": 2, "e": "Stop chodců i aut bylo mnoho, ale ve sněhu nebyly stopy, že by některé vozidlo z cesty vybočilo směrem k dívce."}, {"folder": "REKONSTRUKCE", "ref": "OHLEDÁNÍ 07", "scene": "Policisté si všimli tvaru cesty v místě údajného najíždění auta.", "q": "Co mohlo vytvořit dojem, že vůz míří přímo na dívku?", "a": ["Odraz světel od sněhu z protijedoucího vlaku", "Zatáčka, při jejímž průjezdu světla mířila jejím směrem", "Porucha veřejného osvětlení", "Silný vítr pohybující vozem"], "c": 1, "e": "Cesta se stáčela a vůz projíždějící zatáčkou přirozeně svítil směrem, kde dívka šla."}, {"folder": "REKONSTRUKCE", "ref": "STOPA 08", "scene": "V prosinci se ve spise objevuje další plzeňský incident s tmavým vozidlem.", "q": "Kolik mužů mělo podle hlášení z vozu vystoupit a rozběhnout se za učnicemi?", "a": ["Dva", "Tři", "Čtyři", "Pět"], "c": 1, "e": "Hlášení popisovalo tři muže."}, {"folder": "REKONSTRUKCE", "ref": "STOPA 09", "scene": "Učnice před muži utíkají a hledají místo, kde jsou další lidé.", "q": "Kam se podle hlášení dostaly?", "a": ["Do školy", "Na autobusovou zastávku", "Na policejní stanici", "Do restaurace"], "c": 1, "e": "Utekly k autobusové zastávce, kde čekalo několik dalších lidí; muži pak měli pronásledování ukončit."}, {"folder": "UZAVŘENÍ SPISU", "ref": "USNESENÍ 10", "scene": "Plzeňská kauza se po několika týdnech administrativně uzavírá.", "q": "Kdy byla definitivně úředně ukončena?", "a": ["31. prosince 1988", "1. ledna 1989", "16. ledna 1989", "24. listopadu 1989"], "c": 2, "e": "Seznam Zprávy s odkazem na archivní podklady uvádějí 16. leden 1989."}, {"folder": "UZAVŘENÍ SPISU", "ref": "USNESENÍ 11", "scene": "Po prověřování nepřišel důkaz o organizované skupině unášející lidi na orgány.", "q": "Jaký byl závěr celé plzeňské kauzy?", "a": ["Šlo o organizovanou trestnou činnost", "Případ zůstal otevřený jako vražda", "Bylo zjištěno, že se nejedná o trestnou činnost", "Vůz byl nalezen v Polsku"], "c": 2, "e": "Kauza byla uzavřena se závěrem, že nejde o trestnou činnost."}, {"folder": "UZAVŘENÍ SPISU", "ref": "KULISA 12", "scene": "Legenda potřebovala vozidlo, které lidé znali z reálných ulic.", "q": "Proč právě Škoda 1203 tak dobře zapadla do československé verze pověsti?", "a": ["Vyráběla se pouze v černé barvě", "Používala se jako sanitka a její základ také pro černé pohřební vozy", "Byla výhradním vozem SNB", "Měla neprůhledná okna už z výroby"], "c": 1, "e": "Škoda 1203 byla velmi běžný sanitní vůz a stejný základ se používal i pro černé pohřební automobily."}, {"folder": "ANATOMIE LEGENDY", "ref": "PŮVOD 13", "scene": "Do československé pověsti se promítl i populární západoněmecký thriller o únosech kvůli orgánům.", "q": "Jak se film z roku 1979 jmenoval česky?", "a": ["Noční sanitka", "Kandidáti života a smrti", "Černá Volha", "Poslední převoz"], "c": 1, "e": "Šlo o thriller Kandidáti života a smrti, v originále Fleisch."}, {"folder": "ANATOMIE LEGENDY", "ref": "PŘÍBUZNÝ SPIS 14", "scene": "Za severní hranicí měla podobná pověst jiný automobil.", "q": "Jaké vozidlo proslavila polská varianta legendy?", "a": ["Černou Volhu", "Bílou Ladu", "Červený Trabant", "Modrou Nysu"], "c": 0, "e": "V Polsku se dlouhé roky vyprávělo o tajemné černé Volze unášející děti."}, {"folder": "ANATOMIE LEGENDY", "ref": "DOZVUK 15", "scene": "Terénní výzkum na Nymbursku ukázal, že legenda přežívala dlouho po roce 1989.", "q": "Kolik z 152 oslovených konzultantů zmínilo černou sanitku alespoň nějakým způsobem?", "a": ["Méně než 10", "Asi 20", "Přes 50", "Všech 152"], "c": 2, "e": "Bakalářský výzkum Univerzity Karlovy uvádí, že z 152 konzultantů černou sanitku alespoň nějak zmínilo přes 50 lidí."}];
+let i=0,s=0,lock=false,folderScores=[0,0,0,0,0];
+const tabs=[...document.querySelectorAll('.folder')];
+const counter=document.getElementById('counter'),score=document.getElementById('score'),foldernum=document.getElementById('foldernum'),
+prog=document.getElementById('prog'),folderpill=document.getElementById('folderpill'),ref=document.getElementById('ref'),scene=document.getElementById('scene'),
+question=document.getElementById('question'),answers=document.getElementById('answers'),feedback=document.getElementById('feedback'),
+reward=document.getElementById('reward'),controls=document.getElementById('controls'),next=document.getElementById('next'),
+stamp=document.getElementById('stamp'),flash=document.getElementById('flash'),quiz=document.getElementById('quiz'),result=document.getElementById('result');
+
+function fi(x){return Math.floor(x/3)}
+function render(){
+ lock=false;const x=q[i],f=fi(i);
+ counter.textContent=i+1;score.textContent=s;prog.style.width=(i/q.length*100)+'%';
+ folderpill.textContent=x.folder;ref.textContent=x.ref;scene.textContent=x.scene;question.textContent=x.q;
+ answers.innerHTML='';feedback.className='feedback';reward.className='reward';controls.className='controls';stamp.className='stamp';
+ tabs.forEach((e,n)=>{e.classList.toggle('active',n===f);e.classList.toggle('done',n<f)});
+ x.a.forEach((t,n)=>{const b=document.createElement('button');b.className='answer';b.textContent=t;b.onclick=()=>pick(n);answers.appendChild(b)});
+}
+function pick(n){
+ if(lock)return;lock=true;const x=q[i],f=fi(i),bs=[...answers.querySelectorAll('.answer')];
+ bs.forEach((b,k)=>{b.disabled=true;if(k===x.c)b.classList.add('correct')});
+ if(n===x.c){
+   s++;folderScores[f]++;score.textContent=s;feedback.innerHTML='<strong>Souhlasí se spisem.</strong> '+x.e;
+   stamp.textContent='OVĚŘENO';stamp.className='stamp show';flash.className='flash go';setTimeout(()=>flash.className='flash',190);
+ }else{
+   bs[n].classList.add('wrong');feedback.innerHTML='<strong>Nesouhlasí se spisem.</strong> '+x.e;
+   stamp.textContent='OPRAVENO';stamp.className='stamp show';
+ }
+ feedback.classList.add('show');controls.classList.add('show');prog.style.width=((i+1)/q.length*100)+'%';
+ if((i+1)%3===0){
+   reward.classList.add('show');
+   const clean=folderScores[f]===3;
+   reward.textContent=clean?'SLOŽKA UZAVŘENA 3/3 • pečeť získána':'SLOŽKA PROVĚŘENA '+folderScores[f]+'/3 • pečeť zůstává neúplná';
+   foldernum.textContent=folderScores.filter(v=>v===3).length;
+ }
+ next.textContent=i===q.length-1?'Uzavřít spis':((i+1)%3===0?'Otevřít další složku':'Další list spisu');
+}
+function finish(){
+ quiz.style.display='none';result.classList.add('show');prog.style.width='100%';tabs.forEach(e=>{e.classList.remove('active');e.classList.add('done')});
+ document.getElementById('final').textContent=s;
+ const clean=folderScores.filter(v=>v===3).length;
+ let rank,title,text;
+ if(s===15){rank='ARCHIVÁŘ 1203 // 5 PEČETÍ';title='Legenda vás nesvedla z cesty ani jednou';text='15/15. Znáte nejen samotnou pověst, ale i konkrétní plzeňský záznam, policejní ohledání, uzavření kauzy a mechanismus, díky kterému legenda přežila.'}
+ else if(s>=12){rank='VYŠETŘOVATEL LEGEND';title='Spis máte téměř kompletní';text='Výborný výsledek. Několik detailů z roku 1988 se ztratilo, ale hlavní rozdíl mezi archivní stopou a folklorem držíte přesně.'}
+ else if(s>=8){rank='BADATEL MĚSTSKÝCH POVĚSTÍ';title='Stopa drží, pár listů chybí';text='Základní příběh znáte. Archivní časy, trasa a pozdější výzkum ale ukazují, jak moc je skutečný spis zajímavější než jednoduchá strašidelná historka.'}
+ else{rank='NOVÁČEK V ARCHIVU';title='Legenda několikrát přepsala spis';text='Tohle byl záměrně detailní kvíz. Po vysvětleních už ale máte oddělené to, co bylo opravdu zaznamenáno, od toho, co přidala šeptanda.'}
+ document.getElementById('rank').textContent=rank;document.getElementById('rtitle').textContent=title;document.getElementById('rtext').textContent=text;
+ const box=document.getElementById('seals');box.innerHTML='';
+ ['HLÁŠENÍ','1203','REKONSTRUKCE','UZAVŘENÍ','LEGENDA'].forEach((n,j)=>{const d=document.createElement('div');d.className='seal'+(folderScores[j]===3?' open':'');d.innerHTML=(folderScores[j]===3?'◆ ':'◇ ')+n+'<br>'+folderScores[j]+'/3';box.appendChild(d)});
+}
+next.onclick=()=>{if(i<q.length-1){i++;render()}else finish()};
+document.getElementById('restart').onclick=()=>{i=0;s=0;folderScores=[0,0,0,0,0];foldernum.textContent=0;quiz.style.display='';result.classList.remove('show');render()};
+render();
+</script>
+</body></html>
