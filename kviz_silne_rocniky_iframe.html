@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Silné ročníky – iframe tabulka</title>
+<style>
+  :root{
+    --bg:#eef2f5;
+    --panel:#ffffff;
+    --ink:#1e2329;
+    --muted:#67707a;
+    --line:#d9dee4;
+    --accent:#1f2937;
+    --accent2:#4b5563;
+    --good:#0f766e;
+    --bad:#b42318;
+    --neutral:#374151;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:transparent;font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
+  body{padding:10px}
+  .wrap{
+    max-width:1080px;
+    margin:0 auto;
+    background:linear-gradient(180deg,#f7f9fb 0%, #edf1f4 100%);
+    border:1px solid #d7dde3;
+    border-radius:24px;
+    overflow:hidden;
+    box-shadow:0 20px 50px rgba(20,29,38,.10);
+  }
+  .head{
+    padding:34px 40px 18px;
+    background:linear-gradient(180deg,#f8fafc 0%, #eef2f6 100%);
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    display:inline-block;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:#fff;
+    background:linear-gradient(90deg,#1f2937,#4b5563);
+    border-radius:999px;
+    padding:8px 12px;
+    margin-bottom:14px;
+  }
+  h1{
+    margin:0 0 10px;
+    font-size:38px;
+    line-height:1.08;
+    letter-spacing:-.02em;
+  }
+  .sub{
+    margin:0;
+    color:var(--muted);
+    font-size:18px;
+    line-height:1.5;
+    max-width:920px;
+  }
+  .table{
+    padding:14px 26px 12px;
+  }
+  .grid,
+  .row{
+    display:grid;
+    grid-template-columns: 1.45fr 1.15fr 1.2fr .95fr;
+    gap:18px;
+    align-items:center;
+  }
+  .grid{
+    padding:16px 18px;
+    color:#f8fafc;
+    background:linear-gradient(90deg,#1f2937 0%, #374151 100%);
+    border-radius:16px;
+    font-size:13px;
+    font-weight:900;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+  }
+  .rows{
+    margin-top:10px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .row{
+    background:rgba(255,255,255,.84);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:20px 18px;
+    box-shadow:0 8px 20px rgba(20,29,38,.04);
+  }
+  .cohort{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  .cohort .main{
+    font-size:28px;
+    line-height:1;
+    font-weight:900;
+    letter-spacing:-.02em;
+  }
+  .cohort .age{
+    font-size:18px;
+    font-weight:800;
+    color:var(--accent2);
+  }
+  .cell .label{
+    display:block;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:#7a848f;
+    margin-bottom:8px;
+  }
+  .value{
+    font-size:29px;
+    line-height:1;
+    font-weight:900;
+    letter-spacing:-.02em;
+    color:var(--accent);
+    font-variant-numeric:tabular-nums;
+  }
+  .diff .value{font-size:28px}
+  .diff.negative .value{color:var(--bad)}
+  .diff.positive .value{color:var(--good)}
+  .diff.neutral .value{color:var(--neutral)}
+  .mini{
+    margin-top:6px;
+    font-size:13px;
+    color:var(--muted);
+  }
+  .foot{
+    padding:18px 40px 34px;
+  }
+  .sources{
+    font-size:14px;
+    line-height:1.55;
+    color:#5f6973;
+  }
+  .sources b{color:#2d333a}
+  .note{
+    margin-top:12px;
+    padding:14px 16px;
+    border-left:4px solid #374151;
+    background:#f6f8fa;
+    border-radius:0 12px 12px 0;
+    font-size:14px;
+    line-height:1.55;
+    color:#4f5964;
+  }
+  @media (max-width:900px){
+    .head{padding:26px 22px 14px}
+    .table{padding:12px 14px 10px}
+    .foot{padding:14px 22px 24px}
+    h1{font-size:31px}
+    .sub{font-size:16px}
+    .grid,.row{grid-template-columns:1fr 1fr}
+    .grid div:nth-child(3), .grid div:nth-child(4){margin-top:6px}
+  }
+  @media (max-width:560px){
+    body{padding:4px}
+    .wrap{border-radius:18px}
+    .grid{display:none}
+    .row{grid-template-columns:1fr;gap:14px;padding:18px 16px}
+    .cohort .main{font-size:25px}
+    .cohort .age{font-size:17px}
+    .value{font-size:27px}
+    h1{font-size:26px}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="head">
+      <div class="eyebrow">Demografie • srovnání ročníků</div>
+      <h1>Silné ročníky: narození tehdy vs. obyvatelé stejného věku na konci 2025</h1>
+      <p class="sub">Čísla si jsou velmi blízká, ale nejde o prosté „přežití jedné uzavřené kohorty“. Výsledek ovlivňuje také migrace a změna počtu osob v daném věku.</p>
+    </section>
+
+    <section class="table">
+      <div class="grid">
+        <div>Ročník a věk</div>
+        <div>Narození</div>
+        <div>Obyvatelé stejného věku</div>
+        <div>Rozdíl</div>
+      </div>
+
+      <div class="rows">
+        <div class="row">
+          <div class="cohort">
+            <div class="main">1973</div>
+            <div class="age">věk 52</div>
+          </div>
+          <div class="cell">
+            <span class="label">Narození</span>
+            <div class="value">181&nbsp;750</div>
+          </div>
+          <div class="cell">
+            <span class="label">Obyvatelé</span>
+            <div class="value">180&nbsp;702</div>
+          </div>
+          <div class="cell diff negative">
+            <span class="label">Rozdíl</span>
+            <div class="value">−1&nbsp;048</div>
+            <div class="mini">méně než počet narozených</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="cohort">
+            <div class="main">1974</div>
+            <div class="age">věk 51</div>
+          </div>
+          <div class="cell">
+            <span class="label">Narození</span>
+            <div class="value">194&nbsp;215</div>
+          </div>
+          <div class="cell">
+            <span class="label">Obyvatelé</span>
+            <div class="value">193&nbsp;282</div>
+          </div>
+          <div class="cell diff negative">
+            <span class="label">Rozdíl</span>
+            <div class="value">−933</div>
+            <div class="mini">velmi těsný rozdíl</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="cohort">
+            <div class="main">1975</div>
+            <div class="age">věk 50</div>
+          </div>
+          <div class="cell">
+            <span class="label">Narození</span>
+            <div class="value">191&nbsp;776</div>
+          </div>
+          <div class="cell">
+            <span class="label">Obyvatelé</span>
+            <div class="value">191&nbsp;904</div>
+          </div>
+          <div class="cell diff positive">
+            <span class="label">Rozdíl</span>
+            <div class="value">+128</div>
+            <div class="mini">mírně více obyvatel</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="cohort">
+            <div class="main">1976</div>
+            <div class="age">věk 49</div>
+          </div>
+          <div class="cell">
+            <span class="label">Narození</span>
+            <div class="value">187&nbsp;378</div>
+          </div>
+          <div class="cell">
+            <span class="label">Obyvatelé</span>
+            <div class="value">189&nbsp;497</div>
+          </div>
+          <div class="cell diff positive">
+            <span class="label">Rozdíl</span>
+            <div class="value">+2&nbsp;119</div>
+            <div class="mini">výrazně více obyvatel</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="foot">
+      <div class="sources"><b>Zdroje:</b> ČSÚ – živě narození; DataStat – počet obyvatel podle jednotek věku k 31. 12. 2025.</div>
+      <div class="note">Autorská grafika z oficiálních řad ČSÚ. Právě ročníky 1975 a 1976 ukazují, proč dnešní počet obyvatel stejného věku nelze číst jako prosté přežití původně narozených – do výsledku vstupuje i migrace.</div>
+    </section>
+  </div>
+</body>
+</html>
