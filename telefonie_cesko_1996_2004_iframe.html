@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Česko: pevné vs. mobilní telefonní předplatné, 1996–2004</title>
+<style>
+  :root{
+    --bg1:#f5f7f9;--bg2:#e9edf2;--panel:#fff;--ink:#1f2933;--muted:#667281;
+    --line:#d8dee6;--fixed:#3f7fc4;--mobile:#f47b20;--accent:#1f2937;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:transparent;font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
+  body{padding:10px}
+  .wrap{max-width:1180px;margin:auto;background:linear-gradient(180deg,var(--bg1),var(--bg2));border:1px solid #d7dde4;border-radius:24px;overflow:hidden;box-shadow:0 20px 60px rgba(15,23,42,.10)}
+  .head{padding:30px 34px 18px;background:linear-gradient(180deg,#fafbfd,#eef2f6);border-bottom:1px solid var(--line)}
+  .eyebrow{display:inline-block;padding:8px 12px;border-radius:999px;background:linear-gradient(90deg,#1f2937,#475569);color:#fff;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+  h1{margin:0 0 10px;font-size:37px;line-height:1.08;letter-spacing:-.02em}
+  .sub{margin:0;color:var(--muted);font-size:18px;line-height:1.55;max-width:920px}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:20px 26px 8px}
+  .stat{background:rgba(255,255,255,.88);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+  .stat .k{font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#7b8793;margin-bottom:7px}
+  .stat .v{font-size:26px;font-weight:900;color:#25303a}
+  .stat .s{margin-top:5px;font-size:14px;color:#65717d;line-height:1.4}
+  .chartbox{padding:12px 20px 8px}
+  .chart{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 10px 24px rgba(15,23,42,.04)}
+  svg{display:block;width:100%;height:auto}
+  .legend{display:flex;gap:20px;flex-wrap:wrap;padding:5px 8px 0;font-size:14px;font-weight:800;color:#4d5864}
+  .legend span{display:inline-flex;align-items:center;gap:8px}.dot{width:12px;height:12px;border-radius:50%}.fixed{background:var(--fixed)}.mobile{background:var(--mobile)}
+  .foot{padding:14px 34px 30px}
+  .source{font-size:14px;line-height:1.55;color:#5d6873}
+  .note{margin-top:12px;padding:14px 16px;border-left:4px solid #334155;background:#f8fafb;border-radius:0 12px 12px 0;font-size:14px;line-height:1.55;color:#4f5b68}
+  @media(max-width:720px){body{padding:4px}.wrap{border-radius:18px}.head{padding:24px 18px 14px}h1{font-size:28px}.sub{font-size:16px}.stats{grid-template-columns:1fr;padding:16px 14px 4px}.chartbox{padding:10px 8px 6px}.chart{padding:8px}.foot{padding:10px 18px 22px}.legend{font-size:13px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="head">
+    <div class="eyebrow">Telekomunikace • Česko 1996–2004</div>
+    <h1>Pevné linky stagnovaly. Mobily během pár let explodovaly.</h1>
+    <p class="sub">Počet telefonních předplatných na 100 obyvatel ukazuje prudký přechod od klasických pevných linek k mobilním službám na přelomu tisíciletí.</p>
+  </section>
+
+  <section class="stats">
+    <div class="stat"><div class="k">1996</div><div class="v">27 vs. 2</div><div class="s">pevná vs. mobilní předplatná na 100 obyvatel</div></div>
+    <div class="stat"><div class="k">rok zlomu</div><div class="v">2000</div><div class="s">mobilní křivka se dostává nad pevnou</div></div>
+    <div class="stat"><div class="k">2004</div><div class="v">33 vs. 105</div><div class="s">mobilních předplatných už je přes 100 na 100 obyvatel</div></div>
+  </section>
+
+  <section class="chartbox">
+    <div class="chart">
+      <svg viewBox="0 0 1080 610" role="img" aria-label="Graf pevného a mobilního telefonního předplatného v Česku 1996 až 2004">
+        <rect x="0" y="0" width="1080" height="610" rx="18" fill="#ffffff"/>
+
+        <!-- plot area -->
+        <g transform="translate(95,45)">
+          <!-- horizontal grid -->
+          <g stroke="#e5e9ee" stroke-width="1">
+            <line x1="0" y1="480" x2="900" y2="480"/>
+            <line x1="0" y1="393" x2="900" y2="393"/>
+            <line x1="0" y1="305" x2="900" y2="305"/>
+            <line x1="0" y1="218" x2="900" y2="218"/>
+            <line x1="0" y1="131" x2="900" y2="131"/>
+            <line x1="0" y1="44" x2="900" y2="44"/>
+          </g>
+          <!-- vertical grid -->
+          <g stroke="#eef1f4" stroke-width="1">
+            <line x1="0" y1="44" x2="0" y2="480"/>
+            <line x1="112.5" y1="44" x2="112.5" y2="480"/>
+            <line x1="225" y1="44" x2="225" y2="480"/>
+            <line x1="337.5" y1="44" x2="337.5" y2="480"/>
+            <line x1="450" y1="44" x2="450" y2="480"/>
+            <line x1="562.5" y1="44" x2="562.5" y2="480"/>
+            <line x1="675" y1="44" x2="675" y2="480"/>
+            <line x1="787.5" y1="44" x2="787.5" y2="480"/>
+            <line x1="900" y1="44" x2="900" y2="480"/>
+          </g>
+
+          <!-- 2000 marker -->
+          <line x1="450" y1="20" x2="450" y2="480" stroke="#70a8e3" stroke-width="2" stroke-dasharray="7 6"/>
+          <rect x="408" y="0" width="84" height="28" rx="14" fill="#eef6ff" stroke="#b8d5f5"/>
+          <text x="450" y="19" text-anchor="middle" font-family="Arial" font-size="14" font-weight="800" fill="#3f7fc4">2000</text>
+
+          <!-- axes -->
+          <line x1="0" y1="480" x2="900" y2="480" stroke="#64717e" stroke-width="2"/>
+          <line x1="0" y1="44" x2="0" y2="480" stroke="#64717e" stroke-width="2"/>
+
+          <!-- y labels: 0,20,40,60,80,100 -->
+          <g font-family="Arial" font-size="14" fill="#64717e" text-anchor="end">
+            <text x="-12" y="485">0</text>
+            <text x="-12" y="398">20</text>
+            <text x="-12" y="310">40</text>
+            <text x="-12" y="223">60</text>
+            <text x="-12" y="136">80</text>
+            <text x="-12" y="49">100</text>
+          </g>
+
+          <!-- x labels -->
+          <g font-family="Arial" font-size="14" fill="#64717e" text-anchor="middle">
+            <text x="0" y="510">1996</text><text x="112.5" y="510">1997</text><text x="225" y="510">1998</text><text x="337.5" y="510">1999</text><text x="450" y="510">2000</text><text x="562.5" y="510">2001</text><text x="675" y="510">2002</text><text x="787.5" y="510">2003</text><text x="900" y="510">2004</text>
+          </g>
+
+          <!-- fixed line data approx: 27,32,36,36.5,37,37.5,35.5,35,33 -->
+          <polyline fill="none" stroke="#3f7fc4" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"
+            points="0,362 112.5,340 225,323 337.5,321 450,318 562.5,316 675,325 787.5,327 900,336"/>
+          <!-- mobile line data approx: 2,5,9,18.5,42,68,83.5,94.5,105 -->
+          <polyline fill="none" stroke="#f47b20" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"
+            points="0,471 112.5,458 225,441 337.5,399 450,297 562.5,184 675,116 787.5,68 900,22"/>
+
+          <!-- points -->
+          <g fill="#3f7fc4" stroke="#fff" stroke-width="3">
+            <circle cx="0" cy="362" r="7"/><circle cx="112.5" cy="340" r="7"/><circle cx="225" cy="323" r="7"/><circle cx="337.5" cy="321" r="7"/><circle cx="450" cy="318" r="7"/><circle cx="562.5" cy="316" r="7"/><circle cx="675" cy="325" r="7"/><circle cx="787.5" cy="327" r="7"/><circle cx="900" cy="336" r="7"/>
+          </g>
+          <g fill="#f47b20" stroke="#fff" stroke-width="3">
+            <circle cx="0" cy="471" r="7"/><circle cx="112.5" cy="458" r="7"/><circle cx="225" cy="441" r="7"/><circle cx="337.5" cy="399" r="7"/><circle cx="450" cy="297" r="7"/><circle cx="562.5" cy="184" r="7"/><circle cx="675" cy="116" r="7"/><circle cx="787.5" cy="68" r="7"/><circle cx="900" cy="22" r="7"/>
+          </g>
+
+          <!-- axis titles -->
+          <text x="450" y="555" text-anchor="middle" font-family="Arial" font-size="15" font-weight="800" fill="#4d5864">Rok</text>
+          <text transform="translate(-64,265) rotate(-90)" text-anchor="middle" font-family="Arial" font-size="15" font-weight="800" fill="#4d5864">Předplatná na 100 obyvatel</text>
+        </g>
+      </svg>
+      <div class="legend"><span><i class="dot fixed"></i>Pevná telefonní předplatná / 100 obyvatel</span><span><i class="dot mobile"></i>Mobilní předplatná / 100 obyvatel</span></div>
+    </div>
+  </section>
+
+  <section class="foot">
+    <div class="source"><b>Zdroj dat:</b> World Bank / World Telecommunication–ICT Indicators Database (ITU). Hodnoty jsou počty předplatných na 100 obyvatel, nikoli podíly unikátních lidí.</div>
+    <div class="note">Graf ukazuje zásadní změnu české telefonie na přelomu tisíciletí: zatímco počet pevných linek zůstával kolem podobné úrovně, mobilní předplatná rostla velmi rychle a kolem roku 2000 pevné linky překonala.</div>
+  </section>
+</div>
+</body>
+</html>
