@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Maxa liga po siréně – 9. kolo 2026/27</title>
+<style>
+:root{--ink:#071923;--navy:#0c2a3a;--petrol:#11506a;--ice:#eaf2f6;--paper:#fbfaf7;--gold:#c9a25c;--muted:#6c7a83;--line:#dfe5e7;--red:#a34d4d;--green:#1f6a58}
+*{box-sizing:border-box} html,body{margin:0;padding:0;background:#e9eef1;color:var(--ink);font-family:Arial,Helvetica,sans-serif} body{padding:14px}
+.shell{max-width:700px;margin:0 auto;background:var(--paper);border:1px solid #d6dee2;border-radius:20px;overflow:hidden;box-shadow:0 18px 54px rgba(7,25,35,.16)}
+.topbar{display:flex;justify-content:space-between;gap:14px;align-items:center;background:#04131b;color:#dce8ed;padding:10px 20px;font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.08)}
+.brandmark{color:var(--gold)}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#071923 0%,#0c3348 62%,#10556e 100%);color:white;padding:30px 22px 25px}
+.hero:before{content:"";position:absolute;right:-65px;top:-85px;width:250px;height:250px;border:1px solid rgba(255,255,255,.10);border-radius:50%;box-shadow:0 0 0 30px rgba(255,255,255,.025),0 0 0 60px rgba(255,255,255,.018)}
+.kicker{font-size:11px;letter-spacing:.17em;text-transform:uppercase;font-weight:800;color:#c8dae3;position:relative}
+h1{font-size:30px;line-height:1.04;margin:10px 0 11px;max-width:620px;position:relative;letter-spacing:-.03em}
+.deck{font-size:14px;line-height:1.48;color:#dce8ee;max-width:620px;position:relative}
+.ticker{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:19px;position:relative}
+.tick{background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:10px 9px}
+.tick b{display:block;font-size:17px;color:#fff;margin-bottom:3px} .tick span{display:block;font-size:9px;color:#bfd1da;text-transform:uppercase;letter-spacing:.08em;line-height:1.25}
+.editorial-strip{display:flex;align-items:center;gap:12px;background:#f0e8d8;border-bottom:1px solid #e2d5ba;padding:11px 20px;font-size:11px;line-height:1.35;color:#5e4a28}
+.editorial-strip b{color:#3d2e16;text-transform:uppercase;letter-spacing:.08em;font-size:10px;white-space:nowrap}
+.section{padding:23px 20px 0}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:12px;border-bottom:1px solid var(--line);padding-bottom:9px}
+.section-head h2{font-size:19px;margin:0;letter-spacing:-.015em} .section-head span{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.games{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.game-card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:13px;box-shadow:0 2px 0 rgba(7,25,35,.02)}
+.game-card:last-child:nth-child(odd){grid-column:1/-1}
+.roundline{display:flex;justify-content:space-between;font-size:9px;color:#7a878f;font-weight:800;letter-spacing:.08em}
+.match{display:grid;grid-template-columns:1fr auto 1fr;gap:7px;align-items:center;margin-top:9px}
+.club{font-size:11px;font-weight:800;line-height:1.18} .club.away{text-align:right} .score{font-size:21px;font-weight:900;letter-spacing:-.04em;color:var(--navy);white-space:nowrap}
+.periods{font-size:10px;color:#81909a;text-align:center;margin-top:6px}
+.game-note{font-size:10.5px;line-height:1.4;color:#53616a;border-top:1px solid #edf0f1;margin-top:9px;padding-top:8px}
+.desk{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.desk-card{position:relative;background:white;border:1px solid var(--line);border-radius:14px;padding:15px 15px 14px;overflow:hidden}
+.desk-card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--petrol)}
+.desk-card.gold:before{background:var(--gold)} .desk-card.red:before{background:var(--red)} .desk-card.green:before{background:var(--green)}
+.desk-card .label{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:#73818a;font-weight:900}
+.desk-card h3{font-size:16px;margin:6px 0 5px;color:var(--ink);line-height:1.18} .desk-card p{font-size:11px;line-height:1.45;color:#53616a;margin:0}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:13px;background:white} table{width:100%;border-collapse:collapse;min-width:640px;font-size:11px}
+th{background:#081c27;color:white;padding:9px 7px;font-size:9px;letter-spacing:.05em;text-transform:uppercase;text-align:center} th:nth-child(2){text-align:left}
+td{padding:8px 7px;text-align:center;border-bottom:1px solid #edf0f1} td.team{text-align:left;font-weight:800} td.pos{font-weight:800;color:#66757f} td.pts{font-weight:900;font-size:12px}
+tbody tr:nth-child(even){background:#f7f9fa} tr.leader{background:#fff4dc!important} tr.leader td.pos,tr.leader td.team,tr.leader td.pts{color:#8b611c} tr.danger{background:#fff7f7!important}
+.note{font-size:10.5px;line-height:1.45;color:#66757f;margin:8px 2px 0}
+.schedule table{min-width:570px} .when{white-space:nowrap;text-align:left;font-weight:800;color:#173f55} .dash{color:#9aa6ac} .moved{display:inline-block;background:#f2e1e1;color:#864444;border-radius:999px;padding:3px 6px;margin-left:4px;font-size:8px;font-weight:900;letter-spacing:.05em}
+.intermezzo{margin:13px 0 0;padding:12px 13px;border-radius:11px;background:#edf5f5;border:1px solid #d9e8e6;font-size:10.5px;line-height:1.45;color:#39575b}
+.footer{margin-top:23px;background:#04131b;color:#c8d5dc;padding:17px 20px 19px;font-size:9.5px;line-height:1.5} .footer b{color:white} .footer .sig{display:flex;justify-content:space-between;gap:12px;margin-top:8px;color:#82959f;font-size:8.5px;letter-spacing:.07em;text-transform:uppercase}
+@media(max-width:560px){body{padding:8px}.shell{border-radius:14px}.hero{padding:25px 16px 21px}h1{font-size:25px}.topbar{padding:9px 14px}.ticker{grid-template-columns:1fr 1fr}.section{padding:19px 14px 0}.games,.desk{grid-template-columns:1fr}.editorial-strip{padding:10px 14px;align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="topbar"><span class="brandmark">PO SIRÉNĚ</span><span>MAXA LIGA · 9. KOLO · 3. 10. 2026</span></div>
+  <header class="hero">
+    <div class="kicker">Luxusní ligový servis po poslední siréně</div>
+    <h1>Vsetín přežil poplach a utekl. Třebíč shodila Dynamo, Tábor nasázel osm</h1>
+    <div class="deck">Deváté kolo oddělilo lídra od zbytku. Vsetín ještě ve 42. minutě prohrával s Frýdkem 1:2, pak otočil na 5:2. Pardubice B padly v Třebíči a Tábor zničil Přerov 8:3.</div>
+    <div class="ticker">
+      <div class="tick"><b>9/9</b><span>Vsetín vyhrál každý zápas</span></div>
+      <div class="tick"><b>25 b.</b><span>Vsetín vede ligu</span></div>
+      <div class="tick"><b>8:3</b><span>Tábor rozebral Přerov</span></div>
+      <div class="tick"><b>3 góly</b><span>Valský i Coskey</span></div>
+    </div>
+  </header>
+  <div class="editorial-strip"><b>Redakční čtení</b><span>Vsetín má po devíti startech skóre 39:10 a tříbodový náskok. Pardubice B přitom v Třebíči vystřelily 38krát, ale našly jediný gól.</span></div>
+
+  <section class="section">
+    <div class="section-head"><h2>Výsledky 9. kola</h2><span>7 zápasů · final</span></div>
+    <div class="games"><article class="game-card">
+      <div class="roundline"><span>9. KOLO</span><span>3. 10. 2026</span></div>
+      <div class="match"><div class="club home">SK Horácká Slavia Třebíč</div><div class="score">4:1</div><div class="club away">HC Dynamo Pardubice B</div></div>
+      <div class="periods">1:1 · 2:0 · 1:0</div>
+      <div class="game-note">Dočekal otevřel už v 1. minutě; Malý a Rob zlomili zápas během 73 sekund.</div>
+    </article><article class="game-card">
+      <div class="roundline"><span>9. KOLO</span><span>3. 10. 2026</span></div>
+      <div class="match"><div class="club home">SC Retia Kolín</div><div class="score">3:2</div><div class="club away">HC Slavia Praha</div></div>
+      <div class="periods">1:1 · 2:0 · 0:1</div>
+      <div class="game-note">Kolín rozhodl druhou třetinou a ubránil závěrečný tlak Slavie.</div>
+    </article><article class="game-card">
+      <div class="roundline"><span>9. KOLO</span><span>3. 10. 2026</span></div>
+      <div class="match"><div class="club home">HC Stadion Litoměřice</div><div class="score">2:3</div><div class="club away">HC Dukla Jihlava</div></div>
+      <div class="periods">1:1 · 0:1 · 1:1</div>
+      <div class="game-note">Čachotský dal vítězný gól už 19 sekund po startu třetí třetiny.</div>
+    </article><article class="game-card">
+      <div class="roundline"><span>9. KOLO</span><span>3. 10. 2026</span></div>
+      <div class="match"><div class="club home">HC Baník Sokolov</div><div class="score">3:4</div><div class="club away">Piráti Chomutov</div></div>
+      <div class="periods">1:2 · 1:1 · 1:1</div>
+      <div class="game-note">Chomutov táhl Coskey hattrickem; Sokolov dal všechny tři góly v přesilovkách.</div>
+    </article><article class="game-card">
+      <div class="roundline"><span>9. KOLO</span><span>3. 10. 2026</span></div>
+      <div class="match"><div class="club home">HC AZ Havířov</div><div class="score">4:2</div><div class="club away">RI Okna Berani Zlín</div></div>
+      <div class="periods">2:1 · 1:1 · 1:0</div>
+      <div class="game-note">Havířov odskočil ze dna, Zlín po sedmé porážce spadl na poslední místo.</div>
+    </article><article class="game-card">
+      <div class="roundline"><span>9. KOLO</span><span>3. 10. 2026</span></div>
+      <div class="match"><div class="club home">HC Tábor</div><div class="score">8:3</div><div class="club away">HC ZUBR Přerov</div></div>
+      <div class="periods">3:2 · 4:0 · 1:1</div>
+      <div class="game-note">Valský hattrick. Dva jeho góly padly v rozmezí jediné 25. minuty.</div>
+    </article><article class="game-card">
+      <div class="roundline"><span>9. KOLO</span><span>3. 10. 2026</span></div>
+      <div class="match"><div class="club home">VHK ROBE Vsetín</div><div class="score">5:2</div><div class="club away">HC Frýdek-Místek</div></div>
+      <div class="periods">1:0 · 0:1 · 4:1</div>
+      <div class="game-note">Ve 42. minutě Vsetín prohrával 1:2. Pak přišly čtyři góly a devátá výhra.</div>
+    </article></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2>Redakční verdikty kola</h2><span>Po siréně desk</span></div>
+    <div class="desk">
+      <article class="desk-card gold"><div class="label">Hráč kola</div><h3>Jakub Valský · Tábor</h3><p>Hattrick při demolici Přerova 8:3. Kuriozita navíc: druhý a třetí gól stihl oba v 25. minutě.</p></article>
+      <article class="desk-card"><div class="label">Moment kola</div><h3>Lapač: ze stavu 1:2 na 5:2</h3><p>Frýdek vedl ještě ve 42. minutě. Vsetín pak ve třetí třetině nasázel čtyři góly a zůstal bez porážky.</p></article>
+      <article class="desk-card red"><div class="label">Smolař kola</div><h3>Pardubice B</h3><p>Dynamo v Třebíči vyhrálo na střely 38:33, ale na góly padlo 1:4. K tomu přišlo o kontakt s prvním místem.</p></article>
+      <article class="desk-card green"><div class="label">Číslo kola</div><h3>9/9 · Vsetín</h3><p>Devět utkání, devět vítězství. Sedm za tři body, dvě po prodloužení či nájezdech. Skóre 39:10.</p></article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2>Tabulka po 9. kole</h2><span>stav 3. 10. · 19:39</span></div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>#</th><th>Tým</th><th>Z</th><th>V</th><th>VP</th><th>PP</th><th>P</th><th>Skóre</th><th>B</th></tr></thead>
+      <tbody><tr class="leader"><td class="pos">1</td><td class="team">VHK ROBE Vsetín</td><td>9</td><td>7</td><td>2</td><td>0</td><td>0</td><td>39:10</td><td class="pts">25</td></tr><tr><td class="pos">2</td><td class="team">HC Dynamo Pardubice B</td><td>10</td><td>6</td><td>2</td><td>0</td><td>2</td><td>33:24</td><td class="pts">22</td></tr><tr><td class="pos">3</td><td class="team">HC Tábor</td><td>10</td><td>6</td><td>1</td><td>0</td><td>3</td><td>27:19</td><td class="pts">20</td></tr><tr><td class="pos">4</td><td class="team">SC Retia Kolín</td><td>10</td><td>4</td><td>3</td><td>1</td><td>2</td><td>29:26</td><td class="pts">19</td></tr><tr><td class="pos">5</td><td class="team">HC Stadion Litoměřice</td><td>10</td><td>5</td><td>1</td><td>1</td><td>3</td><td>37:26</td><td class="pts">18</td></tr><tr><td class="pos">6</td><td class="team">SK Horácká Slavia Třebíč</td><td>10</td><td>5</td><td>0</td><td>3</td><td>2</td><td>25:23</td><td class="pts">18</td></tr><tr><td class="pos">7</td><td class="team">HC Dukla Jihlava</td><td>10</td><td>3</td><td>2</td><td>2</td><td>3</td><td>23:27</td><td class="pts">15</td></tr><tr><td class="pos">8</td><td class="team">HC Frýdek-Místek</td><td>10</td><td>3</td><td>2</td><td>1</td><td>4</td><td>30:31</td><td class="pts">14</td></tr><tr><td class="pos">9</td><td class="team">HC ZUBR Přerov</td><td>10</td><td>4</td><td>0</td><td>0</td><td>6</td><td>22:35</td><td class="pts">12</td></tr><tr><td class="pos">10</td><td class="team">HC AZ Havířov</td><td>9</td><td>2</td><td>1</td><td>2</td><td>4</td><td>20:21</td><td class="pts">10</td></tr><tr><td class="pos">11</td><td class="team">Piráti Chomutov</td><td>10</td><td>3</td><td>0</td><td>1</td><td>6</td><td>25:33</td><td class="pts">10</td></tr><tr><td class="pos">12</td><td class="team">HC Slavia Praha</td><td>10</td><td>2</td><td>1</td><td>1</td><td>6</td><td>25:36</td><td class="pts">9</td></tr><tr class="danger"><td class="pos">13</td><td class="team">HC Baník Sokolov</td><td>10</td><td>2</td><td>0</td><td>2</td><td>6</td><td>24:36</td><td class="pts">8</td></tr><tr class="danger"><td class="pos">14</td><td class="team">RI Okna Berani Zlín</td><td>10</td><td>2</td><td>0</td><td>1</td><td>7</td><td>25:37</td><td class="pts">7</td></tr></tbody>
+    </table></div>
+    <div class="note">Počet odehraných zápasů není u všech klubů stejný. Vsetín má devět utkání, většina konkurentů deset. Pořadí proto čtěte společně se sloupcem Z.</div>
+  </section>
+
+  <section class="section schedule">
+    <div class="section-head"><h2>Co přijde v 10. kole</h2><span>7.–29. 11.</span></div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Termín</th><th>Domácí</th><th></th><th>Hosté</th></tr></thead>
+      <tbody><tr><td class="when">7. 10. · 17:00 </td><td class="team">HC Frýdek-Místek</td><td class="dash">—</td><td class="team">HC ZUBR Přerov</td></tr><tr><td class="when">7. 10. · 17:30 </td><td class="team">RI Okna Berani Zlín</td><td class="dash">—</td><td class="team">SC Retia Kolín</td></tr><tr><td class="when">7. 10. · 17:30 </td><td class="team">HC Dynamo Pardubice B</td><td class="dash">—</td><td class="team">HC Stadion Litoměřice</td></tr><tr><td class="when">7. 10. · 17:30 </td><td class="team">SK Horácká Slavia Třebíč</td><td class="dash">—</td><td class="team">HC AZ Havířov</td></tr><tr><td class="when">7. 10. · 18:00 </td><td class="team">HC Slavia Praha</td><td class="dash">—</td><td class="team">HC Baník Sokolov</td></tr><tr><td class="when">8. 10. · 17:30 </td><td class="team">Piráti Chomutov</td><td class="dash">—</td><td class="team">HC Tábor</td></tr><tr><td class="when">29. 11. · 17:30 <span class="moved">PŘELOŽENO</span></td><td class="team">HC Dukla Jihlava</td><td class="dash">—</td><td class="team">VHK ROBE Vsetín</td></tr></tbody>
+    </table></div>
+    <div class="intermezzo"><b>Ještě před 10. kolem:</b> Vsetín v neděli 4. 10. jede do Havířova k dohrávce 3. kola. Duel Jihlava - Vsetín z 10. kola je naopak přeložen až na 29. listopadu.</div>
+  </section>
+
+  <footer class="footer"><b>Datový stav:</b> po poslední siréně 9. kola, 3. 10. 2026. Výsledky a tabulka ověřeny proti aktuálnímu ligovému souhrnu; vybrané detaily proti klubovým zápisům. Program 10. kola ověřen proti rozpisu Hokej.cz.<div class="sig"><span>MAXA LIGA PO SIRÉNĚ</span><span>Adam Holl · Médium.cz</span></div></footer>
+</div>
+</body>
+</html>
