@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Standard 8 vs. Super 8</title>
+<style>
+  :root{
+    --bg1:#f4f6f8;
+    --bg2:#e9edf2;
+    --panel:#ffffff;
+    --ink:#1f2933;
+    --muted:#616d7c;
+    --line:#d8dee6;
+    --accent:#111827;
+    --accent2:#334155;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:transparent;font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
+  body{padding:10px}
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    background:linear-gradient(180deg,var(--bg1),var(--bg2));
+    border:1px solid #d7dde4;
+    border-radius:24px;
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(15,23,42,.10);
+  }
+  .head{
+    padding:30px 34px 18px;
+    background:linear-gradient(180deg,#f8fafc,#eef2f6);
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    display:inline-block;
+    margin-bottom:12px;
+    padding:8px 12px;
+    border-radius:999px;
+    background:linear-gradient(90deg,#1f2937,#475569);
+    color:#fff;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  h1{
+    margin:0 0 10px;
+    font-size:37px;
+    line-height:1.08;
+    letter-spacing:-.02em;
+  }
+  .sub{
+    margin:0;
+    max-width:920px;
+    color:var(--muted);
+    font-size:18px;
+    line-height:1.55;
+  }
+  .compare{
+    padding:26px 26px 12px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:26px;
+  }
+  .card{
+    background:rgba(255,255,255,.92);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:18px 18px 22px;
+    box-shadow:0 10px 24px rgba(15,23,42,.05);
+  }
+  .card h2{
+    margin:0 0 14px;
+    font-size:31px;
+    line-height:1.05;
+    letter-spacing:-.02em;
+    text-align:center;
+  }
+  .frame{
+    border:3px solid #2f3944;
+    border-radius:12px;
+    min-height:310px;
+    background:#f5f7f9;
+    position:relative;
+    padding:22px;
+  }
+  .film-inner{
+    display:grid;
+    grid-template-columns:64px 1fr;
+    gap:24px;
+    align-items:start;
+  }
+  .perfs{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    padding-top:8px;
+  }
+  .perf{
+    border:3px solid #4b5563;
+    background:#fff;
+    height:30px;
+    border-radius:2px;
+  }
+  .perf.std{width:42px}
+  .perf.sup{width:34px}
+  .image-area{
+    border:4px solid #222;
+    background:#fff;
+    position:relative;
+    margin:0 auto;
+  }
+  .image-area.std{
+    width:270px;
+    height:198px;
+    margin-top:16px;
+  }
+  .image-area.sup{
+    width:305px;
+    height:224px;
+    margin-top:6px;
+  }
+  .measure{
+    margin-top:14px;
+    text-align:center;
+    font-size:24px;
+    font-weight:800;
+    color:#2d3742;
+  }
+  .mini-note{
+    margin-top:12px;
+    text-align:center;
+    font-size:15px;
+    line-height:1.5;
+    color:#5f6974;
+  }
+  .mid-note{
+    margin:6px 34px 8px;
+    padding:16px 18px;
+    border-left:4px solid #334155;
+    border-radius:0 12px 12px 0;
+    background:#f8fafb;
+    color:#4f5b68;
+    font-size:16px;
+    line-height:1.55;
+  }
+  .foot{
+    padding:8px 34px 28px;
+  }
+  .caption{
+    margin:0;
+    text-align:center;
+    color:#4f5b68;
+    font-size:17px;
+    line-height:1.55;
+  }
+  .caption b{color:#24303c}
+  @media (max-width:1000px){
+    .compare{grid-template-columns:1fr;gap:18px}
+  }
+  @media (max-width:640px){
+    body{padding:4px}
+    .wrap{border-radius:18px}
+    .head{padding:24px 18px 14px}
+    .compare{padding:18px 14px 10px}
+    .foot{padding:4px 18px 20px}
+    .mid-note{margin:4px 18px 8px;font-size:15px}
+    h1{font-size:28px}
+    .sub{font-size:16px}
+    .card h2{font-size:27px}
+    .frame{min-height:auto;padding:16px}
+    .film-inner{grid-template-columns:50px 1fr;gap:14px}
+    .perfs{gap:12px}
+    .perf.std{width:34px;height:24px}
+    .perf.sup{width:28px;height:24px}
+    .image-area.std{width:210px;height:154px}
+    .image-area.sup{width:236px;height:173px}
+    .measure{font-size:21px}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="head">
+      <div class="eyebrow">Film • porovnání formátů</div>
+      <h1>Stejná šířka pásu 8 mm, jiné využití plochy</h1>
+      <p class="sub">Standard 8 a Super 8 používají stejně široký filmový pás, ale odlišné rozměry perforace i obrazového políčka. Menší perforace u Super 8 nechávají více místa pro samotný obraz.</p>
+    </section>
+
+    <section class="compare">
+      <article class="card">
+        <h2>Standard 8</h2>
+        <div class="frame">
+          <div class="film-inner">
+            <div class="perfs" aria-hidden="true">
+              <div class="perf std"></div>
+              <div class="perf std"></div>
+              <div class="perf std"></div>
+              <div class="perf std"></div>
+              <div class="perf std"></div>
+            </div>
+            <div>
+              <div class="image-area std"></div>
+              <div class="measure">políčko 4,5 × 3,3 mm</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Super 8</h2>
+        <div class="frame">
+          <div class="film-inner">
+            <div class="perfs" aria-hidden="true">
+              <div class="perf sup"></div>
+              <div class="perf sup"></div>
+              <div class="perf sup"></div>
+              <div class="perf sup"></div>
+              <div class="perf sup"></div>
+            </div>
+            <div>
+              <div class="image-area sup"></div>
+              <div class="measure">políčko 5,79 × 4,01 mm</div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <div class="mid-note">Menší perforace <b>Super 8</b> ponechávají na stejně širokém pásu více místa pro obraz, a proto má výsledné políčko citelně větší plochu než u formátu <b>Standard 8</b>.</div>
+
+    <section class="foot">
+      <p class="caption"><b>Porovnání rozměrů obrazového políčka.</b> Diagram je orientační a není v měřítku celé filmové mechaniky.</p>
+    </section>
+  </div>
+</body>
+</html>
