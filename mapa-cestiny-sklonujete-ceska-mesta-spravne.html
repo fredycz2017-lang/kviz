@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAPA ČEŠTINY: Do Brandýsa, v Aši, z Břeclavi. Skloňujete česká města správně?</title>
+<style>
+:root {
+  --bg:#edf5fb;
+  --panel:#ffffff;
+  --ink:#173049;
+  --accent:#1e6ea9;
+  --accent2:#0f4e78;
+  --line:#b8d0e4;
+  --good:#2d8053;
+  --bad:#9f3b3b;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at top,#f8fcff 0%,#edf5fb 35%,#dbe9f4 100%);color:var(--ink)}
+.app{max-width:1180px;margin:0 auto;padding:18px}
+.hero{background:linear-gradient(135deg,#ffffff,#f1f8fd);border:2px solid var(--line);border-radius:22px;padding:18px 20px;box-shadow:0 12px 28px rgba(16,65,102,.08)}
+.badge{display:inline-block;border:1px solid var(--line);padding:6px 10px;border-radius:999px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:#f7fbff}
+h1{margin:10px 0 6px;font-size:clamp(26px,4vw,42px);line-height:1.06}
+.sub{margin:0;max-width:860px;line-height:1.55;color:#44607a}
+.layout{margin-top:18px;display:grid;grid-template-columns:340px 1fr;gap:18px}
+.card{background:var(--panel);border:2px solid var(--line);border-radius:20px;box-shadow:0 12px 28px rgba(16,65,102,.08)}
+.sidebar{padding:18px;position:sticky;top:16px;height:fit-content}
+.main{padding:18px}
+.map{position:relative;height:160px;border-radius:16px;background:linear-gradient(180deg,#dff1fb,#f6fbff);border:2px solid #cae0f0;overflow:hidden}
+.map:before,.map:after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(30,110,169,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(30,110,169,.08) 1px,transparent 1px);background-size:22px 22px;pointer-events:none}
+.pin{position:absolute;width:14px;height:14px;background:var(--accent);border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 0 0 4px rgba(30,110,169,.12)}
+.pin:after{content:'';position:absolute;width:6px;height:6px;background:white;border-radius:50%;top:4px;left:4px}
+.pin.p1{left:18%;top:38%} .pin.p2{left:49%;top:57%} .pin.p3{left:74%;top:42%} .pin.p4{left:34%;top:24%} .pin.p5{left:61%;top:20%}
+.route{margin:16px 0;display:grid;gap:8px}
+.stop{padding:10px 12px;border-radius:12px;border:2px dashed #bfd5e7;background:#f8fcff;color:#49647c;font-weight:700}
+.stop.done{background:#e7f3fb;border-style:solid;border-color:#6da4c8;color:#144870}
+.progressLabel{display:flex;justify-content:space-between;font-weight:700;margin-top:12px}
+.panel{background:#fbfeff;border:2px solid #dbeaf4;border-radius:18px;padding:18px}
+.zoneTag{display:inline-block;background:#eaf5fc;border:1px solid #b8d5ea;color:#21567f;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.question{font-size:clamp(22px,3vw,30px);font-weight:700;line-height:1.23;margin:12px 0 18px}
+.cityCard{margin-bottom:14px;padding:12px 14px;border-radius:14px;background:linear-gradient(180deg,#f4fbff,#edf7fc);border:1px solid #cbe0ef;color:#4b6781;font-size:14px}
+.answers{display:grid;gap:12px}
+.answer{border:2px solid #c7dbea;background:white;padding:14px;border-radius:14px;text-align:left;font-size:17px;cursor:pointer;transition:.15s ease}
+.answer:hover{transform:translateY(-1px);border-color:#7db1d3}
+.answer.correct{background:#ebf7ef;border-color:var(--good)}
+.answer.wrong{background:#fbe9e9;border-color:var(--bad)}
+.answer.locked{pointer-events:none}
+.feedback{display:none;margin-top:16px;padding:14px;border-radius:14px;border:2px solid #d3e4f0;background:#f8fcff;line-height:1.55}
+.feedback.show{display:block}
+.controls{display:flex;justify-content:flex-end;margin-top:16px}
+.next,.restart{border:none;background:linear-gradient(180deg,var(--accent),var(--accent2));color:white;padding:13px 18px;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer}
+.next[disabled]{opacity:.45;cursor:not-allowed}
+.result{display:none;text-align:center;padding:30px 18px}
+.result h2{font-size:34px;margin:0 0 10px}
+.score{font-size:60px;font-weight:800;color:var(--accent2)}
+.band{max-width:660px;margin:14px auto 18px;padding:14px;border-radius:16px;background:#f7fbff;border:2px solid #d7e7f2;line-height:1.55}
+.legend{font-size:14px;color:#49647c;line-height:1.5}
+.small{font-size:13px;color:#577088}
+@media (max-width:900px){.layout{grid-template-columns:1fr} .sidebar{position:static} }
+@media (max-width:540px){.app{padding:10px} .hero,.sidebar,.main{padding:14px} .route{grid-template-columns:1fr 1fr} .answer{font-size:16px} }
+</style>
+</head>
+<body>
+<div class="app">
+  <section class="hero">
+    <div class="badge">Čeština • atlas místních jmen</div>
+    <h1>MAPA ČEŠTINY: Do Brandýsa, v Aši, z Břeclavi. Skloňujete česká města správně?</h1>
+    <p class="sub">Praktická čeština místo školního testu. Každá otázka je jedna běžná věta, kde rozhodujete o správném tvaru českého místního jména.</p>
+  </section>
+
+  <div class="layout">
+    <aside class="card sidebar">
+      <h3 style="margin-top:0">Adresní atlas</h3>
+      <div class="map" aria-hidden="true">
+        <span class="pin p1"></span><span class="pin p2"></span><span class="pin p3"></span><span class="pin p4"></span><span class="pin p5"></span>
+      </div>
+      <div class="progressLabel"><span>Doručovací trasa</span><span id="progressText">1 / 15</span></div>
+      <div class="route" id="routeList"></div>
+      <p class="legend">Pět jazykových oblastí, patnáct vět a vždy jen jeden správný tvar. Výsledek nehodnotí inteligenci, jen to, jak jistě se orientujete v praktické češtině.</p>
+    </aside>
+
+    <main class="card main">
+      <section id="quizArea">
+        <div class="panel">
+          <div class="zoneTag" id="zoneTag"></div>
+          <div class="cityCard">Dispečink hlídá, aby se doručilo správně. Vyberte podobu, kterou by schválila kodifikace i běžné užití.</div>
+          <div class="question" id="question"></div>
+          <div class="answers" id="answers"></div>
+          <div class="feedback" id="feedback"></div>
+          <div class="controls"><button class="next" id="nextBtn" disabled>Další kartička</button></div>
+        </div>
+      </section>
+      <section class="result" id="resultArea">
+        <h2>Trasa dokončena</h2>
+        <div class="score" id="scoreOut"></div>
+        <div class="band" id="bandOut"></div>
+        <button class="restart" id="restartBtn">Zkusit znovu</button>
+        <p class="small">Kvíz používá jen jednoznačné, běžně kodifikované tvary místních jmen.</p>
+      </section>
+    </main>
+  </div>
+</div>
+<script>
+const questions = [{"zone": "Čechy", "q": "Doplňte správně: „Zítra jedeme ___ Aše.“", "options": ["do Aše", "do Aši", "k Aš", "na Aše"], "correct": 1, "explanation": "Správný tvar je „do Aši“."}, {"zone": "Čechy", "q": "Doplňte správně: „V létě jsme byli ___ Třeboni.“", "options": ["v Třeboni", "ve Třeboňi", "v Třeboňu", "na Třeboni"], "correct": 0, "explanation": "Správně je „v Třeboni“."}, {"zone": "Čechy", "q": "Doplňte správně: „Vracíme se ___ Příbrami.“", "options": ["z Příbramě", "z Příbrami", "od Příbramu", "ze Příbram"], "correct": 1, "explanation": "Správný 2. pád po předložce z je „z Příbrami“."}, {"zone": "Morava", "q": "Doplňte správně: „Služebně jel ___ Břeclavi.“", "options": ["do Břeclavy", "do Břeclavi", "na Břeclav", "k Břeclavě"], "correct": 1, "explanation": "Správný tvar je „do Břeclavi“."}, {"zone": "Morava", "q": "Doplňte správně: „Vracela se ___ Jihlavy.“", "options": ["ze Jihlav", "z Jihlavy", "od Jihlavi", "z Jihlavě"], "correct": 1, "explanation": "Správně je „z Jihlavy“."}, {"zone": "Morava", "q": "Doplňte správně: „Konference se koná ___ Olomouci.“", "options": ["v Olomouci", "ve Olomouci", "na Olomouc", "v Olomoucí"], "correct": 0, "explanation": "Správný tvar je „v Olomouci“."}, {"zone": "Slezsko", "q": "Doplňte správně: „Pochází ___ Opavy.“", "options": ["od Opavy", "z Opavy", "ze Opavě", "z Opavu"], "correct": 1, "explanation": "Správně je „z Opavy“."}, {"zone": "Slezsko", "q": "Doplňte správně: „Pracuje ___ Ostravě.“", "options": ["v Ostravě", "ve Ostravě", "na Ostravě", "v Ostravu"], "correct": 0, "explanation": "Správný tvar je „v Ostravě“."}, {"zone": "Slezsko", "q": "Doplňte správně: „Příští týden pojede ___ Karviné.“", "options": ["na Karvinou", "do Karviné", "do Karviny", "k Karvině"], "correct": 2, "explanation": "Správně je „do Karviny“."}, {"zone": "Složité názvy", "q": "Doplňte správně: „Jeli jsme ___ Pardubic.“", "options": ["do Pardubic", "do Pardubice", "k Pardubicím", "na Pardubice"], "correct": 0, "explanation": "Správný tvar je „do Pardubic“."}, {"zone": "Složité názvy", "q": "Doplňte správně: „Vrací se ___ Poděbrad.“", "options": ["z Poděbrad", "ze Poděbradů", "od Poděbrad", "z Poděbrady"], "correct": 0, "explanation": "Správně je „z Poděbrad“."}, {"zone": "Složité názvy", "q": "Doplňte správně: „Výlet plánujeme ___ Klatov.“", "options": ["do Klatov", "do Klatovy", "k Klatovám", "na Klatov"], "correct": 0, "explanation": "Správný tvar je „do Klatov“."}, {"zone": "Finále", "q": "Doplňte správně: „Schůzka bude ___ Chrudimi.“", "options": ["v Chrudimi", "ve Chrudimi", "na Chrudimi", "v Chrudimě"], "correct": 0, "explanation": "Správně je „v Chrudimi“."}, {"zone": "Finále", "q": "Doplňte správně: „Přijeli jsme ___ Litomyšle.“", "options": ["od Litomyšli", "z Litomyšlu", "z Litomyšle", "ze Litomyšly"], "correct": 2, "explanation": "Správný tvar je „z Litomyšle“."}, {"zone": "Finále", "q": "Doplňte správně: „Dovolenou letos zahájíme ___ Českých Budějovicích.“", "options": ["v Českých Budějovicích", "ve Českých Budějovicích", "v Českých Budějovic", "na Českých Budějovicích"], "correct": 0, "explanation": "Správný tvar je „v Českých Budějovicích“."}];
+const zones = ["Čechy", "Morava", "Slezsko", "Složité názvy", "Finále"];
+let idx = 0, score = 0, answered = false;
+const qEl = document.getElementById('question');
+const aEl = document.getElementById('answers');
+const fbEl = document.getElementById('feedback');
+const nextBtn = document.getElementById('nextBtn');
+const progressText = document.getElementById('progressText');
+const zoneTag = document.getElementById('zoneTag');
+const routeList = document.getElementById('routeList');
+const quizArea = document.getElementById('quizArea');
+const resultArea = document.getElementById('resultArea');
+const scoreOut = document.getElementById('scoreOut');
+const bandOut = document.getElementById('bandOut');
+const restartBtn = document.getElementById('restartBtn');
+
+function buildRoute(){
+  routeList.innerHTML='';
+  zones.forEach((z,i)=>{
+    const el = document.createElement('div');
+    el.className='stop';
+    el.id='stop-'+i;
+    el.textContent = z;
+    routeList.appendChild(el);
+  });
+}
+function updateRoute(){
+  const completedZones = Math.floor(idx/3);
+  document.querySelectorAll('.stop').forEach((el,i)=>{
+    el.classList.toggle('done', i < completedZones || (i === completedZones && idx === questions.length));
+    if(el.classList.contains('done')) el.textContent = zones[i] + ' • DORUČENO';
+  });
+}
+function render(){
+  answered = false; nextBtn.disabled = true; fbEl.className='feedback';
+  const q = questions[idx];
+  zoneTag.textContent = q.zone;
+  qEl.textContent = q.q;
+  progressText.textContent = `${idx+1} / ${questions.length}`;
+  aEl.innerHTML='';
+  q.options.forEach((opt,i)=>{
+    const btn = document.createElement('button');
+    btn.className='answer';
+    btn.innerHTML = `<strong>${String.fromCharCode(65+i)}.</strong> ${opt}`;
+    btn.onclick = ()=> choose(i);
+    aEl.appendChild(btn);
+  });
+  updateRoute();
+}
+function choose(choice){
+  if(answered) return;
+  answered = true;
+  const q = questions[idx];
+  const buttons=[...document.querySelectorAll('.answer')];
+  buttons.forEach((b,i)=>{
+    b.classList.add('locked');
+    if(i===q.correct) b.classList.add('correct');
+    if(i===choice && i!==q.correct) b.classList.add('wrong');
+  });
+  const ok = choice===q.correct;
+  if(ok) score++;
+  fbEl.className='feedback show';
+  fbEl.innerHTML = `<strong>${ok ? 'Správně.' : 'Pozor na tvar.'}</strong>${q.explanation}`;
+  nextBtn.disabled=false;
+}
+nextBtn.addEventListener('click',()=>{ idx++; if(idx>=questions.length) finish(); else render(); });
+function finish(){
+  updateRoute();
+  quizArea.style.display='none';
+  resultArea.style.display='block';
+  scoreOut.textContent = `${score} / ${questions.length}`;
+  let text='Praktická čeština vás nezaskočila.';
+  if(score<=5) text='Tvarosloví místních jmen vás trochu potrápilo. O to víc ale tenhle kvíz ukazuje, že čeština je nejsilnější právě v praktických situacích.';
+  else if(score<=10) text='Solidní výsledek. Většinu běžných tvarů měst zvládáte, jen pár názvů umí ještě překvapit.';
+  else if(score<=13) text='Velmi dobré. Máte jistotu v tom, co člověk opravdu píše a říká každý den.';
+  else text='Výborně. Tohle je přesně ten typ jazykového přehledu, který nestojí na biflování, ale na jistotě v běžné češtině.';
+  bandOut.textContent = text;
+}
+restartBtn.addEventListener('click',()=>{idx=0;score=0;quizArea.style.display='block';resultArea.style.display='none';buildRoute();render();});
+buildRoute(); render();
+</script>
+</body>
+</html>
