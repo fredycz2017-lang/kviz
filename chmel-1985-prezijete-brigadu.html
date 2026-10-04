@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHMEL 1985: Přežijete brigádu od budíčku po česačku?</title>
+<style>
+:root {
+  --bg:#efe6d1;
+  --panel:#f7f1e3;
+  --ink:#2e261b;
+  --accent:#687d2d;
+  --accent2:#ab7a2d;
+  --line:#b39c73;
+  --good:#2f7d4a;
+  --bad:#9c3b33;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#d6c49b 0%,#efe6d1 30%,#e3d5b1 100%);color:var(--ink)}
+.wrapper{max-width:1100px;margin:0 auto;padding:18px}
+header{background:rgba(255,255,255,.62);border:2px solid var(--line);border-radius:18px;padding:18px 20px;box-shadow:0 10px 24px rgba(0,0,0,.08)}
+.kicker{display:inline-block;background:#ede1bf;border:1px solid var(--line);padding:6px 10px;border-radius:999px;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+h1{margin:10px 0 6px;font-size:clamp(26px,4vw,42px);line-height:1.06}
+.sub{margin:0;color:#5d4f39;max-width:760px;line-height:1.5}
+.grid{display:grid;grid-template-columns:320px 1fr;gap:18px;margin-top:18px}
+.card{background:var(--panel);border:2px solid var(--line);border-radius:18px;box-shadow:0 10px 24px rgba(0,0,0,.08)}
+.left{padding:18px;position:sticky;top:16px;height:fit-content}
+.right{padding:18px}
+.stampcard{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:16px 0}
+.stamp{aspect-ratio:1/1;border:2px dashed var(--line);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:12px;text-align:center;padding:8px;background:#fbf7ee;color:#71593a}
+.stamp.done{background:rgba(47,125,74,.12);border-style:solid;border-color:var(--good);color:var(--good);font-weight:700}
+.field{height:92px;border-radius:16px;background:repeating-linear-gradient(90deg,#7b9444 0 16px,#88a049 16px 32px,#6f863d 32px 48px);border:2px solid #6b7f39;position:relative;overflow:hidden}
+.wire{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.45)}
+.wire:nth-child(1){left:14%} .wire:nth-child(2){left:29%} .wire:nth-child(3){left:44%} .wire:nth-child(4){left:59%} .wire:nth-child(5){left:74%} .wire:nth-child(6){left:89%}
+.progressLabel{display:flex;justify-content:space-between;font-weight:700;margin-top:10px}
+.questionBox{background:#fcf8f0;border:2px solid #dbc8a4;border-radius:18px;padding:18px}
+.zoneTag{display:inline-block;background:#f0e1ba;color:#644b22;border:1px solid #ccb07a;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.question{font-size:clamp(22px,3vw,30px);line-height:1.22;margin:12px 0 18px;font-weight:700}
+.answers{display:grid;gap:12px}
+.answer{border:2px solid #cbb58a;background:#fffdf8;padding:14px;border-radius:14px;cursor:pointer;text-align:left;font-size:17px;transition:.15s ease}
+.answer:hover{transform:translateY(-1px);border-color:#a88953}
+.answer.correct{border-color:var(--good);background:#e8f5ec}
+.answer.wrong{border-color:var(--bad);background:#fae9e7}
+.answer.locked{pointer-events:none}
+.feedback{display:none;margin-top:16px;padding:14px 16px;border-radius:14px;border:2px solid #d4c1a0;background:#fffaf1;line-height:1.5}
+.feedback.show{display:block}
+.feedback strong{display:block;margin-bottom:6px}
+.controls{display:flex;justify-content:flex-end;margin-top:16px}
+button.next,button.restart{border:none;background:linear-gradient(180deg,var(--accent2),#8c6120);color:white;padding:13px 18px;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.1)}
+button.next[disabled]{opacity:.4;cursor:not-allowed}
+.legend{font-size:14px;color:#6d614a;line-height:1.5}
+.result{display:none;text-align:center;padding:30px 18px}
+.result h2{font-size:34px;margin:0 0 10px}
+.score{font-size:60px;font-weight:800;color:var(--accent2)}
+.resultBand{margin:12px auto 18px;max-width:640px;padding:14px;border-radius:16px;background:#fffaf1;border:2px solid #d3bf95;line-height:1.6}
+.small{font-size:13px;color:#6d614a}
+@media (max-width:860px){.grid{grid-template-columns:1fr} .left{position:static} .stampcard{grid-template-columns:repeat(5,1fr)} }
+@media (max-width:540px){.wrapper{padding:10px} .right,.left,header{padding:14px} .answer{font-size:16px} .stampcard{grid-template-columns:repeat(3,1fr)} }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <header>
+    <div class="kicker">Husákovy děti • vlastní herní svět</div>
+    <h1>CHMEL 1985: Přežijete brigádu od budíčku po česačku?</h1>
+    <p class="sub">Projděte jedním konkrétním dnem na chmelové brigádě. Žádný generický retro mix — od budíčku přes pole a česačku až po vážení a ubytovnu.</p>
+  </header>
+
+  <div class="grid">
+    <aside class="card left">
+      <h3 style="margin-top:0">Směnovka</h3>
+      <div class="field" aria-hidden="true">
+        <span class="wire"></span><span class="wire"></span><span class="wire"></span><span class="wire"></span><span class="wire"></span><span class="wire"></span>
+      </div>
+      <div class="progressLabel"><span>Průchod směnou</span><span id="progressText">1 / 15</span></div>
+      <div class="stampcard" id="stampCard"></div>
+      <p class="legend">Po každé správné odpovědi získáte razítko <strong>SMĚNA OK</strong>. Výsledek nic „neměří“ — jen ukáže, jak moc rozumíte prostředí chmelové brigády.</p>
+    </aside>
+
+    <main class="card right">
+      <section id="quizArea">
+        <div class="questionBox">
+          <div class="zoneTag" id="zoneTag"></div>
+          <div class="question" id="question"></div>
+          <div class="answers" id="answers"></div>
+          <div class="feedback" id="feedback"></div>
+          <div class="controls"><button class="next" id="nextBtn" disabled>Další stanoviště</button></div>
+        </div>
+      </section>
+      <section class="result" id="resultArea">
+        <h2>Konec směny</h2>
+        <div class="score" id="scoreOut"></div>
+        <div class="resultBand" id="bandOut"></div>
+        <button class="restart" id="restartBtn">Zkusit znovu</button>
+        <p class="small">Kvíz je optimalizovaný pro desktop i mobil a po každé odpovědi ukazuje okamžitou zpětnou vazbu.</p>
+      </section>
+    </main>
+  </div>
+</div>
+<script>
+const questions = [{"zone": "Nástup", "q": "Co se při sklizni chmele sbírá jako nejcennější část rostliny pro pivovarnictví?", "options": ["Kořeny", "Samčí květy", "Šištice", "Stonky"], "correct": 2, "explanation": "V pivovarnictví se využívají hlavně chmelové šištice, které nesou hořké a aromatické látky."}, {"zone": "Nástup", "q": "Proč se chmel na poli vede po drátcích nebo konstrukci vzhůru?", "options": ["Aby rostl jako popínavá rostlina za světlem", "Aby se dal zalévat shora", "Aby se pod ním dalo parkovat", "Aby byl chráněný před větrem pod zemí"], "correct": 0, "explanation": "Chmel je popínavá rostlina. Po opoře se pne vzhůru, získá více světla a dá se lépe pěstovat i sklízet."}, {"zone": "Nástup", "q": "Která oblast je v Česku se sklizní chmele spojována nejsilněji?", "options": ["Žatecko", "Poodří", "Haná", "Vysočina"], "correct": 0, "explanation": "Žatecko patří mezi nejznámější české chmelařské oblasti a se sklizní chmele je spojováno nejvíc."}, {"zone": "Pole", "q": "Co se na chmelnici obvykle dělo s dlouhými liánami při sklizni?", "options": ["Nechaly se dál růst do zimy", "Stáhly se nebo odřezaly z konstrukce", "Zakopaly se do země", "Natřely se vápnem"], "correct": 1, "explanation": "Při sklizni bylo potřeba liány z konstrukce stáhnout nebo odřezat, aby se s nimi dalo dál pracovat."}, {"zone": "Pole", "q": "Jaký byl smysl oddělovat při zpracování šištice od přebytečných listů a částí lodyhy?", "options": ["Aby materiál zůstal kvalitní a čistší", "Aby chmel změnil barvu", "Aby byl těžší při vážení", "Aby se nemusel sušit"], "correct": 0, "explanation": "Čistší sklizeň znamenala kvalitnější surovinu. Přebytečné listy a kusy lodyh byly nežádoucí příměs."}, {"zone": "Pole", "q": "Kdy v roce sklizeň chmele nejčastěji vrcholí?", "options": ["V lednu", "Na přelomu srpna a září", "V prosinci", "V květnu"], "correct": 1, "explanation": "Hlavní sklizeň chmele připadá typicky na konec léta, nejčastěji na přelom srpna a září."}, {"zone": "Česačka", "q": "Jakou roli měla česačka při zpracování sklizeného chmele?", "options": ["Zalévala pole", "Třídila pivní lahve", "Oddělovala šištice od rostlinné hmoty", "Měřila cukernatost piva"], "correct": 2, "explanation": "Česačka byla stroj, který pomáhal oddělit šištice od listů, lodyh a dalších částí rostlin."}, {"zone": "Česačka", "q": "Proč nebylo vhodné nechávat nasbíraný chmel dlouho ležet bez dalšího zpracování?", "options": ["Rychle se zhoršovala jeho kvalita", "Okamžitě ztěžkl o polovinu", "Začal se měnit v siláž", "Nešel potom zvážit"], "correct": 0, "explanation": "Chmel je citlivá surovina. Bez rychlého dalšího zpracování a sušení by se zhoršovala jeho kvalita."}, {"zone": "Česačka", "q": "Co z toho vystihuje brigády na chmelu nejpřesněji?", "options": ["Byla to vždy povinnost pro úplně každého", "Šlo o jednotnou celostátní akci bez rozdílů", "Podoba brigád se lišila podle školy, místa a doby", "Chmel se sbíral jen stroji a lidé nebyli potřeba"], "correct": 2, "explanation": "Podoba brigád se lišila. Není přesné tvrdit, že by všude a vždy šlo o naprosto stejnou povinnost pro každého."}, {"zone": "Vážení", "q": "Proč se sklizeň nebo natrhaný materiál na brigádách vážil?", "options": ["Kvůli evidenci a kontrole výkonu", "Kvůli měření teploty chmele", "Aby se poznalo stáří pole", "Aby se vybrala odrůda piva"], "correct": 0, "explanation": "Vážení sloužilo hlavně k evidenci, kontrole práce a v některých situacích i jako podklad pro odměnu."}, {"zone": "Vážení", "q": "Co obvykle následovalo po sklizni, aby se chmel dal bezpečně uchovat pro další použití?", "options": ["Okamžité mražení v ledu", "Sušení", "Nakládání do soli", "Přímé vaření v kotli"], "correct": 1, "explanation": "Po sklizni je potřeba chmel usušit, aby se stabilizoval a mohl se dál skladovat a zpracovávat."}, {"zone": "Vážení", "q": "K čemu sloužila směnovka nebo pracovní výkaz v brigádnickém prostředí?", "options": ["Jen jako suvenýr na památku", "K evidenci směny, úkolů a splnění práce", "Jako vstupenka do kina", "K přidělování piva po směně"], "correct": 1, "explanation": "Směnovka nebo výkaz pomáhaly zaznamenat průběh směny, účast i splnění práce."}, {"zone": "Ubytovna", "q": "Jaké ubytování bylo s brigádami často spojeno?", "options": ["Izolované hotelové pokoje po jednom", "Společné ubytování na internátu nebo v jednoduchých pokojích", "Povinně soukromé apartmány", "Stan bez střechy uprostřed pole"], "correct": 1, "explanation": "S brigádami bylo často spojeno jednodušší společné ubytování, například internátní nebo podobné."}, {"zone": "Ubytovna", "q": "Co nejlépe vystihuje smysl kvízu o chmelové brigádě v tomto formátu?", "options": ["Je to obecný mix o socialismu", "Je to průchod jedním konkrétním pracovním dnem a procesem", "Je to test vojenských hodností", "Je to kvíz o českém pivu po roce 2000"], "correct": 1, "explanation": "Tady nejde o generické retro, ale o konkrétní průchod jednou chmelovou směnou od nástupu až po konec dne."}, {"zone": "Ubytovna", "q": "Proč je nepřesné líčit sklizeň chmele jen romanticky jako výlet?", "options": ["Protože šlo i o fyzickou práci s režimem a povinnostmi", "Protože se chmel sbíral jen v noci", "Protože se nesmělo mluvit", "Protože na poli býval sníh"], "correct": 0, "explanation": "Vedle vzpomínek a zážitků šlo i o fyzicky náročnou práci, ranní režim a konkrétní pracovní povinnosti."}];
+const zones = ["Nástup", "Pole", "Česačka", "Vážení", "Ubytovna"];
+let idx = 0;
+let score = 0;
+let answered = false;
+const stampCard = document.getElementById('stampCard');
+const qEl = document.getElementById('question');
+const aEl = document.getElementById('answers');
+const fbEl = document.getElementById('feedback');
+const nextBtn = document.getElementById('nextBtn');
+const progressText = document.getElementById('progressText');
+const zoneTag = document.getElementById('zoneTag');
+const quizArea = document.getElementById('quizArea');
+const resultArea = document.getElementById('resultArea');
+const scoreOut = document.getElementById('scoreOut');
+const bandOut = document.getElementById('bandOut');
+const restartBtn = document.getElementById('restartBtn');
+
+function buildStampCard(){
+  stampCard.innerHTML = '';
+  zones.forEach((z,i)=>{
+    const div = document.createElement('div');
+    div.className = 'stamp';
+    div.id = 'stamp-'+i;
+    div.innerHTML = '<span>'+z+'</span>';
+    stampCard.appendChild(div);
+  });
+}
+function updateStamps(){
+  const completedZones = Math.floor(idx/3);
+  document.querySelectorAll('.stamp').forEach((el,i)=>{
+    el.classList.toggle('done', i < completedZones || (i === completedZones && idx === questions.length));
+    if(el.classList.contains('done')) el.innerHTML = '<span>'+zones[i]+'<br>SMĚNA OK</span>';
+  });
+}
+function render(){
+  answered = false;
+  nextBtn.disabled = true;
+  fbEl.className = 'feedback';
+  const q = questions[idx];
+  zoneTag.textContent = q.zone;
+  qEl.textContent = q.q;
+  aEl.innerHTML = '';
+  progressText.textContent = `${idx+1} / ${questions.length}`;
+  q.options.forEach((opt,i)=>{
+    const btn = document.createElement('button');
+    btn.className='answer';
+    btn.innerHTML = `<strong>${String.fromCharCode(65+i)}.</strong> ${opt}`;
+    btn.onclick = ()=> choose(i);
+    aEl.appendChild(btn);
+  });
+  updateStamps();
+}
+function choose(choice){
+  if(answered) return;
+  answered = true;
+  const q = questions[idx];
+  const buttons = [...document.querySelectorAll('.answer')];
+  buttons.forEach((b,i)=>{
+    b.classList.add('locked');
+    if(i === q.correct) b.classList.add('correct');
+    if(i === choice && i !== q.correct) b.classList.add('wrong');
+  });
+  const ok = choice === q.correct;
+  if(ok) score++;
+  fbEl.className = 'feedback show';
+  fbEl.innerHTML = `<strong>${ok ? 'Správně.' : 'Tentokrát ne.'}</strong>${q.explanation}`;
+  nextBtn.disabled = false;
+}
+nextBtn.addEventListener('click', ()=>{
+  idx++;
+  if(idx >= questions.length) finish(); else render();
+});
+function finish(){
+  updateStamps();
+  quizArea.style.display='none';
+  resultArea.style.display='block';
+  scoreOut.textContent = `${score} / ${questions.length}`;
+  let text = 'Zvládli jste projít chmelnicí se ctí.';
+  if(score <= 5) text = 'Chmelová brigáda vás trochu potrápila, ale aspoň už víte, co znamenala česačka nebo proč se vážilo.';
+  else if(score <= 10) text = 'Solidní výkon. V prostředí brigády byste se neztratili a základní reálie chmelařství vám nejsou cizí.';
+  else if(score <= 13) text = 'Velmi dobré. Máte dobrý přehled o tom, jak jedna směna na chmelu fungovala.';
+  else text = 'Výborná směna. Tohle je přesně ten typ znalosti, který stojí na konkrétním procesu, ne na prázdné nostalgii.';
+  bandOut.textContent = text;
+}
+restartBtn.addEventListener('click', ()=>{idx=0;score=0;quizArea.style.display='block';resultArea.style.display='none';buildStampCard();render();});
+buildStampCard();
+render();
+</script>
+</body>
+</html>
