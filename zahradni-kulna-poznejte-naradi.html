@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZAHRADNÍ KŮLNA: Rýč, motyčka, plečka. Poznáte 15 nástrojů podle tvaru a účelu?</title>
+<style>
+:root {
+  --bg:#f5eee4;
+  --wood1:#8f5f38;
+  --wood2:#6f4728;
+  --wood3:#c99259;
+  --panel:#fffaf3;
+  --ink:#2c1a10;
+  --line:#d8b38a;
+  --accent:#5a8a45;
+  --good:#2e7a4a;
+  --bad:#9d3a3a;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#efe3d3,#f8f1e8 34%,#eadbc8);color:var(--ink)}
+.page{max-width:1180px;margin:0 auto;padding:18px}
+.hero{background:linear-gradient(180deg,#fff7ee,#fffdf9);border:2px solid var(--line);border-radius:22px;padding:18px 20px;box-shadow:0 12px 26px rgba(70,40,16,.08)}
+.badge{display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:#fdf4e8;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+h1{margin:10px 0 6px;font-size:clamp(26px,4vw,42px);line-height:1.06}
+.sub{margin:0;max-width:820px;line-height:1.55;color:#614732}
+.layout{display:grid;grid-template-columns:360px 1fr;gap:18px;margin-top:18px}
+.card{background:var(--panel);border:2px solid var(--line);border-radius:20px;box-shadow:0 12px 26px rgba(70,40,16,.08)}
+.sidebar{padding:18px;position:sticky;top:16px;height:fit-content}
+.main{padding:18px}
+.wall{position:relative;height:220px;border-radius:18px;background:repeating-linear-gradient(90deg,var(--wood3) 0 26px,var(--wood1) 26px 52px,var(--wood2) 52px 78px);border:2px solid #8b5a32;overflow:hidden;box-shadow:inset 0 0 0 3px rgba(255,255,255,.15)}
+.hook{position:absolute;width:26px;height:18px;border:4px solid rgba(255,255,255,.7);border-top:none;border-radius:0 0 18px 18px}
+.hook.h1{left:12%;top:20%} .hook.h2{left:34%;top:20%} .hook.h3{left:56%;top:20%} .hook.h4{left:78%;top:20%}
+.hook.h5{left:18%;top:58%} .hook.h6{left:44%;top:58%} .hook.h7{left:70%;top:58%}
+.hooks{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:14px}
+.step{padding:10px 6px;border-radius:12px;border:2px dashed #d6b28a;background:#fff7ee;text-align:center;color:#6d4d34;font-size:13px;font-weight:700}
+.step.done{border-style:solid;border-color:#679652;background:#edf8e9;color:#355c25}
+.progressLabel{display:flex;justify-content:space-between;font-weight:700;margin-top:12px}
+.panel{background:#fffdf9;border:2px solid #ecd5bb;border-radius:18px;padding:18px}
+.zoneTag{display:inline-block;background:#f8ecd8;border:1px solid #dfbd95;color:#6b4c2c;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.question{font-size:clamp(22px,3vw,30px);line-height:1.23;margin:12px 0 16px;font-weight:700}
+.toolFrame{border-radius:16px;border:2px solid #e4c6a2;background:linear-gradient(180deg,#fdf3e5,#fffaf3);padding:12px;margin-bottom:16px;display:flex;align-items:center;justify-content:center;min-height:170px}
+.answers{display:grid;gap:12px}
+.answer{border:2px solid #ddc19f;background:white;padding:14px;border-radius:14px;text-align:left;font-size:17px;cursor:pointer;transition:.15s ease}
+.answer:hover{transform:translateY(-1px);border-color:#b98c5b}
+.answer.correct{background:#e8f5ec;border-color:var(--good)}
+.answer.wrong{background:#fbe9e9;border-color:var(--bad)}
+.answer.locked{pointer-events:none}
+.feedback{display:none;margin-top:16px;padding:14px;border-radius:14px;border:2px solid #ead3ba;background:#fffaf4;line-height:1.55}
+.feedback.show{display:block}
+.controls{display:flex;justify-content:flex-end;margin-top:16px}
+.next,.restart{border:none;background:linear-gradient(180deg,#8f5f38,#6f4728);color:white;padding:13px 18px;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer}
+.next[disabled]{opacity:.45;cursor:not-allowed}
+.legend{font-size:14px;color:#6c513c;line-height:1.5}
+.result{display:none;text-align:center;padding:30px 18px}
+.result h2{font-size:34px;margin:0 0 10px}
+.score{font-size:60px;font-weight:800;color:#744725}
+.band{max-width:660px;margin:14px auto 18px;padding:14px;border-radius:16px;background:#fff8ef;border:2px solid #ecd4ba;line-height:1.55}
+.small{font-size:13px;color:#6f5844}
+@media (max-width:930px){.layout{grid-template-columns:1fr} .sidebar{position:static} }
+@media (max-width:540px){.page{padding:10px} .hero,.sidebar,.main{padding:14px} .hooks{grid-template-columns:repeat(3,1fr)} .answer{font-size:16px} }
+</style>
+</head>
+<body>
+<div class="page">
+  <section class="hero">
+    <div class="badge">Praktický kvíz • dřevěná kůlna</div>
+    <h1>ZAHRADNÍ KŮLNA: Rýč, motyčka, plečka. Poznáte 15 nástrojů podle tvaru a účelu?</h1>
+    <p class="sub">Poznávání podle tvaru a účelu, ne podle učebnice. Každá otázka vytáhne z háku jeden nástroj a vy rozhodnete, co to je nebo k čemu slouží.</p>
+  </section>
+
+  <div class="layout">
+    <aside class="card sidebar">
+      <h3 style="margin-top:0">Stěna s nářadím</h3>
+      <div class="wall" aria-hidden="true">
+        <span class="hook h1"></span><span class="hook h2"></span><span class="hook h3"></span><span class="hook h4"></span><span class="hook h5"></span><span class="hook h6"></span><span class="hook h7"></span>
+      </div>
+      <div class="progressLabel"><span>Obsazené háčky</span><span id="progressText">1 / 15</span></div>
+      <div class="hooks" id="hooks"></div>
+      <p class="legend">Po správné odpovědi se nástroj „vrátí“ na své místo. Výsledek neříká, jestli jste lepší člověk — jen jak moc se orientujete v běžném nářadí.</p>
+    </aside>
+
+    <main class="card main">
+      <section id="quizArea">
+        <div class="panel">
+          <div class="zoneTag" id="zoneTag"></div>
+          <div class="question" id="question"></div>
+          <div class="toolFrame" id="toolFrame"></div>
+          <div class="answers" id="answers"></div>
+          <div class="feedback" id="feedback"></div>
+          <div class="controls"><button class="next" id="nextBtn" disabled>Další nástroj</button></div>
+        </div>
+      </section>
+      <section class="result" id="resultArea">
+        <h2>Kůlna zavřená</h2>
+        <div class="score" id="scoreOut"></div>
+        <div class="band" id="bandOut"></div>
+        <button class="restart" id="restartBtn">Zkusit znovu</button>
+        <p class="small">Vizuální svět používá vlastní jednoduché SVG siluety místo cizích ikon nebo fotek.</p>
+      </section>
+    </main>
+  </div>
+</div>
+<script>
+const questions = [{"zone": "Půda", "tool": "ryc", "q": "Který nástroj se používá hlavně k rytí a obracení půdy?", "options": ["Rýč", "Plečka", "Hrábě", "Konev"], "correct": 0, "explanation": "Rýč má pevnou pracovní část a je určený k rytí, obracení nebo zarývání do země."}, {"zone": "Půda", "tool": "lopata", "q": "Který nástroj je vhodný spíš na nabírání a přenášení zeminy nebo kompostu?", "options": ["Srp", "Lopata", "Vidle", "Ruční kultivátor"], "correct": 1, "explanation": "Lopata je určená hlavně k nabírání a přenášení sypkého materiálu."}, {"zone": "Půda", "tool": "vidle", "q": "Který nástroj pomůže při přehazování sena, kompostu nebo lehčího materiálu?", "options": ["Vidle", "Kosa", "Motyka", "Pilka"], "correct": 0, "explanation": "Vidle mají několik hrotů a hodí se na přehazování či provzdušňování materiálu."}, {"zone": "Záhon", "tool": "motyka", "q": "Kterým nástrojem se často okopává půda kolem rostlin?", "options": ["Motyka", "Konev", "Pilka", "Zahradnické nůžky"], "correct": 0, "explanation": "Motyka se používá k okopávání, kypření a úpravě půdy kolem rostlin."}, {"zone": "Záhon", "tool": "plecka", "q": "Který nástroj se hodí hlavně k mělkému pletí mezi řádky?", "options": ["Rýč", "Plečka", "Srp", "Sekera"], "correct": 1, "explanation": "Plečka je určená především na mělké odstraňování plevele a narušení povrchu půdy."}, {"zone": "Záhon", "tool": "hrabe", "q": "Který nástroj slouží typicky ke shrnování zeminy, listí nebo trávy?", "options": ["Hrábě", "Kosa", "Lopatka", "Vidle"], "correct": 0, "explanation": "Hrábě se používají ke shrnování a urovnávání materiálu na povrchu."}, {"zone": "Řez", "tool": "nuzky", "q": "Který nástroj je určený na střihání menších větví a výhonů?", "options": ["Zahradnické nůžky", "Konev", "Ruční kultivátor", "Plečka"], "correct": 0, "explanation": "Zahradnické nůžky jsou základní nástroj pro přesný řez menších větví a výhonů."}, {"zone": "Řez", "tool": "pilka", "q": "Co použijete spíš na silnější větev, se kterou si běžné nůžky neporadí?", "options": ["Srp", "Pilku na větve", "Lopatku", "Konev"], "correct": 1, "explanation": "Na silnější větve je vhodná pilka na větve, případně podobný řezný nástroj."}, {"zone": "Řez", "tool": "srp", "q": "Který nástroj poznáte podle zahnuté čepele a používá se k sečení nebo sklizni drobnějšího porostu?", "options": ["Srp", "Vidle", "Hrábě", "Lopata"], "correct": 0, "explanation": "Srp má krátkou zahnutou čepel a slouží ke sklizni nebo sečení drobnějšího porostu."}, {"zone": "Úklid", "tool": "konev", "q": "Který nástroj nebo pomůcka slouží především k zalévání?", "options": ["Kosa", "Konev", "Rýč", "Sekera"], "correct": 1, "explanation": "Konev je klasická pomůcka pro zalévání, zejména menších ploch a záhonů."}, {"zone": "Úklid", "tool": "kultivator", "q": "Který ruční nástroj s několika zuby se používá na kypření menší plochy?", "options": ["Ruční kultivátor", "Pilka", "Srp", "Lopata"], "correct": 0, "explanation": "Ruční kultivátor se hodí ke kypření a rozrušení půdy na menší ploše."}, {"zone": "Úklid", "tool": "lopatka", "q": "Který malý ruční nástroj využijete při přesazování nebo práci v květináči?", "options": ["Lopatka", "Vidle", "Kosa", "Hrábě"], "correct": 0, "explanation": "Ruční lopatka je praktická pro malé práce, přesazování a dosypávání zeminy."}, {"zone": "Detaily", "tool": "kosa", "q": "Který delší nástroj s dlouhou čepelí je určený ke kosení trávy?", "options": ["Plečka", "Kosa", "Zahradnické nůžky", "Ruční kultivátor"], "correct": 1, "explanation": "Kosa je tradiční nástroj ke kosení porostu, hlavně vyšší trávy."}, {"zone": "Detaily", "tool": "sekera", "q": "Co se hodí spíše na štípání nebo sekání dřeva?", "options": ["Sekera", "Konev", "Plečka", "Hrábě"], "correct": 0, "explanation": "Sekera se používá ke štípání a sekání dřeva, ne k práci se záhonem."}, {"zone": "Detaily", "tool": "postrikovac", "q": "Která pomůcka se používá k rozprašování vody nebo postřiku na rostliny?", "options": ["Pilka", "Postřikovač", "Rýč", "Motyka"], "correct": 1, "explanation": "Postřikovač umožní rozprašovat vodu nebo přípravky na rostliny jemně a rovnoměrně."}];
+const zones = ["Půda", "Záhon", "Řez", "Úklid", "Detaily"];
+let idx = 0, score = 0, answered = false;
+const qEl = document.getElementById('question');
+const aEl = document.getElementById('answers');
+const fbEl = document.getElementById('feedback');
+const nextBtn = document.getElementById('nextBtn');
+const progressText = document.getElementById('progressText');
+const zoneTag = document.getElementById('zoneTag');
+const toolFrame = document.getElementById('toolFrame');
+const hooksEl = document.getElementById('hooks');
+const quizArea = document.getElementById('quizArea');
+const resultArea = document.getElementById('resultArea');
+const scoreOut = document.getElementById('scoreOut');
+const bandOut = document.getElementById('bandOut');
+const restartBtn = document.getElementById('restartBtn');
+
+function toolSvg(name){
+  const base = '#6b4b2e';
+  const metal = '#9aa3aa';
+  const dark = '#39434a';
+  const map = {
+    ryc:`<svg viewBox="0 0 240 140" width="220" height="140"><rect x="109" y="10" width="12" height="82" rx="4" fill="${base}"/><path d="M90 92 L150 92 L132 126 Q120 137 108 126 Z" fill="${metal}" stroke="${dark}" stroke-width="3"/></svg>`,
+    lopata:`<svg viewBox="0 0 240 140" width="220" height="140"><rect x="109" y="10" width="12" height="82" rx="4" fill="${base}"/><path d="M88 92 Q120 76 152 92 L144 122 Q120 135 96 122 Z" fill="${metal}" stroke="${dark}" stroke-width="3"/></svg>`,
+    vidle:`<svg viewBox="0 0 240 140" width="220" height="140"><rect x="109" y="10" width="12" height="92" rx="4" fill="${base}"/><rect x="84" y="96" width="62" height="10" rx="3" fill="${metal}"/><rect x="90" y="104" width="6" height="24" fill="${metal}"/><rect x="104" y="104" width="6" height="24" fill="${metal}"/><rect x="118" y="104" width="6" height="24" fill="${metal}"/><rect x="132" y="104" width="6" height="24" fill="${metal}"/></svg>`,
+    motyka:`<svg viewBox="0 0 240 140" width="220" height="140"><rect x="113" y="10" width="10" height="88" rx="4" fill="${base}" transform="rotate(-10 118 54)"/><rect x="76" y="88" width="72" height="12" rx="3" fill="${metal}" transform="rotate(-10 112 94)"/></svg>`,
+    plecka:`<svg viewBox="0 0 240 140" width="220" height="140"><rect x="110" y="10" width="10" height="88" rx="4" fill="${base}" transform="rotate(12 115 54)"/><path d="M84 90 L146 90 L138 108 L92 108 Z" fill="${metal}" transform="rotate(12 115 99)"/></svg>`,
+    hrabe:`<svg viewBox="0 0 240 140" width="220" height="140"><rect x="112" y="10" width="9" height="84" rx="4" fill="${base}"/><rect x="74" y="92" width="86" height="10" rx="3" fill="${metal}"/><rect x="82" y="102" width="4" height="18" fill="${metal}"/><rect x="96" y="102" width="4" height="18" fill="${metal}"/><rect x="110" y="102" width="4" height="18" fill="${metal}"/><rect x="124" y="102" width="4" height="18" fill="${metal}"/><rect x="138" y="102" width="4" height="18" fill="${metal}"/></svg>`,
+    nuzky:`<svg viewBox="0 0 240 140" width="220" height="140"><circle cx="88" cy="98" r="16" fill="none" stroke="${base}" stroke-width="8"/><circle cx="126" cy="98" r="16" fill="none" stroke="${base}" stroke-width="8"/><path d="M88 90 L164 40" stroke="${dark}" stroke-width="6"/><path d="M126 90 L176 58" stroke="${dark}" stroke-width="6"/></svg>`,
+    pilka:`<svg viewBox="0 0 240 140" width="220" height="140"><path d="M40 70 L154 50 L198 80 L84 100 Z" fill="${metal}" stroke="${dark}" stroke-width="3"/><path d="M60 84 L78 96 L90 92 L72 80 Z" fill="${base}"/></svg>`,
+    srp:`<svg viewBox="0 0 240 140" width="220" height="140"><path d="M144 36 Q102 38 84 74 Q74 96 94 108 Q120 122 154 92" fill="none" stroke="${dark}" stroke-width="10" stroke-linecap="round"/><rect x="148" y="84" width="12" height="42" rx="4" fill="${base}" transform="rotate(30 154 105)"/></svg>`,
+    konev:`<svg viewBox="0 0 240 140" width="220" height="140"><rect x="76" y="56" width="82" height="48" rx="8" fill="#7fa56d" stroke="#567245" stroke-width="4"/><path d="M154 62 Q188 62 198 86" fill="none" stroke="#567245" stroke-width="8" stroke-linecap="round"/><path d="M84 56 Q84 30 108 30 Q132 30 132 56" fill="none" stroke="#567245" stroke-width="8" stroke-linecap="round"/></svg>`,
+    kultivator:`<svg viewBox="0 0 240 140" width="220" height="140"><path d="M88 26 Q120 8 152 26" fill="none" stroke="${base}" stroke-width="10" stroke-linecap="round"/><rect x="115" y="26" width="10" height="46" rx="4" fill="${base}"/><path d="M96 72 L144 72" stroke="${metal}" stroke-width="8"/><path d="M102 72 L96 102 M116 72 L110 104 M130 72 L124 104 M144 72 L138 102" stroke="${metal}" stroke-width="6" stroke-linecap="round"/></svg>`,
+    lopatka:`<svg viewBox="0 0 240 140" width="220" height="140"><rect x="108" y="22" width="14" height="54" rx="5" fill="${base}"/><path d="M90 76 Q120 60 150 76 L140 110 Q120 122 100 110 Z" fill="${metal}" stroke="${dark}" stroke-width="3"/></svg>`,
+    kosa:`<svg viewBox="0 0 240 140" width="220" height="140"><path d="M150 18 L88 116" stroke="${base}" stroke-width="10" stroke-linecap="round"/><path d="M90 102 Q134 88 196 102" fill="none" stroke="${dark}" stroke-width="8" stroke-linecap="round"/></svg>`,
+    sekera:`<svg viewBox="0 0 240 140" width="220" height="140"><rect x="112" y="18" width="12" height="98" rx="4" fill="${base}" transform="rotate(18 118 67)"/><path d="M104 44 Q154 32 166 72 Q142 72 120 86 Z" fill="${metal}" stroke="${dark}" stroke-width="3" transform="rotate(18 132 60)"/></svg>`,
+    postrikovac:`<svg viewBox="0 0 240 140" width="220" height="140"><rect x="86" y="46" width="68" height="58" rx="12" fill="#d9e9cc" stroke="#7f9c6c" stroke-width="4"/><rect x="112" y="24" width="16" height="26" rx="4" fill="#7f9c6c"/><path d="M154 60 L190 52" stroke="#7f9c6c" stroke-width="8" stroke-linecap="round"/><circle cx="198" cy="48" r="4" fill="#7f9c6c"/></svg>`
+  };
+  return map[name] || '<svg viewBox="0 0 240 140" width="220" height="140"></svg>';
+}
+function buildHooks(){
+  hooksEl.innerHTML='';
+  zones.forEach((z,i)=>{
+    const el=document.createElement('div');
+    el.className='step';
+    el.id='step-'+i;
+    el.textContent=z;
+    hooksEl.appendChild(el);
+  });
+}
+function updateHooks(){
+  const completedZones = Math.floor(idx/3);
+  document.querySelectorAll('.step').forEach((el,i)=>{
+    el.classList.toggle('done', i < completedZones || (i===completedZones && idx===questions.length));
+    if(el.classList.contains('done')) el.textContent = zones[i] + ' • ZAVĚŠENO';
+  });
+}
+function render(){
+  answered=false; nextBtn.disabled=true; fbEl.className='feedback';
+  const q=questions[idx];
+  zoneTag.textContent=q.zone;
+  qEl.textContent=q.q;
+  toolFrame.innerHTML = toolSvg(q.tool);
+  progressText.textContent = `${idx+1} / ${questions.length}`;
+  aEl.innerHTML='';
+  q.options.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='answer';
+    btn.innerHTML = `<strong>${String.fromCharCode(65+i)}.</strong> ${opt}`;
+    btn.onclick=()=>choose(i);
+    aEl.appendChild(btn);
+  });
+  updateHooks();
+}
+function choose(choice){
+  if(answered) return; answered=true;
+  const q=questions[idx];
+  const buttons=[...document.querySelectorAll('.answer')];
+  buttons.forEach((b,i)=>{
+    b.classList.add('locked');
+    if(i===q.correct) b.classList.add('correct');
+    if(i===choice && i!==q.correct) b.classList.add('wrong');
+  });
+  const ok=choice===q.correct; if(ok) score++;
+  fbEl.className='feedback show';
+  fbEl.innerHTML = `<strong>${ok ? 'Správně.' : 'Tentokrát ne.'}</strong>${q.explanation}`;
+  nextBtn.disabled=false;
+}
+nextBtn.addEventListener('click',()=>{idx++; if(idx>=questions.length) finish(); else render();});
+function finish(){
+  updateHooks();
+  quizArea.style.display='none'; resultArea.style.display='block';
+  scoreOut.textContent = `${score} / ${questions.length}`;
+  let text='Praktické poznávání nářadí vám sedí.';
+  if(score<=5) text='Kůlna vás trochu potrápila, ale aspoň už víte, proč rýč není lopata a čím se liší plečka od motyky.';
+  else if(score<=10) text='Solidní výsledek. Většinu běžného zahradního nářadí poznáte a orientujete se i v jeho použití.';
+  else if(score<=13) text='Velmi dobré. Tady už mluví zkušenost a hmatová paměť, ne náhoda.';
+  else text='Výborně. V dřevěné kůlně byste se neztratili ani bez popisek.';
+  bandOut.textContent=text;
+}
+restartBtn.addEventListener('click',()=>{idx=0;score=0;quizArea.style.display='block';resultArea.style.display='none';buildHooks();render();});
+buildHooks(); render();
+</script>
+</body>
+</html>
