@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Srovnání ceny toaletního papíru za metr</title>
+  <style>
+    :root{
+      --ink:#172b3d;
+      --muted:#657688;
+      --line:#dbe3ea;
+      --soft:#f5f8fb;
+      --brand:#1f4e79;
+      --brand-2:#0f6fa8;
+      --good:#0d7a4b;
+      --good-bg:#eaf7f1;
+      --warn:#9a5a00;
+      --warn-bg:#fff4df;
+      --white:#fff;
+      --shadow:0 12px 34px rgba(23,43,61,.10);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:transparent;color:var(--ink);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+    .wrap{max-width:1060px;margin:0 auto;padding:18px}
+    .card{background:var(--white);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
+    .hero{padding:22px 24px 18px;background:linear-gradient(135deg,#f8fbfe 0%,#eef5fb 100%);border-bottom:1px solid var(--line)}
+    .eyebrow{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--brand-2);margin-bottom:6px}
+    h1{font-size:clamp(22px,4vw,34px);line-height:1.12;margin:0 0 10px;font-weight:850;letter-spacing:-.02em}
+    .lead{margin:0;color:var(--muted);font-size:15px;line-height:1.55}
+    .stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:999px;font-size:13px;font-weight:750;border:1px solid var(--line);background:#fff}
+    .pill.good{background:var(--good-bg);border-color:#c8eadb;color:var(--good)}
+    .pill.high{background:var(--warn-bg);border-color:#f4d9a6;color:var(--warn)}
+    .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    table{width:100%;border-collapse:collapse;min-width:760px}
+    thead th{background:#203d56;color:#fff;text-align:left;padding:13px 14px;font-size:13px;letter-spacing:.01em;position:sticky;top:0}
+    thead th:not(:first-child){text-align:right}
+    tbody td{padding:12px 14px;border-bottom:1px solid var(--line);font-size:14px;background:#fff}
+    tbody tr:nth-child(even) td{background:#f8fafc}
+    tbody tr:hover td{background:#eef6fb}
+    tbody td:not(:first-child){text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+    tbody td:first-child{font-weight:700}
+    tbody tr.best td{background:var(--good-bg);font-weight:800}
+    tbody tr.best td:first-child::after{content:" nejlevnější za metr";display:inline-block;margin-left:8px;padding:3px 7px;border-radius:999px;background:#fff;color:var(--good);font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.04em;border:1px solid #c8eadb;vertical-align:middle}
+    .value{font-weight:800}
+    .foot{padding:14px 18px 18px;color:var(--muted);font-size:11.5px;line-height:1.5;background:#fbfcfd}
+    @media (max-width:640px){
+      .wrap{padding:10px}
+      .hero{padding:18px 16px 15px}
+      .lead{font-size:14px}
+      .pill{font-size:12px}
+      thead th,tbody td{padding:11px 12px}
+      .foot{padding:12px 14px 16px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="card" aria-label="Srovnání cen toaletního papíru">
+      <header class="hero">
+        <div class="eyebrow">Srovnání podle ceny za metr</div>
+        <h1>Výsledek: přibližně 0,38 až 0,71 Kč za metr</h1>
+        <p class="lead">Přepočet ukazuje, že počet rolí sám o sobě cenu neprozradí. Rozdíl mezi nejlevnější a nejdražší variantou je téměř dvojnásobný.</p>
+        <div class="stats">
+          <span class="pill good">Nejlevnější: <strong>0,38 Kč/m</strong></span>
+          <span class="pill high">Nejdražší: <strong>0,71 Kč/m</strong></span>
+          <span class="pill">13 porovnaných balení</span>
+        </div>
+      </header>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Balení</th>
+              <th>Cena</th>
+              <th>Návin</th>
+              <th>Kč/m</th>
+              <th>Kč/role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Harmony Compact, 4 role</td><td>59,90 Kč</td><td>136 m</td><td class="value">0,44 Kč</td><td>14,98 Kč</td></tr>
+            <tr><td>Linteo, 8 rolí</td><td>79,90 Kč</td><td>120 m</td><td class="value">0,67 Kč</td><td>9,99 Kč</td></tr>
+            <tr><td>Moddia PureCycle, 8 rolí</td><td>93,90 Kč</td><td>218,2 m</td><td class="value">0,43 Kč</td><td>11,74 Kč</td></tr>
+            <tr><td>Harmony Premium, 10 rolí</td><td>94,90 Kč</td><td>175 m</td><td class="value">0,54 Kč</td><td>9,49 Kč</td></tr>
+            <tr class="best"><td>Moddia, 10 rolí</td><td>109,90 Kč</td><td>286 m</td><td class="value">0,38 Kč</td><td>10,99 Kč</td></tr>
+            <tr><td>Zewa Camomile, 8 rolí</td><td>109,90 Kč</td><td>154,4 m</td><td class="value">0,71 Kč</td><td>13,74 Kč</td></tr>
+            <tr><td>Zewa Delicate, 8 rolí</td><td>109,90 Kč</td><td>154,4 m</td><td class="value">0,71 Kč</td><td>13,74 Kč</td></tr>
+            <tr><td>Harmony Dino, 16 rolí</td><td>139,90 Kč</td><td>268,8 m</td><td class="value">0,52 Kč</td><td>8,74 Kč</td></tr>
+            <tr><td>Harmony Soft Flora, 16 rolí</td><td>149,90 Kč</td><td>280 m</td><td class="value">0,54 Kč</td><td>9,37 Kč</td></tr>
+            <tr><td>Linteo, 16 rolí</td><td>149,90 Kč</td><td>240 m</td><td class="value">0,62 Kč</td><td>9,37 Kč</td></tr>
+            <tr><td>Harmony limitovaná edice, 24 rolí</td><td>209,90 Kč</td><td>360 m</td><td class="value">0,58 Kč</td><td>8,75 Kč</td></tr>
+            <tr><td>Zewa Delicate, 16 rolí</td><td>219,90 Kč</td><td>308,8 m</td><td class="value">0,71 Kč</td><td>13,74 Kč</td></tr>
+            <tr><td>Zewa Camomile, 16 rolí</td><td>219,90 Kč</td><td>308,8 m</td><td class="value">0,71 Kč</td><td>13,74 Kč</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="foot">Pozn.: Ceny a náviny podle veřejně zobrazené nabídky při rešerši 6. 10. 2026. U osobně označených slev „pro vás“ je použita běžná cena zobrazená vedle slevy. Zaokrouhleno na haléře.</div>
+    </section>
+  </div>
+</body>
+</html>
