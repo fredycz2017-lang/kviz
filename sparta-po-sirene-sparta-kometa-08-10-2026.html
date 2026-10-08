@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sparta po siréně – Sparta 3:4 pp Kometa</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#eef2f6;color:#152635;font-family:Inter,Arial,Helvetica,sans-serif}
+body{padding:10px}
+.wrap{max-width:860px;margin:auto;background:#fff;border:1px solid #d7e0e7;border-radius:22px;overflow:hidden;box-shadow:0 18px 48px rgba(12,31,49,.14)}
+.hero{padding:28px 24px 22px;color:#fff;background:
+radial-gradient(circle at 88% 10%,rgba(214,152,50,.24),transparent 31%),
+linear-gradient(135deg,#071d31,#0d3554 60%,#164b68)}
+.eyebrow{font-size:10px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:#f2b45f}
+h1{font-size:31px;line-height:1.05;letter-spacing:-.035em;margin:10px 0 9px;max-width:720px}
+.sub{font-size:12.5px;line-height:1.58;color:#dce7ee;max-width:720px}
+.scorebox{margin-top:18px;border:1px solid rgba(255,255,255,.15);border-radius:15px;padding:15px;background:rgba(255,255,255,.06)}
+.scoreline{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center}
+.team{font-size:14px;font-weight:900} .team:last-child{text-align:right}
+.score{font-size:37px;font-weight:950;white-space:nowrap;letter-spacing:-.04em}
+.periods{text-align:center;margin-top:5px;font-size:10px;color:#dbe6ed}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.chip{font-size:9px;font-weight:900;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14)}
+.section{padding:19px 18px 0}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-bottom:10px}
+h2{font-size:18px;margin:0;color:#0b2c47}
+.tag{font-size:9px;text-transform:uppercase;letter-spacing:.1em;font-weight:900;color:#738391}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.card{border:1px solid #dce4ea;border-radius:13px;padding:12px;background:#fbfcfd}
+.card small{font-size:8px;letter-spacing:.09em;text-transform:uppercase;font-weight:900;color:#788691}
+.card b{display:block;font-size:13px;line-height:1.2;color:#123957;margin:5px 0}
+.card p{font-size:9.5px;line-height:1.45;color:#60717d;margin:0}
+.star{border-top:4px solid #d69832} .moment{border-top:4px solid #275f8b} .why{border-top:4px solid #8c555d} .detail{border-top:4px solid #4d7b63}
+.tablewrap{overflow:auto;border:1px solid #dce4ea;border-radius:12px}
+table{width:100%;border-collapse:collapse;min-width:590px;font-size:11px}
+th{background:#0c2d48;color:#fff;padding:8px 7px;font-size:9px;text-align:left;text-transform:uppercase}
+td{padding:8px 7px;border-bottom:1px solid #edf1f4} td:nth-child(2){font-weight:900;color:#143a56}
+.timeline{padding-top:1px}
+.event{display:grid;grid-template-columns:45px 13px 1fr;gap:8px;position:relative;padding:5px 0}
+.event:before{content:"";position:absolute;left:51px;top:0;bottom:-10px;width:1px;background:#dce4ea}
+.event:last-child:before{bottom:20px}
+.time{font-size:10px;font-weight:900;text-align:right;padding-top:4px;color:#62717e}
+.dot{width:9px;height:9px;border-radius:50%;margin-top:5px;z-index:2;border:2px solid #fff;box-shadow:0 0 0 1px #cbd6de}
+.spa .dot{background:#245c8c} .kom .dot{background:#2e58a2}
+.event-body{border:1px solid #e0e7ec;border-radius:9px;padding:8px 9px;background:#fbfcfd}
+.event-top{display:flex;gap:7px;align-items:center;flex-wrap:wrap;font-size:11px}
+.side{font-size:8px;text-transform:uppercase;letter-spacing:.08em;font-weight:900;color:#7b8994}
+.state{margin-left:auto;font-weight:900;color:#0d2c46}
+.event-sub{font-size:9px;color:#778590;margin-top:3px;line-height:1.4}
+.quote{border-left:4px solid #d69832;background:#fff9ef;padding:12px 13px;border-radius:0 11px 11px 0;font-size:10px;line-height:1.5;color:#435565}
+
+
+
+
+.footer{margin-top:18px;background:#0a2943;color:#dce8ef;padding:14px 18px;font-size:9px;line-height:1.5}
+@media(max-width:760px){.cards{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){body{padding:6px}.hero{padding:21px 13px 18px}h1{font-size:23px}.section{padding:15px 11px 0}.cards,.score{font-size:29px}.team{font-size:11px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">SPARTA PO SIRÉNĚ · 9. KOLO</div>
+  <h1>46 střel, 43 zákroků Stezky a návrat z 1:3. Druhý bod vzal Spartě Leino</h1>
+  <div class="sub">Sparta prohrála s Kometou 3:4 po prodloužení. V závěru smazala manko 1:3, když během 69 sekund udeřili Knot a Špaček, ale v čase 61:44 rozhodl Robert Leino.</div>
+  <div class="scorebox">
+    <div class="scoreline"><div class="team">HC Sparta Praha</div><div class="score">3 : 4 pp</div><div class="team">HC Kometa Brno</div></div>
+    <div class="periods">0:1 · 1:1 · 2:1 · 0:1 &nbsp; | &nbsp; 8. 10. 2026 · O2 arena</div>
+    <div class="chips"><span class="chip">STŘELY 46:27</span><span class="chip">STEZKA 43 ZÁKROKŮ</span><span class="chip">BULY 28:28</span><span class="chip">PP 2:0</span><span class="chip">12 193 DIVÁKŮ</span></div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="head"><h2>Po siréně</h2><span class="tag">redakční výběr</span></div>
+  <div class="cards">
+    <article class="card star"><small>Hráč Sparty</small><b>Matěj Blümel</b><p>Gól na 1:2, šest střel a několik dalších obrovských příležitostí. Byl nejaktivnějším mužem domácích.</p></article>
+    <article class="card moment"><small>Moment zápasu</small><b>1:3 → 3:3</b><p>Knot v 57:57 a Špaček v 59:06. Sparta z téměř ztraceného večera vydolovala prodloužení.</p></article>
+    <article class="card why"><small>Co rozhodlo</small><b>Aleš Stezka</b><p>43 zákroků a 93,5 %. Druhá třetina byla 22:6 na střely pro Spartu, Kometa ji přesto ustála.</p></article>
+    <article class="card detail"><small>Detail večera</small><b>Debut Hradce</b><p>Nová posila naskočila na centra třetí formace a zanechala aktivní první dojem.</p></article>
+  </div>
+</section>
+
+<section class="section">
+  <div class="head"><h2>Datový obraz</h2><span class="tag">final</span></div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Ukazatel</th><th>Sparta : Kometa</th><th>Čtení</th></tr></thead>
+      <tbody>
+        <tr><td>Střely na branku</td><td>46 : 27</td><td>Sparta měla výrazně vyšší objem i dlouhé pasáže tlaku</td></tr>
+        <tr><td>Zákroky brankářů</td><td>23 : 43</td><td>Stezka ustál večer, který vypadal jako test trpělivosti</td></tr>
+        <tr><td>Vhazování</td><td>28 : 28</td><td>úplná rovnováha</td></tr>
+        <tr><td>Vyloučení</td><td>3 : 7</td><td>Sparta měla víc početních výhod</td></tr>
+        <tr><td>Využité přesilovky</td><td>2 : 0</td><td>speciální týmy domácím pomohly do comebacku</td></tr>
+        <tr><td>Návštěva</td><td>12 193</td><td>kulisa odpovídala čtvrtečnímu šlágru</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section">
+  <div class="head"><h2>Gólová osa</h2><span class="tag">7 branek</span></div>
+  <div class="timeline">
+    <div class="event kom"><div class="time">07:53</div><div class="dot"></div><div class="event-body"><div class="event-top"><span class="side">Kometa</span><strong>Jakub Flek</strong><span class="state">0:1</span></div><div class="event-sub">rychlé otevření skóre po důrazu hostů v útočném pásmu</div></div></div>
+    <div class="event kom"><div class="time">36:52</div><div class="dot"></div><div class="event-body"><div class="event-top"><span class="side">Kometa</span><strong>Filip Král</strong><span class="state">0:2</span></div><div class="event-sub">trest za špatně načasované střídání Sparty a rychlou kombinaci hostů</div></div></div>
+    <div class="event spa"><div class="time">39:22</div><div class="dot"></div><div class="event-body"><div class="event-top"><span class="side">Sparta</span><strong>Matěj Blümel</strong><span class="state">1:2</span></div><div class="event-sub">přesilovka; konečně prolomené Stezkovo kouzlo</div></div></div>
+    <div class="event kom"><div class="time">46:56</div><div class="dot"></div><div class="event-body"><div class="event-top"><span class="side">Kometa</span><strong>Jakub Brabenec</strong><span class="state">1:3</span></div><div class="event-sub">rychlý přechod a dorážka po prvním zákroku Kořenáře</div></div></div>
+    <div class="event spa"><div class="time">57:57</div><div class="dot"></div><div class="event-body"><div class="event-top"><span class="side">Sparta</span><strong>Ronald Knot</strong><span class="state">2:3</span></div><div class="event-sub">časná power play Sparty</div></div></div>
+    <div class="event spa"><div class="time">59:06</div><div class="dot"></div><div class="event-body"><div class="event-top"><span class="side">Sparta</span><strong>Michael Špaček</strong><span class="state">3:3</span></div><div class="event-sub">šest na čtyři; vyrovnání 54 sekund před koncem</div></div></div>
+    <div class="event kom"><div class="time">61:44</div><div class="dot"></div><div class="event-body"><div class="event-top"><span class="side">Kometa</span><strong>Robert Leino</strong><span class="state">3:4</span></div><div class="event-sub">přečíslení dva na jednoho v prodloužení</div></div></div>
+  </div>
+</section>
+
+
+
+<section class="section">
+  <div class="head"><h2>Co čísla neřeknou sama</h2><span class="tag">z haly</span></div>
+  <div class="quote"><b>„Totální chaos.“</b> Třetí třetina přesně tak působila i z tribuny. Sparta dlouho narážela do Stezky a do vlastní střelecké nemohoucnosti. Pak ale skutečně vstala z popela a z 1:3 udělala 3:3.</div>
+</section>
+
+<footer class="footer"><b>Metodika:</b> statistický rámec utkání byl po zápase ověřen proti veřejným zápisům; autorská interpretace vychází ze sledování zápasu přímo v O2 areně, z vlastních poznámek a z následné redakční syntézy.</footer>
+</div>
+</body>
+</html>
