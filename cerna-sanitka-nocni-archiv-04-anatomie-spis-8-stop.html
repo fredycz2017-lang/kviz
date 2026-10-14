@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kvíz Černá sanitka #04: Láhev na jeřábu, Venušiny kuličky, těhotenství přes žaludek. Projdete 8 stop?</title>
+<style>
+*{box-sizing:border-box}
+:root{--bg:#05070b;--panel:#0b1118;--panel2:#111a24;--line:#294258;--text:#f4f9ff;--muted:#a8b8c8;--ice:#7be7ff;--violet:#c68cff;--red:#ff5b70;--green:#6ef0a3;--amber:#ffd36b}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.015) 0 1px,transparent 1px 4px),radial-gradient(circle at var(--mx,50%) var(--my,25%),rgba(123,231,255,.07),transparent 19%);z-index:50}
+body:after{content:"";position:fixed;inset:-15%;z-index:-1;background:radial-gradient(circle at 15% 8%,rgba(198,140,255,.08),transparent 25%),radial-gradient(circle at 88% 80%,rgba(123,231,255,.08),transparent 28%)}
+.wrap{max-width:1280px;margin:auto;padding:16px}
+.top{position:relative;border:1px solid #31536f;border-radius:25px;background:linear-gradient(135deg,#101a25,#070b10 58%,#161126);padding:19px 21px;box-shadow:0 28px 80px #000a;overflow:hidden}
+.top:after{content:"04";position:absolute;right:20px;top:-18px;font-size:145px;font-weight:1000;color:#7be7ff0b;line-height:1}
+.kicker{font-size:12px;letter-spacing:.18em;font-weight:900;color:var(--ice)}
+h1{font-size:clamp(26px,3.8vw,47px);line-height:1.03;margin:7px 0 8px;max-width:1100px}
+.lead{color:var(--muted);max-width:1000px;line-height:1.5;margin:0}
+.hud{display:grid;grid-template-columns:330px 1fr;gap:16px;margin-top:16px}
+.side,.main{background:linear-gradient(180deg,#0c141d,#06090d);border:1px solid #294258;border-radius:22px;box-shadow:0 18px 50px #0008}
+.side{padding:15px} .main{padding:16px;position:relative;overflow:hidden}
+.smalllabel{font-size:11px;letter-spacing:.13em;color:#8ea4b7;font-weight:900}
+.big{font-size:37px;font-weight:900;margin:5px 0}
+.signal{display:flex;align-items:center;gap:8px;font-size:12px;color:#afc0cf;margin:9px 0 13px}
+.pulse{width:9px;height:9px;border-radius:50%;background:var(--ice);box-shadow:0 0 14px var(--ice);animation:pulse 1.1s infinite}
+@keyframes pulse{50%{opacity:.35;transform:scale(.72)}}
+.casegrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.case{border:1px solid #2c3d4d;background:#101821;border-radius:13px;padding:9px;transition:.25s;position:relative;overflow:hidden}
+.case:before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:#31475a}
+.case.active{border-color:var(--ice);box-shadow:0 0 0 1px #7be7ff44 inset;background:#111f2b}
+.case.active:before{background:var(--ice)}
+.caseNo{display:flex;justify-content:space-between;font-weight:900;font-size:12px}
+.caseCode{color:#7393aa;font-size:9px;letter-spacing:.08em}
+.caseName{font-size:11px;color:#c2cfdb;margin:5px 0;height:27px;overflow:hidden}
+.twolights{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.light{height:5px;border-radius:20px;background:#263747}.light.done{background:var(--green);box-shadow:0 0 8px #6ef0a366}.light.fail{background:#ff6b7e;box-shadow:0 0 8px #ff5b7055}
+.questionTop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+.phase{font-size:11px;letter-spacing:.13em;font-weight:900;padding:7px 10px;border:1px solid var(--ice);border-radius:999px;color:#bff5ff;background:#10212a}
+.caseTitle{color:#b5c5d2;font-size:12px;text-align:right}
+.q{font-size:clamp(22px,2.8vw,31px);line-height:1.16;font-weight:900;margin:8px 0 12px}
+.scene{min-height:310px;border-radius:18px;border:1px solid #31536f;background:#05080d;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;margin-bottom:13px}
+.scene:before{content:"";position:absolute;inset:0;background:linear-gradient(transparent 49%,rgba(255,255,255,.022) 50%,transparent 51%);background-size:100% 6px;pointer-events:none;z-index:3}
+.scene:after{content:"ANATOMY-SCAN";position:absolute;right:12px;bottom:10px;color:#6f8da4;font-size:10px;letter-spacing:.18em;z-index:4}
+.scene svg{width:100%;max-width:780px;height:298px;display:block}
+.evidence{position:absolute;left:13px;bottom:11px;background:#05090ddd;border:1px solid #3d617c;border-radius:10px;padding:7px 9px;color:#d7e6f1;font-size:11px;letter-spacing:.08em;z-index:4}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{appearance:none;border:1px solid #3c5569;background:#111b25;color:#f8fbff;border-radius:15px;padding:13px 14px;text-align:left;font-size:16px;font-weight:750;cursor:pointer;transition:.15s;min-height:60px}
+.opt:hover{border-color:var(--ice);background:#172837;transform:translateY(-1px)}
+.opt.correct{background:#ddfbea;color:#123723;border-color:var(--green)}.opt.wrong{background:#ffe0e5;color:#5b0e19;border-color:#ff6379}.opt:disabled{cursor:default;opacity:1}
+.feedback{display:none;margin-top:12px;border:1px solid #3e596e;border-radius:14px;padding:13px 14px;background:#111a24;color:#eff6fb;line-height:1.48}
+.feedback.show{display:block} .feedback strong{display:block;color:#bff5ff;margin-bottom:5px}
+.next{display:none;margin:12px 0 0 auto;border:none;border-radius:13px;padding:12px 17px;background:linear-gradient(90deg,#2877a1,#7be7ff);color:#051016;font-weight:1000;font-size:15px;cursor:pointer}
+.stamp{position:absolute;right:18px;top:82px;border:4px solid var(--ice);color:var(--ice);border-radius:8px;padding:6px 10px;font-weight:1000;letter-spacing:.12em;font-size:20px;transform:rotate(-8deg);opacity:0;z-index:10}
+.stamp.pop{animation:stamp .35s ease-out forwards}@keyframes stamp{0%{opacity:0;transform:scale(2) rotate(-15deg)}100%{opacity:.95;transform:scale(1) rotate(-8deg)}}
+.result{display:none;text-align:center;padding:28px 15px}.result.show{display:block}.result h2{font-size:clamp(28px,4vw,46px);margin:0 0 8px}
+.score{font-size:72px;font-weight:1000;color:#fff;text-shadow:0 0 25px #7be7ff44}.closed{font-size:20px;color:#bff5ff;font-weight:900}
+.resText{max-width:760px;margin:12px auto 20px;color:#c7d4df;line-height:1.55}
+.restart{border:none;border-radius:14px;padding:13px 19px;background:linear-gradient(90deg,#2877a1,#7be7ff);color:#051016;font-weight:1000;font-size:17px;cursor:pointer}
+.legendbar{margin-top:12px;padding-top:11px;border-top:1px solid #2a3c4b;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:10px;color:#839aaa}
+.legendbar span:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px}.legendbar .story:before{background:var(--violet)}.legendbar .fact:before{background:var(--ice)}
+@media(max-width:900px){.hud{grid-template-columns:1fr}.casegrid{grid-template-columns:repeat(4,1fr)}.scene{min-height:255px}.scene svg{height:245px}.opts{grid-template-columns:1fr}.q{font-size:22px}}
+@media(max-width:520px){.wrap{padding:9px}.top{padding:15px}.top:after{font-size:62px}.side,.main{border-radius:17px}.casegrid{grid-template-columns:1fr 1fr}.caseName{height:30px}.questionTop{align-items:flex-start;flex-direction:column}.caseTitle{text-align:left}.scene{min-height:225px}.scene svg{height:215px}.opt{font-size:15px}.score{font-size:58px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+<div class="kicker">ČERNÁ SANITKA // NOČNÍ ARCHIV #04 // ANATOMIE SPIS</div>
+<h1>Kvíz Černá sanitka #04: Láhev na jeřábu, Venušiny kuličky, těhotenství přes žaludek. Projdete 8 stop?</h1>
+<p class="lead">Čtyři případy, osm stop. Nejdřív rekonstruujete pointu historky, potom oddělíte reálné riziko od pseudoanatomie a nedoloženého folklóru.</p>
+</header>
+<div class="hud">
+<aside class="side">
+<div class="smalllabel">ANATOMICKÁ KONZOLE</div>
+<div class="big" id="progress">01 / 08</div>
+<div class="signal"><span class="pulse"></span> PŘÍJEM SPISŮ // PŘÍPADY 34–37</div>
+<div class="casegrid" id="casegrid"></div>
+<div class="legendbar"><span class="story">PŘÍBĚH</span><span class="fact">REALITA</span></div>
+</aside>
+<main class="main">
+<div id="quiz">
+<div class="questionTop"><span class="phase" id="phase"></span><span class="caseTitle" id="caseTitle"></span></div>
+<div class="q" id="q"></div>
+<div class="scene" id="scene"></div>
+<div class="opts" id="opts"></div>
+<div class="feedback" id="feedback"></div>
+<button class="next" id="next">DALŠÍ SPIS →</button>
+<div class="stamp" id="stamp">OVĚŘENO</div>
+</div>
+<section class="result" id="result">
+<div class="smalllabel">ANATOMIE SPIS UZAVŘEN</div>
+<h2>NOČNÍ REKONSTRUKCE #04 DOKONČENA</h2>
+<div class="score" id="score"></div>
+<div class="closed" id="closed"></div>
+<p class="resText" id="resText"></p>
+<button class="restart" id="restart">OTEVŘÍT SPIS ZNOVU</button>
+</section>
+</main>
+</div>
+</div>
+<script>
+const questions=[{"case": 34, "phase": "PŘÍBĚH", "scene": "crane", "legend": "Láhev na jeřábu", "q": "Kam se podle legendy musí zdravotník dostat, aby pomohl jeřábnici?", "options": ["Do kabiny jeřábu", "Do skladu nářadí", "Do podzemní šachty", "Do sanitky u vrátnice"], "correct": 0, "exp": "Pointa historky stojí na tom, že pomoc musí vyšplhat přímo do kabiny vysoko nad stavbou."}, {"case": 34, "phase": "REALITA", "scene": "crane", "legend": "Láhev na jeřábu", "q": "Jak článek hodnotí dramatické rozbití skleněné lahve jako řešení?", "options": ["Jako běžný postup první pomoci", "Jako bezpečný domácí trik", "Jako extrémně rizikový postup", "Jako povinný krok při podtlaku"], "correct": 2, "exp": "Cizí těleso je reálný medicínský problém, ale rozbíjení skla na místě článek označuje za velmi rizikové."}, {"case": 35, "phase": "PŘÍBĚH", "scene": "vacuum", "legend": "Vodka a „vnitřnosti“", "q": "Co má v hororové variantě způsobit údajně extrémní podtlak v lahvi?", "options": ["Roztrhnout etiketu lahve", "Vytáhnout orgány do hrdla lahve", "Zastavit srdeční tep", "Rozpustit sklo zevnitř"], "correct": 1, "exp": "Legenda přehání reálný princip podtlaku až k představě, že by skleněná láhev mohla „vysát“ orgány."}, {"case": 35, "phase": "REALITA", "scene": "vacuum", "legend": "Vodka a „vnitřnosti“", "q": "Co z této historky článek připouští jako skutečné riziko?", "options": ["Nasátí orgánů přes neporušené tkáně", "Těžké poranění skleněným předmětem", "Vznik nové anatomické dutiny", "Přesun orgánů do lahve podtlakem"], "correct": 1, "exp": "Sklo může způsobit perforaci a vážné poranění. Mechanismus „vysátí vnitřností“ ale anatomicky nedává smysl."}, {"case": 36, "phase": "PŘÍBĚH", "scene": "checkout", "legend": "Venušiny kuličky v uniformě", "q": "K čemu je má vedení supermarketu podle pověsti zaměstnankyním dávat?", "options": ["Aby rychleji markovaly zboží", "Aby se na zákazníky více usmívaly", "Aby hlídaly délku směny", "Aby měřily přestávky"], "correct": 1, "exp": "Absurdní pointa legendy vysvětluje povinný úsměv prodavaček tajným intimním „benefitem“."}, {"case": 36, "phase": "REALITA", "scene": "checkout", "legend": "Venušiny kuličky v uniformě", "q": "Jaký podklad článek pro tuto firemní praxi našel?", "options": ["Interní směrnici řetězce", "Výpovědi desítek zaměstnankyň", "Žádný věrohodný podklad", "Rozhodnutí pracovního soudu"], "correct": 2, "exp": "Text ji označuje za nedoložený business folklore a za sexualizované vysvětlení běžného pracovního chování."}, {"case": 37, "phase": "PŘÍBĚH", "scene": "route", "legend": "Těhotenství přes žaludek", "q": "Jakou „zkratku“ má podle pověsti vytvořit bodné poranění?", "options": ["Ze žaludku k reprodukčním orgánům", "Z plic přímo do žaludku", "Z močového měchýře do srdce", "Z jícnu přímo do plic"], "correct": 0, "exp": "Legenda tvrdí, že poranění vytvořilo cestu, kterou se spermie ze žaludku dostaly k vajíčku."}, {"case": 37, "phase": "REALITA", "scene": "route", "legend": "Těhotenství přes žaludek", "q": "Jaký je verdikt článku k těhotenství po spolknutí spermatu?", "options": ["Je možné jen při poranění břicha", "Je možné po několika hodinách", "Je biologicky vyloučené touto cestou", "Záleží pouze na množství spermatu"], "correct": 2, "exp": "Trávicí soustava nemá normální cestu do dělohy. Polknuté sperma těhotenství touto cestou nezpůsobí."}];
+const caseNames=[{"no": 34, "name": "Láhev na jeřábu", "code": "ANAT-01"}, {"no": 35, "name": "Vodka a „vnitřnosti“", "code": "ANAT-02"}, {"no": 36, "name": "Venušiny kuličky", "code": "ANAT-03"}, {"no": 37, "name": "Těhotenství přes žaludek", "code": "ANAT-04"}];
+let i=0,score=0,locked=false;
+const pair=[...Array(4)].map(()=>[null,null]);
+const grid=document.getElementById('casegrid');
+caseNames.forEach((c,idx)=>{const el=document.createElement('div');el.className='case';el.dataset.index=idx;el.innerHTML=`<div class="caseNo"><span>PŘÍPAD ${c.no}</span><span class="caseCode">${c.code}</span></div><div class="caseName">${c.name}</div><div class="twolights"><span class="light"></span><span class="light"></span></div>`;grid.appendChild(el)});
+
+function esc(s){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+function frame(inner,label){return `<svg viewBox='0 0 780 298' xmlns='http://www.w3.org/2000/svg'>
+<defs><linearGradient id='bg' x1='0' x2='1'><stop stop-color='#07101a'/><stop offset='.55' stop-color='#0b1119'/><stop offset='1' stop-color='#161021'/></linearGradient></defs>
+<rect width='780' height='298' fill='url(#bg)'/><path d='M0 258 H780' stroke='#294258' stroke-width='2'/>
+<text x='24' y='30' fill='#7be7ff' font-size='13' font-weight='800'>ANATOMIE SPIS / ${esc(label)}</text>${inner}
+<text x='754' y='284' text-anchor='end' fill='#60798d' font-size='11'>PŘÍPADY 34–37 // REKONSTRUKCE</text></svg>`}
+
+function visual(q){let x='';
+if(q.scene==='crane')x=`<path d='M120 235 H610 M190 235 L275 60 H322 L255 235 M275 60 L510 60 M435 60 V120 M430 120 H520 V170 H430Z' stroke='#7c9bb0' stroke-width='7' fill='none'/><rect x='444' y='132' width='56' height='27' rx='5' fill='#1a2b39' stroke='#7be7ff' stroke-width='3'/><path d='M525 185 q0 -55 32 -55 h30 v105 h-63z' fill='#835c39' stroke='#ffd36b' stroke-width='4'/><line x1='540' y1='157' x2='575' y2='157' stroke='#ffd36b' stroke-width='4'/><text x='370' y='225' fill='#c68cff' font-size='15' font-weight='900'>DOKTOR NA JEŘÁB?</text>`;
+if(q.scene==='vacuum')x=`<rect x='165' y='80' width='140' height='150' rx='45' fill='#111c27' stroke='#7be7ff' stroke-width='5'/><rect x='210' y='45' width='50' height='48' rx='8' fill='#111c27' stroke='#7be7ff' stroke-width='5'/><path d='M330 150 C400 105 445 105 510 150' fill='none' stroke='#c68cff' stroke-width='5' stroke-dasharray='10 10'/><circle cx='552' cy='150' r='62' fill='none' stroke='#617f96' stroke-width='5'/><path d='M530 126 q22 -22 44 0 q22 22 0 44 q-22 22 -44 0 q-22 -22 0 -44Z' fill='#ff5b70' opacity='.6'/><text x='390' y='230' fill='#ff8090' font-size='15' font-weight='900'>PSEUDO-FYZIKA → HOROR</text>`;
+if(q.scene==='checkout')x=`<rect x='110' y='90' width='270' height='135' rx='18' fill='#111b25' stroke='#486780' stroke-width='5'/><rect x='145' y='118' width='90' height='52' rx='6' fill='#1d2a35' stroke='#7be7ff' stroke-width='3'/><path d='M380 205 H650 M430 205 V115 M430 115 H620' stroke='#66879e' stroke-width='7'/><circle cx='535' cy='112' r='35' fill='#111b25' stroke='#c68cff' stroke-width='4'/><path d='M510 150 q25 25 50 0' fill='none' stroke='#c68cff' stroke-width='4'/><rect x='470' y='170' width='135' height='55' rx='12' fill='#191329' stroke='#c68cff' stroke-width='3'/><text x='537' y='195' text-anchor='middle' fill='#ecd5ff' font-size='12'>„PRACOVNÍ BENEFIT“</text>`;
+if(q.scene==='route')x=`<circle cx='220' cy='115' r='48' fill='none' stroke='#7be7ff' stroke-width='5'/><path d='M220 163 V210 M185 210 H255' stroke='#7be7ff' stroke-width='5'/><path d='M340 88 q85 40 0 92 q-45 28 10 75' fill='none' stroke='#ffd36b' stroke-width='9' stroke-linecap='round'/><path d='M430 145 C490 145 510 205 585 205' fill='none' stroke='#ff5b70' stroke-width='5' stroke-dasharray='11 10'/><path d='M575 175 q35 -30 70 0 q-35 25 -70 0Z' fill='#c68cff' opacity='.55'/><text x='480' y='98' fill='#ff8090' font-size='14' font-weight='900'>„ZKRATKA“?</text>`;
+return frame(x,`PŘÍPAD ${q.case} // ${q.phase}`)} 
+
+function idxForCase(no){return caseNames.findIndex(c=>c.no===no)}
+function updateCases(){
+ document.querySelectorAll('.case').forEach((el,idx)=>{
+   el.classList.toggle('active',idx===idxForCase(questions[i]?.case));
+   const ls=el.querySelectorAll('.light');
+   pair[idx].forEach((v,j)=>{ls[j].className='light'+(v===true?' done':v===false?' fail':'')})
+ })
+}
+function show(){
+ locked=false; const x=questions[i];
+ document.getElementById('progress').textContent=`${String(i+1).padStart(2,'0')} / 08`;
+ document.getElementById('phase').textContent=x.phase;
+ document.getElementById('caseTitle').textContent=`PŘÍPAD ${x.case} // ${x.legend}`;
+ document.getElementById('q').textContent=x.q;
+ document.getElementById('scene').innerHTML=visual(x)+`<div class="evidence">${x.phase==='PŘÍBĚH'?'REKONSTRUKCE POVĚSTI':'ANATOMICKÁ / FOLKLÓRNÍ KONTROLA'}</div>`;
+ const opts=document.getElementById('opts'); opts.innerHTML='';
+ x.options.forEach((o,k)=>{const b=document.createElement('button');b.className='opt';b.textContent=o;b.onclick=()=>answer(k);opts.appendChild(b)});
+ document.getElementById('feedback').className='feedback';
+ document.getElementById('next').style.display='none';
+ document.getElementById('stamp').className='stamp';
+ updateCases();
+}
+function answer(idx){
+ if(locked)return;locked=true;const x=questions[i],btns=[...document.querySelectorAll('.opt')],ok=idx===x.correct;
+ btns.forEach((b,j)=>{b.disabled=true;if(j===x.correct)b.classList.add('correct');if(j===idx&&j!==x.correct)b.classList.add('wrong')});
+ if(ok)score++;
+ const ci=idxForCase(x.case);pair[ci][x.phase==='PŘÍBĚH'?0:1]=ok;
+ const f=document.getElementById('feedback');f.className='feedback show';f.innerHTML=`<strong>${ok?'STOPA SEDÍ.':'STOPA SE ROZCHÁZÍ.'}</strong>${esc(x.exp)}`;
+ const st=document.getElementById('stamp');st.textContent=ok?'OVĚŘENO':'FOLKLÓR';st.style.borderColor=ok?'#6ef0a3':'#ff6b7e';st.style.color=ok?'#6ef0a3':'#ff6b7e';st.className='stamp pop';
+ document.getElementById('next').style.display='block';updateCases();
+}
+document.getElementById('next').onclick=()=>{i++;if(i<questions.length)show();else finish()};
+function finish(){
+ document.getElementById('quiz').style.display='none';
+ const r=document.getElementById('result');r.classList.add('show');
+ document.getElementById('score').textContent=`${score} / 08`;
+ const closed=pair.filter(x=>x[0]===true&&x[1]===true).length;
+ document.getElementById('closed').textContent=`BEZCHYBNĚ UZAVŘENÉ PŘÍPADY: ${closed} / 4`;
+ let t=score>=8?'Anatomie spis je čistý. Pointu i skutečný verdikt článku držíte od sebe bez zaváhání.':score>=6?'Velmi dobré. Většinu pseudoanatomických zkratek jste oddělili od toho, co text skutečně připouští.':score>=4?'Polovina stop sedí. Právě na hraně technicky znějícího detailu a nemožné pointy tyto historky přežívají.':'Noční archiv vás tentokrát nachytal na pseudo-medicínu. Vraťte se ke zdrojovému článku a zkuste druhou směnu.';
+ document.getElementById('resText').textContent=t;
+}
+document.getElementById('restart').onclick=()=>{i=0;score=0;for(let x=0;x<4;x++)pair[x]=[null,null];document.getElementById('result').classList.remove('show');document.getElementById('quiz').style.display='block';show()};
+document.addEventListener('pointermove',e=>{document.body.style.setProperty('--mx',(e.clientX/window.innerWidth*100)+'%');document.body.style.setProperty('--my',(e.clientY/window.innerHeight*100)+'%')});
+show();
+</script>
+</body></html>
