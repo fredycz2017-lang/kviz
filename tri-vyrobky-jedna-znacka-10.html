@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TŘI VÝROBKY, JEDNA ZNAČKA</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;background:#e9e1cc;color:#2a261f;font-family:Arial,sans-serif}body{background:linear-gradient(120deg,#d9ceb2,#f4eddc)}
+.wrap{max-width:1120px;margin:auto;padding:14px}
+header{background:#f6efd9;border:3px double #5b4d32;border-radius:18px;padding:20px;box-shadow:0 18px 45px #4d402c33}
+.ey{font-size:11px;letter-spacing:.18em;font-weight:1000;color:#9a2d2d;text-transform:uppercase}
+h1{font-family:Georgia,serif;font-size:clamp(29px,4.7vw,50px);line-height:1.02;margin:8px 0 10px}.lead{line-height:1.5;color:#5e5649}
+.catalog{margin-top:14px;background:#c5b998;border:1px solid #8e8163;border-radius:18px;padding:15px;box-shadow:inset 0 0 0 5px #ddd2b6}
+.meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px;font-weight:1000;color:#61583f}
+.track{height:10px;background:#aa9e80;border-radius:99px;margin:10px 0 15px;overflow:hidden}.track i{display:block;height:100%;width:0;background:#9e2f2f;transition:.25s}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{background:#f8f1dc;border:2px solid #6a5b3f;border-radius:12px;min-height:210px;padding:14px;position:relative;box-shadow:5px 6px 0 #8c7b58}
+.num{position:absolute;right:9px;top:8px;font:700 11px Consolas,monospace;color:#8a7954}.icon{font-size:58px;display:block;margin:18px 0 10px;text-align:center}.name{font-family:Georgia,serif;font-size:21px;font-weight:800;text-align:center}.sub{text-align:center;font-size:12px;color:#6e6454;margin-top:5px;line-height:1.35}
+.panel{margin-top:14px;background:#f8f1dc;border:2px solid #6a5b3f;border-radius:14px;padding:16px}
+.q{font-size:24px;font-weight:1000;line-height:1.3}.opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}.opt{background:#e7dcc0;border:2px solid #88795a;border-radius:10px;padding:13px;text-align:left;font-weight:1000;cursor:pointer}.opt:hover{background:#efe4ca;border-color:#9e2f2f}
+.correct{background:#d8ead7!important;border-color:#4f8b59!important;color:#214a29}.wrong{background:#f1d2d2!important;border-color:#b55555!important;color:#6b2020}
+.stamp{display:none;margin-top:12px;border:4px solid #9e2f2f;color:#9e2f2f;padding:7px 10px;width:max-content;font-family:Georgia,serif;font-size:20px;font-weight:1000;transform:rotate(-2deg)}.stamp.show{display:block}
+.fact{display:none;margin-top:12px;background:#e8dfc6;border-left:5px solid #6d5a34;padding:12px;line-height:1.48}.fact.show{display:block}
+.next{display:none;margin:12px 0 0 auto;border:0;border-radius:10px;background:#403728;color:#fff1d0;padding:12px 16px;font-weight:1000}
+.result{display:none;text-align:center;padding:42px 16px}.result.show{display:block}.score{font-size:76px;font-weight:1000;color:#9e2f2f}.rank{font:700 27px Georgia,serif}
+.restart{border:0;border-radius:10px;background:#403728;color:#fff1d0;padding:12px 18px;font-weight:1000}
+.note{font-size:11px;color:#756b58;margin-top:10px;line-height:1.45}
+@media(max-width:700px){.cards{grid-template-columns:1fr}.card{min-height:150px}.icon{font-size:45px;margin:8px}.opts{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<header><div class="ey">RETRO KATALOG • ČSSR / ČESKO • 10 KARET</div>
+<h1>Tři výrobky, jedna značka. Husákovy děti poznají spojení, které mladší často vůbec neuvidí.</h1>
+<p class="lead">V každém kole dostanete tři výrobky, modely nebo produktové řady. Všechny spojuje jediná značka či výrobce. Nejde jen o auta: čeká optika, spotřebiče, nábytek, obuv, traktory i elektronika.</p></header>
+<main class="catalog"><div id="game"><div class="meta"><span id="prog"></span><span>SKLADOVÁ KARTA / VÝROBCE NEUVEDEN</span></div><div class="track"><i id="track"></i></div><div class="cards" id="cards"></div><section class="panel"><div class="q">Která značka spojuje všechny tři položky?</div><div class="opts" id="opts"></div><div class="stamp" id="stamp"></div><div class="fact" id="fact"></div><button class="next" id="next">DALŠÍ KARTA →</button></section></div>
+<section class="result" id="res"><div class="ey">INVENTURA HOTOVA</div><h2>Kolik značek jste vytáhli ze skladu?</h2><div class="score" id="score"></div><div class="rank" id="rank"></div><p id="rt"></p><button class="restart" id="restart">NOVÁ INVENTURA</button></section>
+<div class="note">Kvíz používá textové/ikonové kartičky, nikoli firemní loga. Historické poznámky jsou záměrně stručné a vycházejí z ověřených firemních nebo muzejních zdrojů.</div>
+</main></div><script>
+const Q=[
+{brand:'JAWA',items:[['🏍️','JAWA 250 „Pérák“','výroba zahájena 1946'],['🏍️','JAWA 500 OHC','sběratelská legenda z 50. let'],['🛵','JAWA 50 „Pařez“','model představený v 50. letech']],opts:['JAWA','ČZ','Praga','Zetor'],fact:'JAWA uvádí zahájení výroby slavné 250 Pérák v roce 1946, model 500 OHC v roce 1952 a JAWU 50 „Pařez“ v roce 1955.'},
+{brand:'Meopta',items:[['📷','Flexaret','dvouoká zrcadlovka'],['🎥','Admira','snímací kamera'],['🔬','Opemus','zvětšovací přístroj']],opts:['Meopta','Tesla','ETA','KOH-I-NOOR'],fact:'Meopta ve svém historickém přehledu přímo uvádí fotoaparáty Flexaret, snímací kamery Admira a zvětšovací přístroje Opemus.'},
+{brand:'ETA',items:[['♨️','ETA 211','žehlička s mimořádně velkou žehlicí plochou'],['🥣','ETA 012','mixér uvedený v roce 1976'],['🧹','Vysavače z Hlinska','hlavní výrobní program od 50. let']],opts:['ETA','Tesla','Mora','Tatramat'],fact:'ETA připomíná výrobu žehliček už od počátků firmy, přesun výroby vysavačů do Hlinska v roce 1952, registraci značky ETA v roce 1960 a modely ETA 211 či ETA 012.'},
+{brand:'Zetor',items:[['🚜','Zetor Z 25','první poválečný Zetor'],['🚜','Zetor 50 Super','silnější řada 50. let'],['🚜','Zetor 8011 Crystal','první Crystal řady UŘ II']],opts:['Zetor','Avia','Tatra','Škoda'],fact:'První Zetor Z 25 vznikl v roce 1945. Následoval 50 Super a koncem roku 1968 se objevil Zetor 8011 Crystal.'},
+{brand:'TON',items:[['🪑','Židle č. 14','ikonická ohýbaná židle'],['🪑','Židle č. 18','výroba od roku 1876'],['🪑','Židle č. 30','návrh Augusta Thoneta']],opts:['TON','UP závody','Jitona','Kovona'],fact:'TON ve své časové ose připomíná slavné modely 14, 18 a 30 spojené s tradicí továrny v Bystřici pod Hostýnem.'},
+{brand:'KOH-I-NOOR',items:[['✏️','KOH-I-NOOR 1500','žlutá grafitová tužka'],['✒️','Versatil','mechanická tužka'],['🖍️','Magic','trojbarevná pastelka']],opts:['KOH-I-NOOR','Centropen','Toison','Versace'],fact:'KOH-I-NOOR uvádí zahájení výroby tužky 1500 v roce 1888, registraci ochranné známky Versatil v roce 1937 a výrobu tříbarevných pastelek Magic od roku 2000.'},
+{brand:'Botas',items:[['👟','Botas Classic','ikonický střih'],['👟','Botas 66 Classic','retro label spuštěný v roce 2009'],['👟','Botas Authentic','nový label z roku 2021']],opts:['Botas','Prestige','Baťa','Novesta'],fact:'Značka Botas vznikla v roce 1963. Později přišel projekt Botas 66 Classic a v roce 2021 label Botas Authentic.'},
+{brand:'Tatra',items:[['🚘','Tatra 603','reprezentativní limuzína'],['🚘','Tatra 613','hranatá éra s návrhem Vignale'],['🚛','Tatra 815','kopřivnická nákladní legenda']],opts:['Tatra','Praga','LIAZ','Avia'],fact:'Muzeum Tatra připomíná osobní řady 603 a 613 i nákladní T 815, jejíž sériová éra začala v 80. letech a výroba skončila v roce 2025.'},
+{brand:'Praga',items:[['🚗','Praga Piccolo','lidový osobní automobil'],['🚚','Praga V3S','terénní „vejtřaska“'],['🚛','Praga S5T','silniční derivát V3S']],opts:['Praga','Tatra','Avia','Walter'],fact:'Oficiální historie Pragy uvádí Piccolo a poválečné nákladní modely V3S a S5T; V3S se vyráběla téměř čtyři desetiletí.'},
+{brand:'TESLA',items:[['📻','Tesla 308U Talisman','stolní rozhlasový přijímač'],['🎙️','Tesla Sonet Duo','kufříkový kotoučový magnetofon'],['📺','Tesla 4001A','raný československý televizor']],opts:['TESLA','Meopta','ETA','Orava'],fact:'Technické muzeum v Brně uvádí Talisman 308U i Sonet Duo mezi ikonami TESLY; Národní technické muzeum má ve sbírce prototyp televizoru TESLA 4001A.'}
+];
+let i=0,s=0,lock=false;const $=x=>document.getElementById(x);
+function show(){lock=false;let x=Q[i];$('prog').textContent='KARTA '+(i+1)+' / '+Q.length;$('track').style.width=(i/Q.length*100)+'%';$('cards').innerHTML=x.items.map((a,k)=>`<article class="card"><span class="num">SKLAD ${String(i+1).padStart(2,'0')}-${k+1}</span><span class="icon">${a[0]}</span><div class="name">${a[1]}</div><div class="sub">${a[2]}</div></article>`).join('');$('opts').innerHTML='';x.opts.forEach((o,j)=>{let b=document.createElement('button');b.className='opt';b.textContent=o;b.onclick=()=>answer(j);$('opts').appendChild(b)});$('stamp').className='stamp';$('fact').className='fact';$('next').style.display='none';}
+function answer(j){if(lock)return;lock=true;let x=Q[i],bs=[...document.querySelectorAll('.opt')],a=x.opts.indexOf(x.brand);bs.forEach((b,k)=>{b.disabled=true;if(k===a)b.classList.add('correct');if(k===j&&j!==a)b.classList.add('wrong')});if(j===a)s++;$('stamp').className='stamp show';$('stamp').textContent=(j===a?'VÝROBCE POTVRZEN: ':'SPRÁVNĚ BYLO: ')+x.brand;$('fact').className='fact show';$('fact').textContent=x.fact;$('next').style.display='block';}
+$('next').onclick=()=>{i++;i<Q.length?show():finish()};
+function finish(){$('track').style.width='100%';$('game').style.display='none';$('res').classList.add('show');$('score').textContent=s+' / '+Q.length;let r=s===10?'CHODÍCÍ KATALOG ČSSR':s>=8?'SKLADNÍK':s>=6?'PAMĚTNÍK':'NÁVŠTĚVNÍK MOTOTECHNY';$('rank').textContent=r;$('rt').textContent=s===10?'Bez jediné záměny. Tři výrobky vám stačí k okamžitému přiřazení značky.':s>=6?'Velmi slušná inventura. Několik podniků se ještě plete, ale většinu katalogu čtete správně.':'Druhé kolo: všímejte si nejen typu výrobku, ale i názvů modelů a období.';}
+$('restart').onclick=()=>{i=0;s=0;$('res').classList.remove('show');$('game').style.display='';show()};show();
+</script></body></html>
