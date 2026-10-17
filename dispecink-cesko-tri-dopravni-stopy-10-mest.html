@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DISPEČINK ČESKO: Tři dopravní stopy, jedno město</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Arial,sans-serif;background:#081018;color:#eef7ff}
+body{background:radial-gradient(circle at 15% 0,#11314b 0,transparent 34%),linear-gradient(150deg,#071018,#0c1720)}
+.wrap{max-width:1180px;margin:auto;padding:14px}
+header{background:#0d1822;border:1px solid #24465f;border-radius:24px;padding:20px;box-shadow:0 18px 55px #0008;position:relative;overflow:hidden}
+header:before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:repeating-linear-gradient(90deg,#64e4ff 0 72px,#f5c451 72px 144px,#142738 144px 216px)}
+.ey{color:#6ee7ff;font-size:11px;font-weight:1000;letter-spacing:.19em;text-transform:uppercase}
+h1{font-size:clamp(28px,4.7vw,50px);line-height:1.04;margin:8px 0 10px}
+.lead{max-width:930px;color:#b7cbd9;line-height:1.52}
+.console{margin-top:14px;background:#0a1219;border:1px solid #244356;border-radius:24px;padding:15px}
+.top{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.stat{font-size:12px;color:#9ab2c2;font-weight:900}
+.scorebox{display:flex;gap:10px;flex-wrap:wrap}
+.pill{background:#122431;border:1px solid #2e536a;padding:8px 11px;border-radius:999px;font-size:12px;font-weight:900}
+.pill strong{color:#7eeaff}
+.progress{height:9px;background:#152b39;border-radius:99px;margin:12px 0 15px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#66e8ff,#f5c451);transition:.25s}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}
+.mapcard,.desk{background:#111b23;border:1px solid #2d4657;border-radius:18px;padding:14px}
+.mapcard h3,.desk h3{margin:0 0 8px;font-size:13px;letter-spacing:.12em;color:#91c8e6}
+.map{position:relative;min-height:470px;border-radius:16px;background:linear-gradient(#0f222d99,#0f222d99),repeating-linear-gradient(0deg,#17303d 0 1px,transparent 1px 42px),repeating-linear-gradient(90deg,#17303d 0 1px,transparent 1px 42px);border:1px solid #244251;overflow:hidden}
+.outline{position:absolute;left:7%;top:12%;width:86%;height:72%;border:2px solid #34576a;border-radius:45% 38% 45% 42% / 40% 48% 35% 45%;transform:rotate(-4deg);opacity:.75}
+.city{position:absolute;transform:translate(-50%,-50%);border:0;background:transparent;color:#dcebf4;cursor:pointer;text-align:center;padding:0}
+.city .dot{width:24px;height:24px;border-radius:50%;background:#132c39;border:3px solid #66e8ff;box-shadow:0 0 0 5px #66e8ff1f,0 0 14px #66e8ff55;margin:auto;transition:.2s}
+.city .name{margin-top:4px;font-size:10px;font-weight:900;text-shadow:0 2px 3px #000}
+.city:hover .dot{transform:scale(1.18);background:#1f4a5c}
+.city.done .dot{background:#22402b;border-color:#64d68a;box-shadow:none}
+.city.done{opacity:.55;pointer-events:none}
+.city.wrong .dot{border-color:#f06a78;box-shadow:0 0 14px #f06a7860}
+.board{background:#071016;border:1px solid #2a4657;border-radius:14px;padding:13px;min-height:160px}
+.route{font-family:Consolas,monospace;color:#f2d072;font-size:12px;margin-bottom:8px}
+.clue{font-size:20px;font-weight:1000;line-height:1.35}
+.clue small{display:block;color:#8ca8b8;font-size:12px;margin-bottom:5px;letter-spacing:.12em}
+.clue.locked{color:#4c5f6a;filter:blur(2px);user-select:none}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.unlock,.reveal,.next{border:0;border-radius:11px;padding:12px 14px;font-weight:1000;cursor:pointer}
+.unlock{background:#f2c557;color:#2a2105}.reveal{background:#203b4b;color:#e6f7ff}.next{display:none;background:#61d4ff;color:#05212d;margin-left:auto}
+.feedback{display:none;margin-top:12px;background:#0a1116;border:1px solid #2c424f;border-radius:12px;padding:12px;line-height:1.5;color:#c5d5df}
+.feedback.show{display:block}
+.profile{margin-top:12px;border-left:4px solid #60dfff;padding:10px 12px;background:#10212b;border-radius:8px;color:#c8dbe6;display:none}
+.profile.show{display:block}
+.signal{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:13px}
+.lamp{height:7px;border-radius:99px;background:#23333d}.lamp.on{background:#f2c557;box-shadow:0 0 12px #f2c55777}
+.result{display:none;text-align:center;padding:42px 15px}.result.show{display:block}
+.big{font-size:72px;font-weight:1000;color:#69e7ff}.rank{font-size:24px;font-weight:1000}
+.restart{margin-top:12px;border:0;border-radius:12px;background:#f2c557;color:#211a04;padding:12px 18px;font-weight:1000;cursor:pointer}
+.note{font-size:11px;color:#708592;line-height:1.45;margin-top:10px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.map{min-height:390px}.city .name{font-size:9px}.clue{font-size:18px}}
+</style></head>
+<body><div class="wrap">
+<header>
+<div class="ey">DISPEČINK ČESKO • 10 MĚST • SKÓRE 3–2–1</div>
+<h1>10/10 nestačí. Skutečný znalec Česka pozná města už podle první dopravní stopy.</h1>
+<p class="lead">Každé kolo začne jedinou těžší stopou z MHD. Klikněte na město v mapě. Pokud netrefíte, dispečink odemkne další stopu a hodnota kola klesne ze 3 na 2 a pak na 1 bod. Maximem je 30 bodů.</p>
+</header>
+<main class="console">
+<div id="game">
+<div class="top"><div class="stat" id="round"></div><div class="scorebox"><div class="pill">BODY <strong id="score">0</strong>/30</div><div class="pill">HODNOTA KOLA <strong id="value">3</strong></div></div></div>
+<div class="progress"><i id="progress"></i></div>
+<div class="grid">
+<section class="mapcard"><h3>MAPA DISPEČINKU</h3><div class="map" id="map"><div class="outline"></div></div><div class="note">Mapa je schematická, pozice měst jsou pouze orientační. Odpověď se vybírá kliknutím na kontrolku města.</div></section>
+<section class="desk"><h3>ODJEZDOVÁ TABULE / STOPY</h3><div class="board" id="board"></div>
+<div class="signal"><i class="lamp on" id="l1"></i><i class="lamp" id="l2"></i><i class="lamp" id="l3"></i></div>
+<div class="controls"><button class="unlock" id="unlock">ODEMKNOUT DALŠÍ STOPU (-1 BOD)</button><button class="reveal" id="giveup">VZDÁT KOLO</button><button class="next" id="next">DALŠÍ MĚSTO →</button></div>
+<div class="feedback" id="fb"></div><div class="profile" id="profile"></div>
+</section></div></div>
+<section class="result" id="result"><div class="ey">SMĚNA UKONČENA</div><h2>Dispečerské skóre</h2><div class="big" id="final"></div><div class="rank" id="rank"></div><p id="resultText"></p><button class="restart" id="restart">NOVÁ SMĚNA</button></section>
+</main></div>
+<script>
+const CITIES={'Praha':{x:40,y:39},'Brno':{x:61,y:68},'Ostrava':{x:82,y:47},'Plzeň':{x:24,y:50},'Olomouc':{x:70,y:51},'Ústí nad Labem':{x:42,y:21},'Pardubice':{x:57,y:43},'Hradec Králové':{x:59,y:34},'Zlín':{x:74,y:67},'České Budějovice':{x:37,y:76}};
+const Q=[
+{city:'Praha',clues:['Trolejbusová linka 59 je v grafikonu vedena typem Tb2Kb a obsluhuje Terminál 1 a Terminál 3.','Linka 59 propojuje letištní terminály s Nádražím Veleslavín.','Jediné z těchto měst má metro; letištní trolejbus 59 navazuje na metro A v Nádraží Veleslavín.'],profile:'Praha: v roce 2026 je linka 59 trolejbusová a spojuje Letiště s Nádražím Veleslavín přes Terminál 1 a Terminál 3.'},
+{city:'Brno',clues:['Obousměrné nízkopodlažní tramvaje Škoda 45T jsou nasazovány zejména na lince 8.','Linka 8 vede z Líšně k Univerzitnímu kampusu.','Dopravní podnik tohoto města používá zkratku DPMB.'],profile:'Brno: Škoda 45T je typická hlavně pro linku 8; DPMB ji uvádí na trase z Líšně k Univerzitnímu kampusu.'},
+{city:'Ostrava',clues:['Tramvajová linka 5 vede z Poruby,Vřesinské do Budišovic,Zátiší.','Tramvajová linka 8 spojuje Porubu,Vřesinskou přes Porubu,vozovnu s Hlavním nádražím.','Dopravní podnik má současně rozsáhlou tramvajovou, autobusovou i trolejbusovou síť.'],profile:'Ostrava: aktuální jízdní řády DPO uvádějí například linku 5 Poruba,Vřesinská – Budišovice,Zátiší a linku 8 k Hlavnímu nádraží.'},
+{city:'Plzeň',clues:['Tramvajová linka 4 má na severním konci Košutku a na jihu jezdí k Univerzitě/Borům.','Při výluce na Košutce se objevuje náhradní autobusová linka 4A a přestup u Lékařské fakulty.','Ve městě běžně jezdí tramvaje 1, 2 a 4 a také číselná řada trolejbusů od 10 výše.'],profile:'Plzeň: linka 4 propojuje oblast Univerzity/Bor s Košutkou; při výluce 17.–18. 10. 2026 ji v části trasy doplňuje 4A.'},
+{city:'Olomouc',clues:['V tramvajové síti se objevuje konečná Neředín, krematorium.','Běžný systém má tramvajové linky 1, 2, 3, 4, 5, 6 a 7.','Dopravní podnik používá zkratku DPMO.'],profile:'Olomouc: DPMO provozuje tramvajové linky 1–7; mezi charakteristické konečné patří Neředín, krematorium.'},
+{city:'Ústí nad Labem',clues:['V roce 2026 přibylo 2,35 km nového trolejového vedení v ulici Výstupní.','Linky 74 a 75 nově obsluhují 18metrové parciální trolejbusy a zastávku ZOO.','Městská tarifní zóna nese číslo 101 a v systému je i lanová dráha Větruše.'],profile:'Ústí nad Labem: od 1. 6. 2026 běží zkušební provoz nové trolejbusové tratě ve Výstupní; linky 74 a 75 dostaly kapacitní parciální trolejbusy.'},
+{city:'Pardubice',clues:['Linka 33 zajíždí až do Rybitví k zastávkám UMA továrna a UMA točna.','Na trase linky 33 jsou Semtín, Globus a Terminál Univerzita.','Městská doprava má silnou trolejbusovou tradici a dopravce používá zkratku DPMP.'],profile:'Pardubice: linka 33 podle jízdního řádu z roku 2026 vede z Hlavního nádraží přes univerzitu a Semtín až do Rybitví.'},
+{city:'Hradec Králové',clues:['Trolejbusová linka 1 vede až na konečnou KLUKY PLANETÁRIUM.','Po cestě se objevují Moravské Předměstí, Nový Hradec Králové a Domov U Biřičky.','Dopravní podnik používá zkratku DPMHK.'],profile:'Hradec Králové: linka 1 je trolejbusová a v jízdních řádech 2026 pokračuje přes Nový Hradec až ke Klukům/planetáriu.'},
+{city:'Zlín',clues:['Trolejbusová linka 2 spojuje Otrokovice,Štěrkoviště přes Otrokovice,žel.st. s Bartošovou čtvrtí.','Na lince se objevuje Baťova nemocnice a některé spoje končí právě tam.','Systém MHD je společný pro dvě sousední města a dopravce se jmenuje DSZO.'],profile:'Zlín: linka 2 propojuje Zlín s Otrokovicemi; aktuální jízdní řád vede přes železniční stanici v Otrokovicích k Bartošově čtvrti.'},
+{city:'České Budějovice',clues:['Linka 3 vede z Máje – Antonína Barcala přes Jihočeskou univerzitu a Výstaviště k Nádraží.','Linka 5 propojuje Rožnov přes Nádraží a Vltavu-střed se sídlištěm Máj.','Dopravní podnik používá zkratku DPMCB a ve městě jezdí trolejbusy.'],profile:'České Budějovice: linka 3 spojuje Máj, Jihočeskou univerzitu, Výstaviště a Nádraží; linka 5 pokračuje mezi Rožnovem a Májem.'}
+];
+let i=0,score=0,level=0,locked=false,solved=new Set();const $=x=>document.getElementById(x);
+function buildMap(){const map=$('map');[...map.querySelectorAll('.city')].forEach(x=>x.remove());Object.entries(CITIES).forEach(([name,p])=>{const b=document.createElement('button');b.className='city'+(solved.has(name)?' done':'');b.style.left=p.x+'%';b.style.top=p.y+'%';b.dataset.city=name;b.innerHTML='<div class="dot"></div><div class="name">'+name+'</div>';b.onclick=()=>guess(name,b);map.appendChild(b);});}
+function drawClues(){const q=Q[i];let html='<div class="route">PŘÍPAD '+String(i+1).padStart(2,'0')+' / 10</div>';q.clues.forEach((c,k)=>{html+='<div class="clue '+(k>level?'locked':'')+'"><small>STOPA '+(k+1)+' • '+(3-k)+' BOD'+(k===2?'':'Y')+'</small>'+c+'</div>'});$('board').innerHTML=html;$('value').textContent=3-level;[$('l1'),$('l2'),$('l3')].forEach((el,k)=>el.className='lamp'+(k<=level?' on':''));$('unlock').disabled=level>=2;$('unlock').style.opacity=level>=2?.45:1;}
+function show(){locked=false;$('round').textContent='MĚSTO '+(i+1)+' / 10';$('progress').style.width=(i/10*100)+'%';$('score').textContent=score;$('fb').className='feedback';$('profile').className='profile';$('next').style.display='none';$('giveup').style.display='inline-block';$('unlock').style.display='inline-block';buildMap();drawClues();}
+function guess(name,b){if(locked||solved.has(name))return;const q=Q[i];if(name===q.city){locked=true;const pts=3-level;score+=pts;solved.add(name);$('score').textContent=score;b.classList.add('done');$('fb').className='feedback show';$('fb').innerHTML='<b>DISPEČINK POTVRZUJE: '+q.city.toUpperCase()+'</b><br>Správně za '+pts+' bod'+(pts===1?'':'y')+'.';$('profile').className='profile show';$('profile').textContent=q.profile;$('unlock').style.display='none';$('giveup').style.display='none';$('next').style.display='block';}else{b.classList.add('wrong');setTimeout(()=>b.classList.remove('wrong'),550);if(level<2){level++;drawClues();$('fb').className='feedback show';$('fb').innerHTML='<b>NESPRÁVNÁ KONTROLKA.</b> Dispečink odemkl další stopu; hodnota kola klesá na '+(3-level)+' bod'+(3-level===1?'':'y')+'.';}else{reveal('Po třetí stopě už další není.');}}}
+function reveal(prefix){if(locked)return;locked=true;const q=Q[i];solved.add(q.city);buildMap();$('fb').className='feedback show';$('fb').innerHTML='<b>'+prefix+'</b><br>Správné město je <b>'+q.city+'</b>. Za toto kolo je 0 bodů.';$('profile').className='profile show';$('profile').textContent=q.profile;$('unlock').style.display='none';$('giveup').style.display='none';$('next').style.display='block';}
+$('unlock').onclick=()=>{if(locked||level>=2)return;level++;drawClues();};$('giveup').onclick=()=>reveal('KOLO VZDÁNO.');$('next').onclick=()=>{i++;level=0;i<Q.length?show():finish()};
+function finish(){$('progress').style.width='100%';$('game').style.display='none';$('result').classList.add('show');$('final').textContent=score+' / 30';let rank=score>=27?'HLAVNÍ DISPEČER':score>=22?'VEDOUCÍ SMĚNY':score>=16?'ZKUŠENÝ VÝPRAVČÍ':score>=9?'MĚSTSKÝ CESTOVATEL':'NÁVŠTĚVNÍK TERMINÁLU';$('rank').textContent=rank;$('resultText').textContent=score>=27?'První stopa vám stačila skoro vždy. Tohle už není tipování, ale čtení dopravního DNA měst.':score>=16?'Síť znáte dobře, ale pár měst vás donutilo rozsvítit druhou nebo třetí kontrolku.':'Druhá směna bude lepší: sledujte hlavně konečné, čísla linek a zvláštní tarifní nebo vozidlové detaily.';}
+$('restart').onclick=()=>{i=0;score=0;level=0;locked=false;solved.clear();$('result').classList.remove('show');$('game').style.display='';show()};show();
+</script></body></html>
